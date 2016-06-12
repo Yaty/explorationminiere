@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mygdx.mehelpers.Deplacement;
 
 import com.badlogic.gdx.Gdx;
@@ -11,21 +6,22 @@ import com.mygdx.gameobjects.Mineur;
 import com.mygdx.gameobjects.Mineur.Etat;
 
 /**
- *
- * @author Hugo
+ * Classe gérant le déplacement du mineur en mode fluide
+ * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Fluide extends Deplacement {
     
     /**
-     *
-     * @param mineur
+     * @param mineur le mineur
      */
     public Fluide(Mineur mineur) {
         super(mineur);
     }
     
     /**
-     *
+     * Méthode appelée à chaque frame lorsque le mineur est en mode fluide.
+     * Celle-ci va faire bouger le mineur dynamiquement en fonction de la
+     * direction choisit par le joueur.
      */
     @Override
     public void move() {

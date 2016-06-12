@@ -28,15 +28,14 @@ public class Collision {
     private int debutX, debutY, finX, finY;
     
     /**
-     *
-     * @param deplacement
+     * @param deplacement objet Deplacement
      */
     public Collision(Deplacement deplacement) {
         this.deplacement = deplacement;
     }
     
     /**
-     *
+     * Coordone la gestion des collisions
      */
     public void handleCollision() {
         deplacement.getMineur().getCellsHandler().getCellsSurfaceAroundMineur();
@@ -46,7 +45,9 @@ public class Collision {
         rectPool.free(mineurRect); // Libération de mineurRect dans la pool
     }
    
-    
+    /**
+     * Gère les collisions en  abscisse
+     */
     private void handleCollisionX() {
         mineurRect.set(deplacement.getMineur().getPosition().x, deplacement.getMineur().getPosition().y, deplacement.getMineur().getLARGEUR(), deplacement.getMineur().getHAUTEUR());
         debutX = (int) deplacement.getMineur().getPosition().x;
@@ -76,9 +77,10 @@ public class Collision {
         mineurRect.x = deplacement.getMineur().getPosition().x; // On remet en t, plus en t+1
     }
     
-    private void handleCollisionY() {
-        // if the koala is moving upwards, check the tiles to the top of its
-        // top bounding box edge, otherwise check the ones to the bottom            
+    /**
+     * Gère les collisions en ordonnée
+     */    
+    private void handleCollisionY() {           
         if(deplacement.getVelocite().y > 0) {
             debutY = finY = (int) (deplacement.getMineur().getPosition().y + deplacement.getMineur().getHAUTEUR() + deplacement.getVelocite().y);
         } else {
@@ -108,16 +110,19 @@ public class Collision {
     }
     
     /**
-     *
-     * @param x
-     * @param y
-     * @return
+     * @param x l'entier en abscisse
+     * @param y l'entier en ordonnée
+     * @return vrai s'il y a un bloc à cette position, faux sinon
      */
     public boolean isTiledHere(int x, int y) {
         TiledMapTileLayer layer = (TiledMapTileLayer) deplacement.getMineur().getMap().getLayers().get("surface");
         return layer.getCell(x, y) != null; // True si cellule non vide
     }
-
+    
+    /**
+     * Méthode qui va récuperer les blocs autour du mineur et
+     * les ajouter dans la list tiles.
+     */
     private void getTiles (int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
         // On va recuperer tout les tiles dans le rectangle de coordonnes (startx, starty, finx, finy) existantes
         TiledMapTileLayer layer = (TiledMapTileLayer) deplacement.getMineur().getMap().getLayers().get("surface"); // Une couche qui va contenir tout les "walls"

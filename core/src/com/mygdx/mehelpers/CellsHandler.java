@@ -16,8 +16,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
- * @author Hugo
+ * Classe gérant les cellules du jeu
+ * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class CellsHandler {
     private boolean victory, cassageEnCour;
@@ -26,8 +26,8 @@ public class CellsHandler {
     private final boolean[] cellsSAM; // CellsSurfaceAroundMineur
     
     /**
-     *
-     * @param mineur
+     * Constructeur par défaut
+     * @param mineur Référence au mineur
      */
     public CellsHandler(Mineur mineur) {
         this.mineur = mineur;
@@ -38,17 +38,15 @@ public class CellsHandler {
     }
     
     /**
-     *
-     * @return
+     * @return la valeur de la variable victory
      */
     public boolean isVictory(){
         return this.victory;
     }
     
-    // On lit les cell près du mineur et on renvoit un tableau de boolean si elle sont pleines ou pas
 
     /**
-     *
+     * Remplit un tableau pour savoir s'il y a des blocs autour du mineur
      */
     public void getCellsSurfaceAroundMineur() {
         int y = (int) mineur.getPosition().y;
@@ -83,13 +81,17 @@ public class CellsHandler {
     }
     
     /**
-     *
-     * @return
+     * @return un tableau de booléen qui indique si un bloc et existant autour du mineur
      */
     public boolean[] getCellsSAM() {
         return cellsSAM;
     }
     
+    /**
+     * @param x l'entier en abscisse
+     * @param y l'entier en ordonnée
+     * @return vrai s'il y a une échelle à cette position, non sinon
+     */    
     private boolean isLadderHere(int x,int y){
         if(layerObjets.getCell(x, y) != null){
             if(layerObjets.getCell(x,y).getTile().getId() == 5) return true;
@@ -98,9 +100,9 @@ public class CellsHandler {
     }
     
     /**
-     *
-     * @param x
-     * @param y
+     * Ajoute une échelle au coordonnée mis en paramètre
+     * @param x l'entier en abscisse
+     * @param y l'entier en ordonnée
      */
     public void setLadder(int x,int y){
         Cell cell = new Cell();
@@ -109,20 +111,26 @@ public class CellsHandler {
         layerObjets.setCell(x, y, cell);
     }
     
+    /**
+     * @param x l'entier en abscisse
+     * @param y l'entier en ordonnée
+     * @return vrai si cell présente en x et y, faux sinon
+     */
     private boolean isCellSurfaceHere(int x, int y) {
         return layerSurface.getCell(x, y) != null;
     }
     
     /**
-     *
-     * @param x
-     * @param y
+     * Détruit un bloc à la position passée
+     * @param x l'entier en abscisse
+     * @param y l'entier en ordonnée
      */
     public void destructionBloc(int x, int y) {  
         final int xBloc = x;
         final int yBloc = y;
         if(isCellSurfaceHere(x, y) && !cassageEnCour) {
-            checkVictory(x, y);
+            if(layerSurface.getCell(x, y).getTile().getId() == 4)
+                victory = true;
             mineur.setEtatMineur(Etat.Miner);
             mineur.setDirectionMineur(Direction.Arret);
             cassageEnCour = true;
@@ -138,17 +146,6 @@ public class CellsHandler {
                 }
             }, 1000);
         }
-    } 
-    
-    /**
-     *
-     * @param x
-     * @param y
-     */
-    public void checkVictory (int x, int y){
-        if(layerSurface.getCell(x, y).getTile().getId() == 4)
-            victory = true;
-    }
-    
+    }    
     
 }

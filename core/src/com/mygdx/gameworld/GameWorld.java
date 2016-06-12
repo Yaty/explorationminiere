@@ -26,27 +26,22 @@ public class GameWorld {
     }
 
     /**
-     *
-     * @param delta
+     * Va mettre à jour le mineur
+     * @param delta le temps passé depuis la dernière frame
      */
     public void update(float delta) {
         mineur.update(delta);
-        if(mineur.getCellsHandler().isVictory()) ShutdownHandler.shutdown();
-        
-        //stage.act();
     }
     
     /**
-     *
-     * @return
+     * @return la carte
      */
     public TiledMap getMap() {
         return map;
     }
     
     /**
-     *
-     * @return
+     * @return le mineur
      */
     public Mineur getMineur() {
         return mineur;

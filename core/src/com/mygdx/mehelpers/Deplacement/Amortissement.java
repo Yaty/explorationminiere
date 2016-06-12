@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Mineur;
 
 /**
- *
- * @author Hugo
+ * Classe gérant le déplacement du mineur en mode amortissement
+ * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Amortissement extends Deplacement {
 
@@ -21,8 +21,7 @@ public class Amortissement extends Deplacement {
     private final float VITESSE_AMORTISSEMENT = 150f;
     
     /**
-     *
-     * @param mineur
+     * @param mineur le mineur
      */
     public Amortissement(Mineur mineur) {
         super(mineur);
@@ -31,7 +30,9 @@ public class Amortissement extends Deplacement {
     }
 
     /**
-     *
+     * Méthode appelé à chaque frame quand le mineur est en mode
+     * amortissement. Celle-ci créer un vecteur objectif que le mineur au fur
+     * et a mesure du temps va rejoindre pour finalemet s'arrêter.
      */
     @Override
     public void move() {

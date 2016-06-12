@@ -27,8 +27,7 @@ public class GameRenderer {
     private float runTime = 0;
     
     /**
-     *
-     * @param gameWorld
+     * @param gameWorld un objet gameWorld
      */
     public GameRenderer(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
@@ -47,8 +46,8 @@ public class GameRenderer {
     }
     
     /**
-     *
-     * @param runTime
+     * Va rendre le jeu via la caméra
+     * @param runTime le temps passé depuis le début
      */
     public void render(float runTime) { // Une frame = un lancement de la méthode render()
         this.runTime = runTime;
@@ -77,7 +76,7 @@ public class GameRenderer {
     }
     
     /**
-     *
+     * Va rendre le mineur avec les animations
      */       
     private void renderMineur() {
         TextureRegion frame;
@@ -98,14 +97,11 @@ public class GameRenderer {
             batcher.draw(frame, gameWorld.getMineur().getPosition().x + gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getPosition().y, -gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getHAUTEUR());
         batcher.end();
     }
-
-    private void renderLadder (){
-        
-        
-    }
     
     /**
-     *
+     * Va rendre le mode debug
+     * Ajout des lignes jaunes pour définir les blocs
+     * Ajout du rectangle rouge pour définir le mineur
      */       
     private void renderDebug () {
         debugRenderer.setProjectionMatrix(orthoCamera.combined);

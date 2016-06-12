@@ -5,14 +5,14 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mygdx.minexploration.MEGame;
 
 /**
- *
- * @author Hugo
+ * Permet de lancer le jeu en version Desktop (pour les PC)
+ * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class DesktopLauncher {
 
     /**
-     *
-     * @param arg
+     * Configure la fênetre et lance le jeu
+     * @param arg Non utilisé
      */
     public static void main (String[] arg) {
             LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();

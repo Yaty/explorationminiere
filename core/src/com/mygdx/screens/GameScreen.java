@@ -8,8 +8,9 @@ import com.mygdx.mehelpers.KeyBoard;
 import com.mygdx.minexploration.MEGame;
 
 /**
- *
- * @author Hugo
+ * Classe qui est l'écran du jeu, c'est elle qui contient les éléments du jeu
+ * et se fait afficher par un TiledMapRenderer.
+ * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class GameScreen implements Screen {
     private final GameWorld gameWorld;
@@ -17,7 +18,7 @@ public class GameScreen implements Screen {
     private MEGame game;
     
     /**
-     *
+     * @param game le jeu
      */
     public GameScreen(MEGame game) {
         Gdx.app.log("GameScreen", "GameScreen créé");
@@ -28,7 +29,7 @@ public class GameScreen implements Screen {
     }
     
     /**
-     *
+     * Méthode appelée à la création du jeu
      */    
     @Override
     public void show() {
@@ -36,7 +37,7 @@ public class GameScreen implements Screen {
     }
     
     /**
-     *
+     * Méthode appelée à chaque frame
      */   
     @Override
     public void render(float delta) {
@@ -48,9 +49,9 @@ public class GameScreen implements Screen {
     }
     
     /**
-     *
-     * @param width
-     * @param height
+     * Redimensionne la fenetre
+     * @param width la largeur
+     * @param height la hauteur
      */   
     @Override
     public void resize(int width, int height) {
@@ -58,7 +59,7 @@ public class GameScreen implements Screen {
     }
     
     /**
-     *
+     * Méthode appelée quand le jeu passe en pause
      */   
     @Override
     public void pause() {
@@ -66,7 +67,7 @@ public class GameScreen implements Screen {
     }
     
     /**
-     *
+     * Méthode appelée quand le jeu passe sort de la pause
      */   
     @Override
     public void resume() {
@@ -74,7 +75,7 @@ public class GameScreen implements Screen {
     }
     
     /**
-     *
+     * Méthode appelée quand la fenetre est minimiser
      */   
     @Override
     public void hide() {
@@ -82,7 +83,7 @@ public class GameScreen implements Screen {
     }
     
     /**
-     *
+     * Méthode appelée quand on demande de supprimer le contenu de l'écran
      */   
     @Override
     public void dispose() {}

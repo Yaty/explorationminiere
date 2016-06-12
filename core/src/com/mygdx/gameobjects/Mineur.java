@@ -10,21 +10,66 @@ import com.mygdx.mehelpers.Deplacement.Fluide;
 import com.mygdx.mehelpers.InputHandler;
 
 /**
- *
- * @author Hugo
+ * Classe représentant le personnage du Mineur
+ * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Mineur {
     private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, AMORTISSEMENT;
 
     /**
-     *
+     * Représente la direction du mineur
      */
-    public enum Direction { Haut, Bas, Gauche, Droite, Arret };
+    public enum Direction { 
+
+        /**
+         * Va vers le haut (un saut)
+         */
+        Haut, 
+
+        /**
+         * Va vers le bas (une chute)
+         */
+        Bas, 
+
+        /**
+         * Va vers la gauche
+         */
+        Gauche, 
+
+        /** 
+         * Va vers la droite
+         */
+        Droite, 
+
+        /**
+         * Ne bouge pas
+         */
+        Arret };
 
     /**
-     *
+     * Représente l'état du mineur
      */
-    public enum Etat { Miner, Deplacement, Arret, Sauter };
+    public enum Etat { 
+
+        /**
+         * Il mine
+         */
+        Miner, 
+
+        /**
+         * Il se déplace
+         */
+        Deplacement, 
+
+        /**
+         * Il est arrêté
+         */
+        Arret, 
+
+        /**
+         * Il saute
+         */
+        Sauter };
     private Etat etat;
     private Direction dirMineur;
     private final Vector2 position;
@@ -36,8 +81,9 @@ public class Mineur {
     private Deplacement deplacement;
     
     /**
-     *
-     * @param map
+     * Constructeur du Mineur
+     * Initialise toutes les variables et instancie CellsHandler
+     * @param map la carte
      */
     public Mineur(TiledMap map) {
         GRAVITE = -0.1f;
@@ -59,32 +105,28 @@ public class Mineur {
     }
     
     /**
-     *
-     * @return
+     * @return la valeur gravité.
      */
     public float getGRAVITE() {
         return GRAVITE;
     }
     
     /**
-     *
-     * @return
+     * @return la variable moving
      */
     public boolean isMoving() {
         return moving;
     }
 
     /**
-     *
-     * @param moving
+     * @param moving valeur qui va être affecté
      */
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
 
     /**
-     *
-     * @param deltaTime
+     * @param deltaTime temps passé durant la dernière frame
      */
     public void update(float deltaTime) { //deltaTime = temps passé entre deux frames
         if (deltaTime == 0) return; // Si rien ne s'est passé on sort
@@ -141,191 +183,142 @@ public class Mineur {
     }    
 
     /**
-     *
-     * @return
+     * @return vrai si le mineur est mode amortissement
      */
     public boolean isIsInAmortissement() {
-        return isInAmortissement;
+        return deplacement instanceof Amortissement;
     }
     
     /**
-     *
-     * @param bool
+     * @param bool valeur a affecter
      */
     public void setWasMoving(boolean bool) {
         wasMoving = bool;
     }
 
     /**
-     *
-     * @param isInAmortissement
-     */
-    public void setIsInAmortissement(boolean isInAmortissement) {
-        this.isInAmortissement = isInAmortissement;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isWasInAmortissement() {
-        return wasInAmortissement;
-    }
-
-    /**
-     *
-     * @param wasInAmortissement
-     */
-    public void setWasInAmortissement(boolean wasInAmortissement) {
-        this.wasInAmortissement = wasInAmortissement;
-    }
-    
-    /**
-     *
-     * @return
+     * @return l'état du mineur
      */
     public Etat getEtatMineur() {
         return etat;
     }
     
     /**
-     *
-     * @return
+     * @return la map (la carte)
      */
     public TiledMap getMap(){
         return this.map;
     }
     
     /**
-     *
-     * @param typeDepla
+     * Change le type de déplacement du mineur
+     * @param typeDepla objet a affecter
      */
     public void setTypeDeplacement(Deplacement typeDepla) {
         deplacement = typeDepla;
     }
     
      /**
-     *
+     * @return l'objet deplacement
      */
     public Deplacement getTypeDeplacement() {
         return deplacement;
     }   
     
     /**
-     *
-     * @return
+     * @return la direction du mineur
      */
     public Direction getDirectionMineur() {
         return dirMineur;
     }
     
     /**
-     *
-     * @param etat
+
+     * @param etat variable à affecter
      */
     public void setEtatMineur(Etat etat) {
         this.etat = etat;
     }
     
     /**
-     *
-     * @param dir
+     * @param dir variable à affecter
      */
     public void setDirectionMineur(Direction dir) {
         dirMineur = dir;
     }
      
     /**
-     *
-     * @return
+     * @return l'objet qui gère les cellules, blocs
      */
     public CellsHandler getCellsHandler(){
         return this.cellsHandler;
     }
     
     /**
-     *
-     * @return
+     * @return la largeur du mineur
      */
     public float getLARGEUR() {
         return LARGEUR;
     }
 
     /**
-     *
-     * @return
+     * @return la hauteur du mineur
      */
     public float getHAUTEUR() {
         return HAUTEUR;
     }
 
     /**
-     *
-     * @return
+     * @return la velocite maximale en abscisse du mineur
      */
     public float getMAX_VELOCITE() {
         return MAX_VELOCITE;
     }
 
     /**
-     *
-     * @return
+     * @return la velocite maximale en ordonnée du mineur
      */
     public float getSAUT_VELOCITE() {
         return SAUT_VELOCITE;
     }
 
     /**
-     *
-     * @return
-     */
-    public float getAMORTISSEMENT() {
-        return AMORTISSEMENT;
-    }
-
-    /**
-     *
-     * @return
+     * @return le vecteur position
      */
     public Vector2 getPosition() {
         return position;
     }
  
     /**
-     *
-     * @return
+     * @return runtime
      */
     public float getRunTime() {
         return runTime;
     }
 
     /**
-     *
-     * @param teteVersLaDroite
+     * @param teteVersLaDroite booléen à affecter
      */
     public void setTeteVersLaDroite(boolean teteVersLaDroite) {
         this.teteVersLaDroite = teteVersLaDroite;
     }
     
     /**
-     *
-     * @return
+     * @return vrai si le mineur va vers la droite, faux sinon
      */
     public boolean isTeteVersLaDroite() {
         return teteVersLaDroite;
     }
 
     /**
-     *
-     * @param mineurAuSol
+     * @param mineurAuSol booléen à affecter
      */
     public void setMineurAuSol(boolean mineurAuSol) {
         this.mineurAuSol = mineurAuSol;
     }
     
     /**
-     *
-     * @return
+     * @return vrai si le mineur  touche le sol, faux sinon
      */
     public boolean isMineurAuSol() {
         return mineurAuSol;
