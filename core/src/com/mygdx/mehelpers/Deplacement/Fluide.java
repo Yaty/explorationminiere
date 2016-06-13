@@ -46,13 +46,15 @@ public class Fluide extends Deplacement {
                 if(!collision.isTiledHere(x+1, y)) {
                     velocite.x = mineur.getMAX_VELOCITE();
                     mineur.setTeteVersLaDroite(true);
+                    mineur.setEtatMineur(Etat.Deplacement);
                 } else {
                     lancerDestruction = true;
                     x++;
                 }
                 break;
             case Bas:
-                if(!collision.isTiledHere(x, y-1)) {
+                if(collision.isTiledHere(x, y-1)) {
+                    mineur.setEtatMineur(Etat.Arret);
                     lancerDestruction = true;
                     y--;
                 }
@@ -61,6 +63,7 @@ public class Fluide extends Deplacement {
                 if(!collision.isTiledHere(x-1, y)) {
                     velocite.x = -mineur.getMAX_VELOCITE();
                     mineur.setTeteVersLaDroite(false);
+                    mineur.setEtatMineur(Etat.Deplacement);
                 } else {
                     lancerDestruction = true;
                     x--;

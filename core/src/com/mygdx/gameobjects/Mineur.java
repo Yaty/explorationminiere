@@ -138,12 +138,10 @@ public class Mineur {
         if(InputHandler.keys[45] || InputHandler.keys[21]) {
             moving = true;
             dirMineur = Direction.Gauche;
-            etat = Etat.Deplacement;
         }
         if (InputHandler.keys[32] || InputHandler.keys[22]) {
             moving = true;
             dirMineur = Direction.Droite;
-            etat = Etat.Deplacement;
         }
         if ((InputHandler.keys[19] || InputHandler.keys[54]) && mineurAuSol) {
             moving = true;
@@ -169,10 +167,12 @@ public class Mineur {
         
         // Sa bug car il faut empecher tout deplacement tant que le joueur est en vol
         
+        System.out.println(dirMineur);
         
         if(deplacement != null) {
             deplacement.move();
             System.out.println(deplacement.getClass());
+            System.out.println(dirMineur);
             if(deplacement.getVelocite().isZero() && !(deplacement instanceof Fluide)) {
                 deplacement = null;
                 wasMoving = false;

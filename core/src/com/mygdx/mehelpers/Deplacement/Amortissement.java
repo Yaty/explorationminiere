@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Mineur;
+import com.mygdx.gameobjects.Mineur.Etat;
 
 /**
  * Classe gérant le déplacement du mineur en mode amortissement
@@ -51,7 +52,7 @@ public class Amortissement extends Deplacement {
                 case Gauche:
                     x = (int) (mineur.getPosition().x - (0.5 + mineur.getLARGEUR()/2)); // Position de la case à gauche ou le mineur va devoir aller
                     y = (int) mineur.getPosition().y;
-                    if(!hasTarget && !collision.isTiledHere(x, y)) { // Si pas d'objectif et pas de tiled (bloc) en x, y
+                    if(!hasTarget && !collision.isTiledHere(x, y) && !mineur.getEtatMineur().equals(Etat.Arret)) { // Si pas d'objectif et pas de tiled (bloc) en x, y
                         targetPosition.set((float) ((int) mineur.getPosition().x - (0.5 + mineur.getLARGEUR()/2)),  mineur.getPosition().y);
                         hasTarget = true;
                     }
@@ -59,7 +60,7 @@ public class Amortissement extends Deplacement {
                 case Droite:
                     x = (int) ((mineur.getPosition().x + 1) + (0.5 - mineur.getLARGEUR()/2));
                     y = (int) mineur.getPosition().y;
-                    if(!hasTarget && !collision.isTiledHere(x, y)) {
+                    if(!hasTarget && !collision.isTiledHere(x, y) && !mineur.getEtatMineur().equals(Etat.Arret)) {
                         targetPosition.set((float) ((int) ( mineur.getPosition().x + 1) + (0.5 - mineur.getLARGEUR()/2)),  mineur.getPosition().y);
                         hasTarget = true;
                     }
