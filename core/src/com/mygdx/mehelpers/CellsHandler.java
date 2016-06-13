@@ -134,8 +134,6 @@ public class CellsHandler {
             mineur.setEtatMineur(Etat.Miner);
             mineur.setDirectionMineur(Direction.Arret);
             cassageEnCour = true;
-            System.out.println("Je vais casser le bloc en mode " + mineur.getTypeDeplacement().getClass().getName());
-            //mineur.setTypeDeplacement(new Fluide(mineur));
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {

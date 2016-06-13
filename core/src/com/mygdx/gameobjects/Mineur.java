@@ -167,12 +167,13 @@ public class Mineur {
         
         // Sa bug car il faut empecher tout deplacement tant que le joueur est en vol
         
-        System.out.println(dirMineur);
+
         
         if(deplacement != null) {
-            deplacement.move();
-            System.out.println(deplacement.getClass());
-            System.out.println(dirMineur);
+            //System.out.println("1Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
+            if(!etat.equals(Etat.Miner))
+                deplacement.move();
+            //System.out.println("2Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
             if(deplacement.getVelocite().isZero() && !(deplacement instanceof Fluide)) {
                 deplacement = null;
                 wasMoving = false;

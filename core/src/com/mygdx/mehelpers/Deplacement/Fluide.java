@@ -54,7 +54,7 @@ public class Fluide extends Deplacement {
                 break;
             case Bas:
                 if(collision.isTiledHere(x, y-1)) {
-                    mineur.setEtatMineur(Etat.Arret);
+                    //mineur.setEtatMineur(Etat.Arret);
                     lancerDestruction = true;
                     y--;
                 }
