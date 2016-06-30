@@ -28,16 +28,21 @@ public class Fluide extends Deplacement {
         boolean lancerDestruction = false;
         int x = (int) (mineur.getPosition().x + mineur.getLARGEUR()/2);
         int y = (int) mineur.getPosition().y;
-        
         switch(mineur.getDirectionMineur()) {
             case Haut:
                 if(!collision.isTiledHere(x, y+1)) { // Si pas de bloc en x et y + 1
-                    if(!mineur.getEtatMineur().equals(Etat.Sauter)) {
+                    if(mineur.isOnEchelle()) {
+                        System.out.println("On commence à monter sur l'échelle !");
+                        velocite.y = mineur.getVelociteMaxEchelle();
+                        mineur.setMineurAuSol(false);
+                        mineur.setEtatMineur(Etat.Echelle);
+                    } else if(!mineur.getEtatMineur().equals(Etat.Sauter)) {
                         velocite.y = mineur.getSAUT_VELOCITE();
                         mineur.setMineurAuSol(false);
                         mineur.setEtatMineur(Etat.Sauter);
                     }
                 } else {
+                    // Lancer animation ici ?
                     lancerDestruction = true;
                     y++;
                 }
@@ -53,7 +58,9 @@ public class Fluide extends Deplacement {
                 }
                 break;
             case Bas:
-                if(collision.isTiledHere(x, y-1)) {
+                if(mineur.getEtatMineur().equals(Etat.Echelle)) {
+                    velocite.y = -mineur.getSAUT_VELOCITE();                
+                } else if(collision.isTiledHere(x, y-1)) {
                     //mineur.setEtatMineur(Etat.Arret);
                     lancerDestruction = true;
                     y--;

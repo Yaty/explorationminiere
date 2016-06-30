@@ -2,6 +2,7 @@ package com.mygdx.gameobjects;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import static com.mygdx.gameobjects.Mineur.Etat.Echelle;
 import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.CellsHandler;
 import com.mygdx.mehelpers.Deplacement.Amortissement;
@@ -14,7 +15,7 @@ import com.mygdx.mehelpers.InputHandler;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Mineur {
-    private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, AMORTISSEMENT;
+    private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
 
     /**
      * Représente la direction du mineur
@@ -69,12 +70,18 @@ public class Mineur {
         /**
          * Il saute
          */
-        Sauter };
+        Sauter,
+    
+        /**
+         * Il est sur une échelle
+         */
+        Echelle
+    };
     private Etat etat;
     private Direction dirMineur;
     private final Vector2 position;
     private float runTime;
-    private boolean teteVersLaDroite, mineurAuSol, moving, isInAmortissement, wasInAmortissement, wasMoving;
+    private boolean teteVersLaDroite, mineurAuSol, moving, isInAmortissement, wasInAmortissement, wasMoving, isOnEchelle;
     private final float UNITE = 1/64f;
     private final TiledMap map;
     private final CellsHandler cellsHandler;
@@ -91,13 +98,14 @@ public class Mineur {
         HAUTEUR = UNITE * AssetLoader.regions[0].getRegionHeight();
         MAX_VELOCITE = 2f;
         SAUT_VELOCITE = 4f;
-        AMORTISSEMENT = 0.87f;
+        ECHELLE_VELOCITE = 2f;
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
         position = new Vector2(5.5f - LARGEUR/2, 13);
         runTime = 0f;
         mineurAuSol = teteVersLaDroite = true;
         isInAmortissement = false;
+        isOnEchelle = false;
         wasInAmortissement = false;
         wasMoving = false;
         this.map = map;
@@ -116,6 +124,10 @@ public class Mineur {
      */
     public boolean isMoving() {
         return moving;
+    }
+    
+    public float getVelociteMaxEchelle() {
+        return ECHELLE_VELOCITE;
     }
 
     /**
@@ -161,7 +173,7 @@ public class Mineur {
         if(moving && !(deplacement instanceof Fluide)) { // Si on est dans déplacement dit de type fluide et que le mineur n'est pas en train de sauter
             wasMoving = true;
             deplacement = new Fluide(this);
-        } else if(!moving && wasMoving && !(deplacement instanceof Amortissement) && !etat.equals(Etat.Sauter)){ // Sinon c'est un amortissement
+        } else if(!moving && wasMoving && !(deplacement instanceof Amortissement) && !etat.equals(Etat.Sauter) && !etat.equals(Etat.Echelle)){ // Sinon c'est un amortissement
             deplacement = new Amortissement(this);
         }
         
@@ -170,15 +182,20 @@ public class Mineur {
 
         
         if(deplacement != null) {
-            //System.out.println("1Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
-            if(!etat.equals(Etat.Miner))
+            System.out.println("1Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
+            if(!etat.equals(Etat.Miner)) {
                 deplacement.move();
-            //System.out.println("2Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
+                if(isOnEchelle && !cellsHandler.isLadderHere((int) position.x, (int) position.y))
+                    isOnEchelle = false;
+            }
+            System.out.println("2Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
             if(deplacement.getVelocite().isZero() && !(deplacement instanceof Fluide)) {
                 deplacement = null;
                 wasMoving = false;
                 dirMineur = Direction.Arret;
                 etat = Etat.Arret;
+                if(cellsHandler.isLadderHere((int) position.x, (int) position.y)) 
+                    isOnEchelle = true;
             }          
         }
     }    
@@ -188,6 +205,13 @@ public class Mineur {
      */
     public boolean isIsInAmortissement() {
         return deplacement instanceof Amortissement;
+    }
+    
+    /**
+     * @return vrai si le mineur est arreté sur une echelle
+     */
+    public boolean isOnEchelle() {
+        return isOnEchelle;
     }
     
     /**

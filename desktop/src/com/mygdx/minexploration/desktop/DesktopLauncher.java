@@ -9,7 +9,6 @@ import com.mygdx.minexploration.MEGame;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class DesktopLauncher {
-
     /**
      * Configure la fênetre et lance le jeu
      * @param arg Non utilisé

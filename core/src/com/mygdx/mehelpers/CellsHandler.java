@@ -92,10 +92,9 @@ public class CellsHandler {
      * @param y l'entier en ordonnée
      * @return vrai s'il y a une échelle à cette position, non sinon
      */    
-    private boolean isLadderHere(int x,int y){
-        if(layerObjets.getCell(x, y) != null){
-            if(layerObjets.getCell(x,y).getTile().getId() == 5) return true;
-        }
+    public boolean isLadderHere(int x,int y){
+        if(layerObjets.getCell(x, y) != null)
+            return layerObjets.getCell(x,y).getTile().getId() == 5;
         return false;
     }
     
@@ -119,6 +118,7 @@ public class CellsHandler {
     private boolean isCellSurfaceHere(int x, int y) {
         return layerSurface.getCell(x, y) != null;
     }
+ 
     
     /**
      * Détruit un bloc à la position passée
@@ -128,7 +128,7 @@ public class CellsHandler {
     public void destructionBloc(int x, int y) {  
         final int xBloc = x;
         final int yBloc = y;
-        if(isCellSurfaceHere(x, y) && !cassageEnCour) {
+        if(isCellSurfaceHere(x, y) && !cassageEnCour && mineur.isMineurAuSol()) {
             if(layerSurface.getCell(x, y).getTile().getId() == 4)
                 victory = true;
             mineur.setEtatMineur(Etat.Miner);
