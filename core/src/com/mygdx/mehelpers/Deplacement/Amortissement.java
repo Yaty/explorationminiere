@@ -75,6 +75,5 @@ public class Amortissement extends Deplacement {
         collision.handleCollision(); // Gestion des colisions
         mineur.getPosition().add(velocite); // Ajout de la velocite au vecteur position
         velocite.scl(1/Gdx.graphics.getDeltaTime()); // On remet velocite comme avant
-    }
-    
+    } 
 }

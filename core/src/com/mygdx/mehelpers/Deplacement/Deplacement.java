@@ -21,7 +21,7 @@ public abstract class Deplacement {
         velocite = new Vector2(0,0);
         collision = new Collision(this);
     }
-
+    
     /**
      * @return le mineur
      */
