@@ -2,6 +2,7 @@ package com.mygdx.mehelpers.Deplacement;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Mineur;
 import com.mygdx.gameobjects.Mineur.Etat;
 
@@ -91,5 +92,10 @@ public class Fluide extends Deplacement {
         collision.handleCollision(); // Gestion des colisions
         mineur.getPosition().add(velocite);
         velocite.scl(1/Gdx.graphics.getDeltaTime());
+    }
+
+    @Override
+    public Vector2 getTargetPosition() {
+        return null;
     }
 }

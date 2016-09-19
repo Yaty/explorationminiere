@@ -69,5 +69,7 @@ public abstract class Deplacement {
      * Méthode abstraite que les classes filles doivent re-définir
      */
     public abstract void move();
- 
+
+    public abstract Vector2 getTargetPosition();
+
 }

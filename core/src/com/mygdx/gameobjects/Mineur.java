@@ -200,6 +200,10 @@ public class Mineur {
         }
     }    
 
+    public Deplacement getDeplacement() {
+        return this.deplacement;
+    }
+    
     /**
      * @return vrai si le mineur est mode amortissement
      */
