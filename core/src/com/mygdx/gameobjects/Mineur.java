@@ -101,15 +101,28 @@ public class Mineur {
         ECHELLE_VELOCITE = 2f;
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
-        position = new Vector2(5.5f - LARGEUR/2, 13);
+        this.map = map;
+        position = new Vector2(getXDepart(), getYDepart());
         runTime = 0f;
         mineurAuSol = teteVersLaDroite = true;
         isInAmortissement = false;
         isOnEchelle = false;
         wasInAmortissement = false;
         wasMoving = false;
-        this.map = map;
         cellsHandler = new CellsHandler(this);
+    }
+    /**
+     * @return La coordonnée en X du mineur au départ du jeu
+     */
+    private float getXDepart() {
+        return ((map.getProperties().get("width", Integer.class))/2) + LARGEUR/2;
+        
+    }
+     /**
+     * @return La coordonnée en Y du mineur au départ du jeu
+     */   
+    private float getYDepart() {
+        return map.getProperties().get("height", Integer.class)-2; 
     }
     
     /**
