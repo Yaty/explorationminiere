@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Mineur;
 import com.mygdx.gameobjects.Mineur.Etat;
+import com.mygdx.mehelpers.InputHandler;
 
 /**
  * Classe gérant le déplacement du mineur en mode fluide
@@ -37,6 +38,10 @@ public class Fluide extends Deplacement {
                         velocite.y = mineur.getVelociteMaxEchelle();
                         mineur.setMineurAuSol(false);
                         mineur.setEtatMineur(Etat.Echelle);
+                        mineur.getDirectionMineur();
+                        if(InputHandler.keys[19] || InputHandler.keys[54]){
+                            velocite.y = mineur.getVelociteStopEchelle(); //faut rester appuyé
+                        };
                     } else if(!mineur.getEtatMineur().equals(Etat.Sauter)) {
                         velocite.y = mineur.getSAUT_VELOCITE();
                         mineur.setMineurAuSol(false);
@@ -60,7 +65,10 @@ public class Fluide extends Deplacement {
                 break;
             case Bas:
                 if(mineur.getEtatMineur().equals(Etat.Echelle)) {
-                    velocite.y = -mineur.getSAUT_VELOCITE();                
+                    velocite.y = -mineur.getSAUT_VELOCITE();
+                    if(InputHandler.keys[20] || InputHandler.keys[47]){
+                        velocite.y = mineur.getVelociteStopEchelle(); //faut rester appuyé
+                    }
                 } else if(collision.isTiledHere(x, y-1)) {
                     //mineur.setEtatMineur(Etat.Arret);
                     lancerDestruction = true;

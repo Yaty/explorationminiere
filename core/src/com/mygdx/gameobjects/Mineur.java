@@ -9,13 +9,15 @@ import com.mygdx.mehelpers.Deplacement.Amortissement;
 import com.mygdx.mehelpers.Deplacement.Deplacement;
 import com.mygdx.mehelpers.Deplacement.Fluide;
 import com.mygdx.mehelpers.InputHandler;
+import com.mygdx.gameobjects.Inventaire;
 
 /**
  * Classe représentant le personnage du Mineur
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Mineur {
-    private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
+    private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE, STOP_ECHELLE;
+    int nbEchelle = 10;
 
     /**
      * Représente la direction du mineur
@@ -99,6 +101,7 @@ public class Mineur {
         MAX_VELOCITE = 2f;
         SAUT_VELOCITE = 4f;
         ECHELLE_VELOCITE = 2f;
+        STOP_ECHELLE = 0f;
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
         this.map = map;
@@ -142,6 +145,10 @@ public class Mineur {
     public float getVelociteMaxEchelle() {
         return ECHELLE_VELOCITE;
     }
+    
+    public float getVelociteStopEchelle(){
+        return STOP_ECHELLE;
+    }
 
     /**
      * @param moving valeur qui va être affecté
@@ -177,9 +184,10 @@ public class Mineur {
             dirMineur = Direction.Bas;
         }
         
-        
-        if(InputHandler.keys[33]) // Echelle (F)
+        if(InputHandler.keys[33] && this.nbEchelle >= 0 ){ // Echelle (E)
             cellsHandler.setLadder((int) position.x,(int) position.y);
+               //soon limiter par nb echelle
+        }
         
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit
