@@ -2,7 +2,6 @@ package com.mygdx.gameobjects;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-import static com.mygdx.gameobjects.Mineur.Etat.Echelle;
 import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.CellsHandler;
 import com.mygdx.mehelpers.Deplacement.Amortissement;
