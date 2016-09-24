@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -25,6 +27,8 @@ public class GameRenderer {
     private final float UNITE = 1/64f;
     private final ShapeRenderer debugRenderer;
     private float runTime = 0;
+    private final SpriteBatch spriteBatch;
+    private BitmapFont etat, direction, deplacement, velocite, position, target;
     
     /**
      * @param gameWorld un objet gameWorld
@@ -38,11 +42,15 @@ public class GameRenderer {
         orthoCamera.setToOrtho(false, 15, 15); // False pour y pointé vers le haut, les dimensions que la camera prend
         orthoCamera.update();
         
-        // batcher = new SpriteBatch();
-        // batcher.setProjectionMatrix(orthoCamera.combined);
-        
         debugRenderer = new ShapeRenderer();
-        //debugRenderer.setProjectionMatrix(orthoCamera.combined); 
+        spriteBatch = new SpriteBatch();
+        
+        etat = new BitmapFont();
+        direction = new BitmapFont(); 
+        deplacement = new BitmapFont(); 
+        velocite = new BitmapFont();
+        position = new BitmapFont();
+        target = new BitmapFont();  
     }
     
     /**
@@ -64,6 +72,8 @@ public class GameRenderer {
         orthoCamera.position.y = gameWorld.getMineur().getPosition().y;
         orthoCamera.update();
         
+        renderBackground();
+        
         //Gdx.app.log("Position orthoCaméra", orthoCamera.position.toString());
         //Gdx.app.log("Position mineur", gameWorld.getMineur().getPosition().toString());
         //Gdx.app.log("GameRenderer", (String) gameWorld.getMineur().getEtatMineur().name());
@@ -73,6 +83,12 @@ public class GameRenderer {
         renderMineur();
         //if(InputHandler.keys[30]) 
             renderDebug(); // Si on appui sur B, on affiche le debug
+    }
+    
+    private void renderBackground() {
+        spriteBatch.begin();
+        spriteBatch.draw(AssetLoader.backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        spriteBatch.end();        
     }
     
     /**
@@ -103,7 +119,19 @@ public class GameRenderer {
      * Ajout des lignes jaunes pour définir les blocs
      * Ajout du rectangle rouge pour définir le mineur
      */       
-    private void renderDebug () {
+    private void renderDebug () {      
+        spriteBatch.begin();
+        etat.draw(spriteBatch, "Etat : " + gameWorld.getMineur().getEtatMineur().name(), 5, 950);
+        direction.draw(spriteBatch, "Direction : " + gameWorld.getMineur().getDirectionMineur().name(), 5, 935);
+        if(gameWorld.getMineur().getTypeDeplacement() != null) {
+            deplacement.draw(spriteBatch, "Déplacement : " + gameWorld.getMineur().getTypeDeplacement().getClass().getSimpleName(), 5, 920);
+            if("Ammortissement".equals(gameWorld.getMineur().getTypeDeplacement().toString()))
+                target.draw(spriteBatch, "Target : " + gameWorld.getMineur().getDeplacement().getTargetPosition().toString(), 5, 905);
+            velocite.draw(spriteBatch, "Vélocité : " + gameWorld.getMineur().getDeplacement().getVelocite().toString(), 150, 950);
+        }
+        position.draw(spriteBatch, "Position : " + gameWorld.getMineur().getPosition().toString(), 150, 935);
+        spriteBatch.end();
+        
         debugRenderer.setProjectionMatrix(orthoCamera.combined);
         debugRenderer.begin(ShapeType.Line);
         debugRenderer.setColor(Color.RED);

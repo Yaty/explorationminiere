@@ -1,0 +1,9 @@
+diff a/core/src/com/mygdx/mehelpers/Deplacement/Amortissement.java b/core/src/com/mygdx/mehelpers/Deplacement/Amortissement.java	(rejected hunks)
+@@ -75,6 +75,5 @@
+         collision.handleCollision(); // Gestion des colisions
+         mineur.getPosition().add(velocite); // Ajout de la velocite au vecteur position
+         velocite.scl(1/Gdx.graphics.getDeltaTime()); // On remet velocite comme avant
+-    }
+-    
++    } 
+ }

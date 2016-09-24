@@ -18,12 +18,12 @@ public class MEGame extends Game {
      */
     @Override
     public void create() {
-        // Création du jeu
+        // Chargement des textures, assignation du screen au menu principal
+        AssetLoader.load();
         setScreen(new MainMenuScreen(this));
     }
     
     public void createGame(){
-        AssetLoader.load();
         setScreen(new GameScreen(this));
     }
     

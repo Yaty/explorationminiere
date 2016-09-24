@@ -15,7 +15,7 @@ import com.mygdx.minexploration.MEGame;
 public class GameScreen implements Screen {
     private final GameWorld gameWorld;
     private final GameRenderer gameRenderer;
-    private MEGame game;
+    private final MEGame game;
     
     /**
      * @param game le jeu

@@ -9,6 +9,7 @@ import com.mygdx.mehelpers.Deplacement.Amortissement;
 import com.mygdx.mehelpers.Deplacement.Deplacement;
 import com.mygdx.mehelpers.Deplacement.Fluide;
 import com.mygdx.mehelpers.InputHandler;
+import com.mygdx.gameobjects.Inventaire;
 
 /**
  * Classe représentant le personnage du Mineur
@@ -16,6 +17,8 @@ import com.mygdx.mehelpers.InputHandler;
  */
 public class Mineur {
     private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
+    private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE, STOP_ECHELLE;
+    int nbEchelle = 10;
 
     /**
      * Représente la direction du mineur
@@ -100,9 +103,12 @@ public class Mineur {
         MAX_VELOCITE = 2f;
         SAUT_VELOCITE = 4f;
         ECHELLE_VELOCITE = 2f;
+        STOP_ECHELLE = 0f;
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
         position = new Vector2(5.5f - LARGEUR/2, 13);
+        this.map = map;
+        position = new Vector2(getXDepart(), getYDepart());
         runTime = 0f;
         mineurAuSol = teteVersLaDroite = true;
         isInAmortissement = false;
@@ -134,6 +140,19 @@ public class Mineur {
     public boolean getHasMovedWhileBreaking(){
         return this.hasMovedWhileBreaking;
     }
+    /**
+     * @return La coordonnée en X du mineur au départ du jeu
+     */
+    private float getXDepart() {
+        return ((map.getProperties().get("width", Integer.class))/2) + LARGEUR/2;
+        
+    }
+     /**
+     * @return La coordonnée en Y du mineur au départ du jeu
+     */   
+    private float getYDepart() {
+        return map.getProperties().get("height", Integer.class)-2; 
+    }
     
     /**
      * @return la valeur gravité.
@@ -151,6 +170,10 @@ public class Mineur {
     
     public float getVelociteMaxEchelle() {
         return ECHELLE_VELOCITE;
+    }
+    
+    public float getVelociteStopEchelle(){
+        return STOP_ECHELLE;
     }
 
     /**
@@ -194,7 +217,10 @@ public class Mineur {
         
         
         if(InputHandler.keys[33]) // Echelle (F)
+        if(InputHandler.keys[33] && this.nbEchelle >= 0 ){ // Echelle (E)
             cellsHandler.setLadder((int) position.x,(int) position.y);
+               //soon limiter par nb echelle
+        }
         
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit
@@ -226,7 +252,15 @@ public class Mineur {
                     isOnEchelle = true;
             }          
         }
+<<<<<<< HEAD
     } 
+=======
+    }    
+
+    public Deplacement getDeplacement() {
+        return this.deplacement;
+    }
+>>>>>>> 8ac78de58ef97367f1525bddb5b79a708710d9cd
     
     /**
      * @return vrai si le mineur est mode amortissement
