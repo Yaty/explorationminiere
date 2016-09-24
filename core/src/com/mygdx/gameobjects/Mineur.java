@@ -15,7 +15,7 @@ import com.mygdx.gameobjects.Inventaire;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Mineur {
-    private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE, STOP_ECHELLE;
+    private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
     int nbEchelle = 10;
 
     /**
@@ -100,7 +100,6 @@ public class Mineur {
         MAX_VELOCITE = 2f;
         SAUT_VELOCITE = 4f;
         ECHELLE_VELOCITE = 2f;
-        STOP_ECHELLE = 0f;
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
         this.map = map;
@@ -143,10 +142,6 @@ public class Mineur {
     
     public float getVelociteMaxEchelle() {
         return ECHELLE_VELOCITE;
-    }
-    
-    public float getVelociteStopEchelle(){
-        return STOP_ECHELLE;
     }
 
     /**
