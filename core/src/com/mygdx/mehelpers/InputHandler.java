@@ -43,4 +43,7 @@ public class InputHandler {
      * @return vrai si la touche identifié par l'entier i est enfoncé, faux sinon
      */
     public static boolean isDown(int i) { return keys[i]; }
+    
+    
+
 }

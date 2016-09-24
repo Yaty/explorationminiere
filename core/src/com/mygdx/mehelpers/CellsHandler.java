@@ -129,18 +129,19 @@ public class CellsHandler {
         final int xBloc = x;
         final int yBloc = y;
         if(isCellSurfaceHere(x, y) && !cassageEnCour && mineur.isMineurAuSol()) {
-            if(layerSurface.getCell(x, y).getTile().getId() == 4)
-                victory = true;
+            if(layerSurface.getCell(x, y).getTile().getId() == 4)victory = true;
             mineur.setEtatMineur(Etat.Miner);
-            mineur.setDirectionMineur(Direction.Arret);
             cassageEnCour = true;
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    layerSurface.setCell(xBloc, yBloc, null);
+                    System.out.println("getHasMovedWhileBreaking=" + mineur.getHasMovedWhileBreaking());
+                    if(!mineur.getHasMovedWhileBreaking()){
+                        layerSurface.setCell(xBloc, yBloc, null);
+                        cassageEnCour = false;
+                    }
                     mineur.setEtatMineur(Etat.Arret);
-                    mineur.setDirectionMineur(Direction.Arret);
-                    cassageEnCour = false;
+                    mineur.setHasMovedWhileBreaking(false);
                 }
             }, 1000);
         }
