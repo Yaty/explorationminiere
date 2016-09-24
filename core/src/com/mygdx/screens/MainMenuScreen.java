@@ -46,7 +46,8 @@ public class MainMenuScreen implements Screen {
         btnNvlPartie.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    game.setScreen(new GameScreen(game));
+                    dispose();
+                    game.setScreen(new GameScreen(game, "partieGen", 1)); // ATTENTION : IL VA FALLOIR GENERE PARTIEGEN AUTO SINON CA ECRASE LANCIENNE PARTIE
                 };
         });
         
@@ -55,6 +56,7 @@ public class MainMenuScreen implements Screen {
         btnChargerPartie.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    dispose();
                     game.setScreen(new ChargementPartie(game));
                 };
         });        
@@ -64,6 +66,7 @@ public class MainMenuScreen implements Screen {
         btnInfos.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    dispose();
                     game.setScreen(new InfosScreen(game));
                 };
         });    
@@ -73,6 +76,7 @@ public class MainMenuScreen implements Screen {
         btnQuitter.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    dispose();
                     Gdx.app.exit();
                 };
         });  

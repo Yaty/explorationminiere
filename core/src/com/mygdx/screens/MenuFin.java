@@ -80,7 +80,7 @@ public class MenuFin implements Screen {
             batch.draw(playBoutonActif, xPlayBouton , PLAY_BOUTON_Y, PLAY_BOUTON_WIDTH, PLAY_BOUTON_HEIGHT);
             if(Gdx.input.isTouched()){
                 this.dispose();
-                game.createGame();
+                game.backToMainMenuScreen();
             }
         }else{
             batch.draw(playBoutonInactif, xPlayBouton , PLAY_BOUTON_Y, PLAY_BOUTON_WIDTH, PLAY_BOUTON_HEIGHT);

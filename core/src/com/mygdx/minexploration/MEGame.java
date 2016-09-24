@@ -23,8 +23,8 @@ public class MEGame extends Game {
         setScreen(new MainMenuScreen(this));
     }
     
-    public void createGame(){
-        setScreen(new GameScreen(this));
+    public void backToMainMenuScreen(){
+        setScreen(new MainMenuScreen(this));
     }
     
     public void createMenuFin (){
