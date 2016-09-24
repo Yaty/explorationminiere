@@ -2,14 +2,12 @@ package com.mygdx.gameobjects;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-import static com.mygdx.gameobjects.Mineur.Etat.Echelle;
 import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.CellsHandler;
 import com.mygdx.mehelpers.Deplacement.Amortissement;
 import com.mygdx.mehelpers.Deplacement.Deplacement;
 import com.mygdx.mehelpers.Deplacement.Fluide;
 import com.mygdx.mehelpers.InputHandler;
-import com.mygdx.gameobjects.Inventaire;
 
 /**
  * Classe représentant le personnage du Mineur
@@ -17,11 +15,12 @@ import com.mygdx.gameobjects.Inventaire;
  */
 public class Mineur {
     private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
-<<<<<<< HEAD
-    private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE, STOP_ECHELLE;
-=======
->>>>>>> d6197b1c98498e938def6d71d9eefab2a135ff02
+
     int nbEchelle = 10;
+
+    public void setEtatMineur(Etat etat) {
+        this.etat = etat;
+    }
 
     /**
      * Représente la direction du mineur
@@ -108,7 +107,6 @@ public class Mineur {
         ECHELLE_VELOCITE = 2f;
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
-        position = new Vector2(5.5f - LARGEUR/2, 13);
         this.map = map;
         position = new Vector2(getXDepart(), getYDepart());
         runTime = 0f;
@@ -117,7 +115,6 @@ public class Mineur {
         isOnEchelle = false;
         wasInAmortissement = false;
         wasMoving = false;
-        this.map = map;
         cellsHandler = new CellsHandler(this);
         hasMovedWhileBreaking = false;
         
@@ -250,15 +247,11 @@ public class Mineur {
                     isOnEchelle = true;
             }          
         }
-<<<<<<< HEAD
-    } 
-=======
-    }    
+    }  
 
     public Deplacement getDeplacement() {
         return this.deplacement;
     }
->>>>>>> 8ac78de58ef97367f1525bddb5b79a708710d9cd
     
     /**
      * @return vrai si le mineur est mode amortissement
@@ -319,14 +312,6 @@ public class Mineur {
      */
     public Direction getDirectionMineur() {
         return dirMineur;
-    }
-    
-    /**
-
-     * @param etat variable à affecter
-     */
-    public void setEtatMineur(Etat etat) {
-        this.etat = etat;
     }
     
     /**

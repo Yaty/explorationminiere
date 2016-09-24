@@ -128,14 +128,14 @@ public class CellsHandler {
     public void destructionBloc(int x, int y) {  
         final int xBloc = x;
         final int yBloc = y;
-<<<<<<< HEAD
+
         if(isCellSurfaceHere(x, y) && !cassageEnCour && mineur.isMineurAuSol()) {
             if(layerSurface.getCell(x, y).getTile().getId() == 4)victory = true;
-=======
+
         if(isCellSurfaceHere(x, y) && !cassageEnCour && mineur.isMineurAuSol() && layerSurface.getCell(x, y).getTile().getId() != 6 ) {
             if(layerSurface.getCell(x, y).getTile().getId() == 4)
                 victory = true;
->>>>>>> 8ac78de58ef97367f1525bddb5b79a708710d9cd
+
             mineur.setEtatMineur(Etat.Miner);
             cassageEnCour = true;
             new Timer().schedule(new TimerTask() {
@@ -152,5 +152,6 @@ public class CellsHandler {
             }, 1000);
         }
     }    
+    }
     
 }

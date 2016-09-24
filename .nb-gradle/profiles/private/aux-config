@@ -4,28 +4,13 @@
   <auxiliary>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-      <group>
-        <file>file:/C:/Users/Pc/Documents/Projet/Exploitminiere/desktop/src/com/mygdx/minexploration/desktop/DesktopLauncher.java</file>
-      </group>
+      <group/>
     </open-files>
     <editor-bookmarks lastBookmarkId="0" xmlns="http://www.netbeans.org/ns/editor-bookmarks/2"/>
-<<<<<<< HEAD
-=======
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
-      <group/>
-=======
       <group>
-        <file>file:/C:/Users/Hugo/Desktop/Projet%201A2A/ExplorationMiniere/core/src/com/mygdx/screens/MainMenuScreen.java</file>
-        <file>file:/C:/Users/Hugo/Desktop/Projet%201A2A/ExplorationMiniere/core/src/com/mygdx/screens/GameScreen.java</file>
-        <file>file:/C:/Users/Hugo/Desktop/Projet%201A2A/ExplorationMiniere/core/src/com/mygdx/screens/ChargementPartie.java</file>
-        <file>file:/C:/Users/Hugo/Desktop/Projet%201A2A/ExplorationMiniere/core/src/com/mygdx/screens/ChargementNiveau.java</file>
-        <file>file:/C:/Users/Hugo/Desktop/Projet%201A2A/ExplorationMiniere/core/src/com/mygdx/gameworld/GameRenderer.java</file>
-        <file>file:/C:/Users/Hugo/Desktop/Projet%201A2A/ExplorationMiniere/core/src/com/mygdx/screens/InfosScreen.java</file>
-        <file>file:/C:/Users/Hugo/Desktop/Projet%201A2A/ExplorationMiniere/core/src/com/mygdx/gameworld/GameWorld.java</file>
+        <file>file:/C:/Users/Hugo/Desktop/Projet%201A2A/ExplorationMiniere/desktop/src/com/mygdx/minexploration/desktop/DesktopLauncher.java</file>
       </group>
->>>>>>> 8ac78de58ef97367f1525bddb5b79a708710d9cd
     </open-files>
->>>>>>> 29f1abe45b4f68534d182b7ef9ea244e1dfecc92
   </auxiliary>
 </gradle-project-properties>
