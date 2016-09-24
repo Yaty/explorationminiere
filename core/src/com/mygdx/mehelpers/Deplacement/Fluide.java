@@ -40,7 +40,7 @@ public class Fluide extends Deplacement {
                         mineur.setEtatMineur(Etat.Echelle);
                         mineur.getDirectionMineur();
                         if(InputHandler.keys[19] || InputHandler.keys[54]){
-                            velocite.y = mineur.getVelociteStopEchelle(); //faut rester appuyé
+                            velocite.y = 0.2f - mineur.getGRAVITE(); //faut rester appuyé
                         };
                     } else if(!mineur.getEtatMineur().equals(Etat.Sauter)) {
                         velocite.y = mineur.getSAUT_VELOCITE();
@@ -67,7 +67,7 @@ public class Fluide extends Deplacement {
                 if(mineur.getEtatMineur().equals(Etat.Echelle)) {
                     velocite.y = -mineur.getSAUT_VELOCITE();
                     if(InputHandler.keys[20] || InputHandler.keys[47]){
-                        velocite.y = mineur.getVelociteStopEchelle(); //faut rester appuyé
+                        velocite.y = 0f; //faut rester appuyé
                     }
                 } else if(collision.isTiledHere(x, y-1)) {
                     //mineur.setEtatMineur(Etat.Arret);

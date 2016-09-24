@@ -17,7 +17,10 @@ import com.mygdx.gameobjects.Inventaire;
  */
 public class Mineur {
     private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
+<<<<<<< HEAD
     private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE, STOP_ECHELLE;
+=======
+>>>>>>> d6197b1c98498e938def6d71d9eefab2a135ff02
     int nbEchelle = 10;
 
     /**
@@ -103,7 +106,6 @@ public class Mineur {
         MAX_VELOCITE = 2f;
         SAUT_VELOCITE = 4f;
         ECHELLE_VELOCITE = 2f;
-        STOP_ECHELLE = 0f;
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
         position = new Vector2(5.5f - LARGEUR/2, 13);
@@ -170,10 +172,6 @@ public class Mineur {
     
     public float getVelociteMaxEchelle() {
         return ECHELLE_VELOCITE;
-    }
-    
-    public float getVelociteStopEchelle(){
-        return STOP_ECHELLE;
     }
 
     /**
