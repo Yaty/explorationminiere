@@ -128,7 +128,7 @@ public class CellsHandler {
     public void destructionBloc(int x, int y) {  
         final int xBloc = x;
         final int yBloc = y;
-        if(isCellSurfaceHere(x, y) && !cassageEnCour && mineur.isMineurAuSol()) {
+        if(isCellSurfaceHere(x, y) && !cassageEnCour && mineur.isMineurAuSol() && layerSurface.getCell(x, y).getTile().getId() != 6 ) {
             if(layerSurface.getCell(x, y).getTile().getId() == 4)
                 victory = true;
             mineur.setEtatMineur(Etat.Miner);

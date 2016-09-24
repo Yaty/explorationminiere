@@ -1,9 +1,9 @@
 package com.mygdx.gameworld;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.mygdx.gameobjects.Mineur;
-import com.mygdx.minexploration.ShutdownHandler;
 
 /**
  *
@@ -18,11 +18,8 @@ public class GameWorld {
      *
      */
     public GameWorld() {
-        map = new TmxMapLoader().load("mapv3.tmx");
-        //stage = new TiledMapStage(map);
+        map = new TmxMapLoader().load(Gdx.files.internal("./map/1/1/mapv3.tmx").toString());
         mineur = new Mineur(map);
-        
-        
     }
 
     /**

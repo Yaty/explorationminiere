@@ -2,9 +2,16 @@ package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.minexploration.MEGame;
 
 /**
@@ -15,24 +22,10 @@ import com.mygdx.minexploration.MEGame;
 
 
 public class MainMenuScreen implements Screen {
-    
-    /**
-     * @param batch sert pour ecrire dans une fentre 2D
-     * @param playBoutonActif represente le bouton Play actif (fond jaune)
-     * @param playBoutonInactif represente le bouton Play inactif (fond blanc)
-     * @param exitBoutonActif represente le bouton Exit actif (fond jaune)
-     * @param exitBoutonInactif represente le bouton Exit inactif (fond blanc)
-     * @param background represente le fond de la fenetre (fond d'ecran)
-     */
 
-    private static final int PLAY_BOUTON_WIDTH = 200;
-    private static final int PLAY_BOUTON_HEIGHT = 100;
-    private static final int EXIT_BOUTON_WIDTH = 200;
-    private static final int EXIT_BOUTON_HEIGHT = 100;
-    private static final int PLAY_BOUTON_Y = 600;
-    private static final int EXIT_BOUTON_Y = 400;
-    private MEGame game;  
-    private Texture playBoutonActif, playBoutonInactif, exitBoutonActif, exitBoutonInactif, background;
+    private final MEGame game;  
+    private Stage stage;
+    private Skin skin;
     
     /**
      * Ce constructeur initialise les boutons avec leur images
@@ -40,14 +33,77 @@ public class MainMenuScreen implements Screen {
      */
     
     public MainMenuScreen (MEGame game){
-        this.game = game;
-        background = new Texture ("background_menudebut.jpg");
-        playBoutonActif = new Texture("bouton_play_actif.png");
-        playBoutonInactif = new Texture("bouton_play_inactif.png");
-        exitBoutonInactif = new Texture("Bouton_exit_inactif.png");
-        exitBoutonActif = new Texture("Bouton_exit_actif.png");   
+        this.game = game;        
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage); // Le stage va s'occuper des E/S
+        create(); // Création du skin de base, puis ajout ci-dessous
+        createButtons();
     }
     
+    private void createButtons() {
+        TextButton btnNvlPartie = new TextButton("Nouvelle partie", skin); // On utilise le skin
+        btnNvlPartie.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2+150);
+        btnNvlPartie.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.setScreen(new GameScreen(game));
+                };
+        });
+        
+        TextButton btnChargerPartie = new TextButton("Charger une partie", skin);
+        btnChargerPartie.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2+50);
+        btnChargerPartie.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.setScreen(new ChargementPartie(game));
+                };
+        });        
+        
+        TextButton btnInfos = new TextButton("Informations", skin);
+        btnInfos.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2-50);
+        btnInfos.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    game.setScreen(new InfosScreen(game));
+                };
+        });    
+        
+        TextButton btnQuitter = new TextButton("Quitter", skin);
+        btnQuitter.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2-150);
+        btnQuitter.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    Gdx.app.exit();
+                };
+        });  
+        
+        stage.addActor(btnNvlPartie);
+        stage.addActor(btnChargerPartie);
+        stage.addActor(btnInfos);
+        stage.addActor(btnQuitter);
+    }
+    
+    private void create() {     
+        //Create a font
+        BitmapFont font = new BitmapFont();
+        skin = new Skin();
+        skin.add("default", font);
+
+        //Create a texture
+        Pixmap pixmap = new Pixmap((int)Gdx.graphics.getWidth()/4,(int)Gdx.graphics.getHeight()/10, Pixmap.Format.RGB888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        skin.add("background",new Texture(pixmap));
+
+        //Create a button style
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
+        textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("background", Color.DARK_GRAY);
+        textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
+        textButtonStyle.font = skin.getFont("default");
+        skin.add("default", textButtonStyle);
+    }
 
     @Override
     public void show() {
@@ -59,40 +115,10 @@ public class MainMenuScreen implements Screen {
     
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,1,1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        SpriteBatch batch = new SpriteBatch();
-        batch.begin();
-        
-        batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        
-        
-        int xPlayBouton = Gdx.graphics.getWidth() / 2 - PLAY_BOUTON_WIDTH / 2;
-        
-        if(Gdx.input.getX() < xPlayBouton + PLAY_BOUTON_WIDTH && Gdx.input.getX() > xPlayBouton && Gdx.graphics.getHeight() - Gdx.input.getY() < PLAY_BOUTON_Y + PLAY_BOUTON_HEIGHT && Gdx.graphics.getHeight() - Gdx.input.getY() > PLAY_BOUTON_Y ){
-            batch.draw(playBoutonActif, xPlayBouton , PLAY_BOUTON_Y, PLAY_BOUTON_WIDTH, PLAY_BOUTON_HEIGHT);
-            if(Gdx.input.isTouched()){
-                this.dispose();
-                game.createGame();
-            }
-        }else{
-            batch.draw(playBoutonInactif, xPlayBouton , PLAY_BOUTON_Y, PLAY_BOUTON_WIDTH, PLAY_BOUTON_HEIGHT);
-        }
-        
-        
-        int xExitBouton = Gdx.graphics.getWidth() / 2 - EXIT_BOUTON_WIDTH / 2;
-
-        if(Gdx.input.getX() < xExitBouton + EXIT_BOUTON_WIDTH && Gdx.input.getX() > xExitBouton && Gdx.graphics.getHeight() - Gdx.input.getY() < EXIT_BOUTON_Y + EXIT_BOUTON_HEIGHT && Gdx.graphics.getHeight() - Gdx.input.getY() > EXIT_BOUTON_Y ){
-            batch.draw(exitBoutonActif, xExitBouton , EXIT_BOUTON_Y, EXIT_BOUTON_WIDTH, EXIT_BOUTON_HEIGHT);
-            if(Gdx.input.isTouched()){
-                Gdx.app.exit();
-            }
-        }else{
-            batch.draw(exitBoutonInactif, xExitBouton , EXIT_BOUTON_Y, EXIT_BOUTON_WIDTH, EXIT_BOUTON_HEIGHT);        
-        }
-        
-        batch.end();
-        
+        stage.act();
+        stage.draw();
     }
 
     
@@ -114,7 +140,8 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        skin.dispose();
     }
     
     
