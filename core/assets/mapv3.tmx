@@ -3,23 +3,23 @@
 	<tileset firstgid="1" name="dirt" tilewidth="64" tileheight="64" tilecount="1" columns="1">
 		<image source="dirt.png" width="64" height="64"/>
 	</tileset>
-	 
+
 	<tileset firstgid="2" name="glowstone" tilewidth="64" tileheight="64" tilecount="1" columns="1">
 		<image source="glowstone.png" width="64" height="64"/>
 	</tileset>
-	 
+
 	<tileset firstgid="3" name="grass_side" tilewidth="64" tileheight="64" tilecount="1" columns="1">
 		<image source="grass_side.png" width="64" height="64"/>
 	</tileset>
-	 
+
 	<tileset firstgid="4" name="diamond_block" tilewidth="64" tileheight="64" tilecount="1" columns="1">
 		<image source="diamond_block.png" width="64" height="64"/>
 	</tileset>
-	
+
 	<tileset firstgid="5" name="ladder" tilewidth="64" tileheight="64" tilecount="1" columns="1">
 		<image source="ladder.png" width="64" height="64"/>
 	</tileset>
-	 
+
 	<layer name="surface" width="15" height="15">
 		<data encoding="csv">
 		0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -39,7 +39,7 @@
 		0,1,1,1,1,1,1,1,1,1,1,1,1,1,0
 		</data>
 	</layer>
-	 
+
 	<layer name="objets" width="15" height="15">
 		<data encoding="csv">
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
