@@ -24,16 +24,7 @@ public class ChargementPartie extends Chargement implements Screen {
         createListe("./map/");
         createBtn("Valider");
     }
-
-    @Override
-    public void show() {
-    }
-    
-/**
- * Cette methode sert pour l'affichage dans l'ecrans du menu
- * 
- */
-    
+  
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -45,42 +36,17 @@ public class ChargementPartie extends Chargement implements Screen {
         batch.end();
     }
 
-    
     @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-    @Override
-    public void createBtn(String text) {
+    public final void createBtn(String text) {
         TextButton valider = new TextButton(text, skin); // On utilise le skin
         valider.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2-150);
         valider.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
-                    game.setScreen(new ChargementNiveau(game, nomDossier[sb.getSelectedIndex()]));
+                    game.setScreen(new ChargementNiveau(game, Integer.parseInt(nomDossier[sb.getSelectedIndex()]), nom[sb.getSelectedIndex()]));
                 };
         });
         stage.addActor(valider);
-    }
-    
-    
-    
+    } 
 }

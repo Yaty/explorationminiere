@@ -6,18 +6,18 @@
 package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.minexploration.MEGame;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -26,7 +26,7 @@ import java.io.FilenameFilter;
  *
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
-public abstract class Chargement {
+public abstract class Chargement implements Screen {
     protected final MEGame game;
     protected final Stage stage;
     protected Skin skin;
@@ -71,10 +71,8 @@ public abstract class Chargement {
         skin.add("default", textButtonStyle);
     }
     
-    protected void createListe(String text) {
-        
+    protected final void createListe(String text) {
         // https://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html
-        
         // On va lister les parties (équivalente à des dossiers) dans le tableau directories
         File file = new File(text);
         String[] directories = file.list(new FilenameFilter() {
@@ -95,8 +93,6 @@ public abstract class Chargement {
                 }
             });
             nomDossier[j] = folder.getName();
-            
-            //System.out.println(files[0].getName());
             nom[j] = files[0].getName().substring(0, files[0].getName().length()-5);
         }
         
@@ -107,14 +103,37 @@ public abstract class Chargement {
         Table table = new Table();
         table.setFillParent(true); 
         table.center();
-
         table.add(sb);
-        
-        
         stage.addActor(table);
-       
     }    
     
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+    
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
+    
+    @Override
+    public void hide() {
+    } 
+    
+    @Override
+    public void show() {
+    }
+    
+    @Override
     public void dispose() {
         skin.dispose();
         stage.dispose();

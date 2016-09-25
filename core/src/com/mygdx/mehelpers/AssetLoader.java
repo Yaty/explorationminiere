@@ -35,10 +35,12 @@ public class AssetLoader {
         marcher.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
     }
     
+    
     /**
      *
      */
     public static void dispose() {
         mineurTexture.dispose();
+        backgroundTexture.dispose();
     }   
 }

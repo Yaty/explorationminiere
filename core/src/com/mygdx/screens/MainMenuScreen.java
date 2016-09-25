@@ -47,7 +47,7 @@ public class MainMenuScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
-                    game.setScreen(new GameScreen(game, "partieGen", 1)); // ATTENTION : IL VA FALLOIR GENERE PARTIEGEN AUTO SINON CA ECRASE LANCIENNE PARTIE
+                    game.setScreen(new ChoosePropertiesScreen(game)); // ATTENTION : IL VA FALLOIR GENERE PARTIEGEN AUTO SINON CA ECRASE LANCIENNE PARTIE
                 };
         });
         

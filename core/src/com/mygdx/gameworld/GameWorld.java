@@ -1,6 +1,5 @@
 package com.mygdx.gameworld;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.mygdx.gameobjects.Mineur;
@@ -17,8 +16,8 @@ public class GameWorld {
     /**
      *
      */
-    public GameWorld() {
-        map = new TmxMapLoader().load(Gdx.files.internal("./map/1/1/mapv3.tmx").toString());
+    public GameWorld(String cheminMap) {
+        map = new TmxMapLoader().load(cheminMap);
         mineur = new Mineur(map);
     }
 

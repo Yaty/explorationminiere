@@ -18,18 +18,13 @@ import com.mygdx.minexploration.MEGame;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class ChargementNiveau extends Chargement implements Screen {
-    private String partie;
+    private int idPartie;
     
-    public ChargementNiveau(MEGame game, String partie) {
+    public ChargementNiveau(MEGame game, int idPartie, String nomPartie) {
         super(game);
-        this.partie = partie;
-        createListe("./map/" + partie +"/");
+        this.idPartie = idPartie;
+        createListe("./map/" + idPartie +"/");
         createBtn("Valider");
-    }
-    
-    
-    @Override
-    public void show() {
     }
 
     @Override
@@ -44,27 +39,6 @@ public class ChargementNiveau extends Chargement implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-    @Override
     public void createBtn(String text) {
         TextButton valider = new TextButton(text, skin); // On utilise le skin
         valider.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2-150);
@@ -72,7 +46,7 @@ public class ChargementNiveau extends Chargement implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
-                    game.setScreen(new GameScreen(game, partie, Integer.parseInt(nomDossier[sb.getSelectedIndex()])));
+                    game.loadingGame(idPartie, nom[sb.getSelectedIndex()], Integer.parseInt(nomDossier[sb.getSelectedIndex()]));
                 };
         });
         stage.addActor(valider);

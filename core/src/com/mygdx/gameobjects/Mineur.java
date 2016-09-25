@@ -1,6 +1,7 @@
 package com.mygdx.gameobjects;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.CellsHandler;
@@ -143,14 +144,16 @@ public class Mineur {
      * @return La coordonnée en X du mineur au départ du jeu
      */
     private float getXDepart() {
-        return ((map.getProperties().get("width", Integer.class))/2) + LARGEUR/2;
+        TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get("surface");
+        return layer.getWidth()/2 + LARGEUR/2;
         
     }
      /**
      * @return La coordonnée en Y du mineur au départ du jeu
      */   
     private float getYDepart() {
-        return map.getProperties().get("height", Integer.class)-2; 
+        TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get("surface");
+        return layer.getHeight()-3; 
     }
     
     /**

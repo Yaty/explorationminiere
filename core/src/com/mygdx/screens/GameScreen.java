@@ -16,21 +16,19 @@ public class GameScreen implements Screen {
     private final GameWorld gameWorld;
     private final GameRenderer gameRenderer;
     private final MEGame game;
-    private String partie;
-    private int level;
     
     /**
      * Lance le jeu au niveau 1
      * @param game le jeu
+     * @param partie
+     * @param level
      */ 
-    public GameScreen(MEGame game, String partie, int level) {
-         Gdx.app.log("GameScreen", "GameScreen créé");
+    public GameScreen(MEGame game, String cheminMap) {
+        Gdx.app.log("GameScreen", "GameScreen créé");
         this.game = game;
-        this.partie = partie;
-        this.level = level;
-        gameWorld = new GameWorld();
+        gameWorld = new GameWorld(cheminMap);
         gameRenderer = new GameRenderer(gameWorld);
-        Gdx.input.setInputProcessor(new KeyBoard());       
+        Gdx.input.setInputProcessor(new KeyBoard());   
     }
     
     
