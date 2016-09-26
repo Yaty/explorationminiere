@@ -12,6 +12,7 @@ import com.mygdx.gameobjects.Mineur;
 import com.mygdx.gameobjects.Mineur.Direction;
 import com.mygdx.gameobjects.Mineur.Etat;
 import com.mygdx.mehelpers.Deplacement.Fluide;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -130,11 +131,11 @@ public class CellsHandler {
         final int yBloc = y;
 
         if(isCellSurfaceHere(x, y) && !cassageEnCour && mineur.isMineurAuSol()) {
-            if(layerSurface.getCell(x, y).getTile().getId() == 4)victory = true;
-
-        if(isCellSurfaceHere(x, y) && !cassageEnCour && mineur.isMineurAuSol() && layerSurface.getCell(x, y).getTile().getId() != 6 ) {
-            if(layerSurface.getCell(x, y).getTile().getId() == 4)
+            Object idDiam =  mineur.getMap().getTileSets().getTileSet("diamond_block.png").getProperties().get("firstgid");
+            int idDiam2 = (Integer) idDiam;
+            if(layerSurface.getCell(x, y).getTile().getId() == idDiam2)
                 victory = true;
+        }
 
             mineur.setEtatMineur(Etat.Miner);
             cassageEnCour = true;
@@ -151,7 +152,4 @@ public class CellsHandler {
                 }
             }, 1000);
         }
-    }    
-    }
-    
 }
