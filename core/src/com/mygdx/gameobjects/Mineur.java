@@ -92,7 +92,6 @@ public class Mineur {
     private final TiledMap map;
     private final CellsHandler cellsHandler;
     private Deplacement deplacement;
-    private boolean hasMovedWhileBreaking;
     
     /**
      * Constructeur du Mineur
@@ -117,29 +116,9 @@ public class Mineur {
         wasInAmortissement = false;
         wasMoving = false;
         cellsHandler = new CellsHandler(this);
-        hasMovedWhileBreaking = false;
         
     }
     
-    public void testHasMovedWhileBreaking(Direction dir){
-        if (etat == Etat.Miner){
-            System.out.println("DirMineur ="+ dirMineur + " dir=" + dir +".");
-            if(dirMineur != dir){
-                this.hasMovedWhileBreaking = true;
-            }else{
-                this.hasMovedWhileBreaking = false;
-            }
-        }
-            
-    }
-    
-    public void setHasMovedWhileBreaking(boolean bool){
-        this.hasMovedWhileBreaking = bool;
-    }
-    
-    public boolean getHasMovedWhileBreaking(){
-        return this.hasMovedWhileBreaking;
-    }
     /**
      * @return La coordonnée en X du mineur au départ du jeu
      */
@@ -193,29 +172,24 @@ public class Mineur {
         
         if(InputHandler.keys[45] || InputHandler.keys[21]) {
             moving = true;
-            testHasMovedWhileBreaking(Direction.Gauche);
             dirMineur = Direction.Gauche;
             
         }
         if (InputHandler.keys[32] || InputHandler.keys[22]) {
             moving = true;
-            testHasMovedWhileBreaking(Direction.Droite);
             dirMineur = Direction.Droite;
         }
         if ((InputHandler.keys[19] || InputHandler.keys[54]) && mineurAuSol) {
             moving = true;
-            testHasMovedWhileBreaking(Direction.Haut);
             dirMineur = Direction.Haut;
         }
         if(InputHandler.keys[20] || InputHandler.keys[47]) {
             moving = true;
-            testHasMovedWhileBreaking(Direction.Bas);
             dirMineur = Direction.Bas;
         }
         
         
-        if(InputHandler.keys[33]) // Echelle (F)
-        if(InputHandler.keys[33] && this.nbEchelle >= 0 ){ // Echelle (E)
+        if(InputHandler.keys[33] && this.nbEchelle > 0 ){ // Echelle (E)
             cellsHandler.setLadder((int) position.x,(int) position.y);
                //soon limiter par nb echelle
         }
@@ -235,11 +209,9 @@ public class Mineur {
         
         if(deplacement != null) {
             //System.out.println("1Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
-            if(!etat.equals(Etat.Miner)) {
-                deplacement.move();
-                if(isOnEchelle && !cellsHandler.isLadderHere((int) position.x, (int) position.y))
-                    isOnEchelle = false;
-            }
+            deplacement.move();
+            if(isOnEchelle && !cellsHandler.isLadderHere((int) position.x, (int) position.y))
+                isOnEchelle = false;
             //System.out.println("2Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
             if(deplacement.getVelocite().isZero() && !(deplacement instanceof Fluide)) {
                 deplacement = null;
