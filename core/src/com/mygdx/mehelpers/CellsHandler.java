@@ -8,11 +8,9 @@ package com.mygdx.mehelpers;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Mineur;
-import com.mygdx.gameobjects.Mineur.Direction;
 import com.mygdx.gameobjects.Mineur.Etat;
-import com.mygdx.mehelpers.Deplacement.Fluide;
-import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -136,26 +134,26 @@ public class CellsHandler {
         final int xBloc = x;
         final int yBloc = y;
 
-        if(isCellSurfaceHere(x, y) && !cassageEnCour && mineur.isMineurAuSol()) {
-            Object idDiam =  mineur.getMap().getTileSets().getTileSet("diamond_block.png").getProperties().get("firstgid");
-            int idDiam2 = (Integer) idDiam;
-            if(layerSurface.getCell(x, y).getTile().getId() == idDiam2)
-                victory = true;
-        }
-
-            mineur.setEtatMineur(Etat.Miner);
-            cassageEnCour = true;
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    System.out.println("getHasMovedWhileBreaking=" + mineur.getHasMovedWhileBreaking());
-                    if(!mineur.getHasMovedWhileBreaking()){
-                        layerSurface.setCell(xBloc, yBloc, null);
-                        cassageEnCour = false;
+        final Vector2 positionLancement = mineur.getPosition().cpy();
+        // Faudrait lamper vers le bloc ou il va
+        
+        // Commencement du minage
+        mineur.setEtatMineur(Etat.Miner);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() { // Fin du minage
+                Vector2 positionLorsDuCassage = mineur.getPosition().cpy();
+                System.out.println("Condition test :");
+                System.out.println(isCellSurfaceHere(xBloc, yBloc) + "" + mineur.isMineurAuSol() + "" + positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f));
+                if(isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
+                    Object idDiam =  mineur.getMap().getTileSets().getTileSet("diamond_block.png").getProperties().get("firstgid");
+                    int idDiam2 = (Integer) idDiam;
+                    if(layerSurface.getCell(xBloc, yBloc).getTile().getId() == idDiam2) {
+                        victory = true;
                     }
-                    mineur.setEtatMineur(Etat.Arret);
-                    mineur.setHasMovedWhileBreaking(false);
+                    layerSurface.setCell(xBloc, yBloc, null);
                 }
-            }, 1000);
+            }
+        }, 1000);
         }
 }
