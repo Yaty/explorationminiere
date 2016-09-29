@@ -77,6 +77,7 @@ public class Amortissement extends Deplacement {
         velocite.scl(1/Gdx.graphics.getDeltaTime()); // On remet velocite comme avant
     } 
     
+    @Override
     public Vector2 getTargetPosition() {
         return targetPosition;
     }

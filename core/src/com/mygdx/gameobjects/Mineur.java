@@ -194,12 +194,11 @@ public class Mineur {
                //soon limiter par nb echelle
         }
         
-        
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit
         if(moving && !(deplacement instanceof Fluide)) { // Si on est dans déplacement dit de type fluide et que le mineur n'est pas en train de sauter
             wasMoving = true;
             deplacement = new Fluide(this);
-        } else if(!moving && wasMoving && !(deplacement instanceof Amortissement) && !etat.equals(Etat.Sauter) && !etat.equals(Etat.Echelle)){ // Sinon c'est un amortissement
+        } else if(!moving && wasMoving && !(deplacement instanceof Amortissement) && etat.equals(Etat.Deplacement)){ // Sinon c'est un amortissement
             deplacement = new Amortissement(this);
         }
         
@@ -213,7 +212,7 @@ public class Mineur {
             if(isOnEchelle && !cellsHandler.isLadderHere((int) position.x, (int) position.y))
                 isOnEchelle = false;
             //System.out.println("2Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
-            if(deplacement.getVelocite().isZero() && !(deplacement instanceof Fluide)) {
+            if(deplacement.getVelocite().isZero()) {
                 deplacement = null;
                 wasMoving = false;
                 dirMineur = Direction.Arret;
