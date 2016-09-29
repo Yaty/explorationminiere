@@ -94,8 +94,11 @@ public class CellsHandler {
      * @return vrai s'il y a une échelle à cette position, non sinon
      */    
     public boolean isLadderHere(int x,int y){
-        if(layerObjets.getCell(x, y) != null)
-            return layerObjets.getCell(x,y).getTile().getId() == 5;
+        Object idLadder = mineur.getMap().getTileSets().getTileSet("ladder.gif").getProperties().get("firstgid");
+        int idLadder2 = (Integer)idLadder;
+        if(layerObjets.getCell(x, y) != null){
+            return layerObjets.getCell(x,y).getTile().getId() == idLadder2;
+        }
         return false;
     }
     
@@ -106,8 +109,11 @@ public class CellsHandler {
      */
     public void setLadder(int x,int y){
         Cell cell = new Cell();
-        TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("ladder");
-        cell.setTile(tileSet.getTile(5));
+        Object idLadder = mineur.getMap().getTileSets().getTileSet("ladder.gif").getProperties().get("firstgid");
+        int idLadder2 = (Integer)idLadder;
+        TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("ladder.gif");
+        cell.setTile(tileSet.getTile(idLadder2));
+        System.out.println(idLadder2);
         layerObjets.setCell(x, y, cell);
     }
     
