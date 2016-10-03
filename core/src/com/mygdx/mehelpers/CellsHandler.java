@@ -139,6 +139,8 @@ public class CellsHandler {
         
         // Commencement du minage
         mineur.setEtatMineur(Etat.Miner);
+        int dureeMinage = calculDureeMinage();
+        System.out.println("Durée minage : " + dureeMinage);
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() { // Fin du minage
@@ -154,6 +156,15 @@ public class CellsHandler {
                     layerSurface.setCell(xBloc, yBloc, null);
                 }
             }
-        }, 1000);
-        }
+        }, dureeMinage);
+    }
+    
+    /*
+     Renvoi une durée en MS.
+     Durée = 1000ms + 100 ms tout les 10 blocs
+    */
+    private int calculDureeMinage() {
+        int profondeur = layerSurface.getHeight() - (int) mineur.getPosition().y;
+        return 1000 + 100 * (profondeur/10);
+    }
 }
