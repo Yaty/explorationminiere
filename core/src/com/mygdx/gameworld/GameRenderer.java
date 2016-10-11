@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.mygdx.mehelpers.AssetLoader;
+import static javax.swing.Spring.width;
 
 /**
  *
@@ -81,7 +83,9 @@ public class GameRenderer {
         tiledMapRenderer.render();
 
         renderMineur();
+        renderGUI();
         //if(InputHandler.keys[30]) 
+        //renderDebug(); // Si on appui sur B, on affiche le debug
     }
     
     private void renderBackground() {
@@ -111,6 +115,13 @@ public class GameRenderer {
         else
             batcher.draw(frame, gameWorld.getMineur().getPosition().x + gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getPosition().y, -gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getHAUTEUR());
         batcher.end();
+    }
+    
+    private void renderGUI(){
+        spriteBatch.begin();
+        NinePatch health = new NinePatch(AssetLoader.healthBarTexture);
+        health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth(), AssetLoader.healthBarTexture.getHeight());
+        spriteBatch.end();
     }
     
     /**

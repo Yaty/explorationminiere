@@ -93,6 +93,7 @@ public class Mineur {
     private final CellsHandler cellsHandler;
     private Deplacement deplacement;
     private boolean poserEchelle = true;
+    private float health = 1f;
     
     /**
      * Constructeur du Mineur
@@ -143,6 +144,14 @@ public class Mineur {
         return GRAVITE;
     }
     
+    public float getHealth(){
+        return this.health;
+    }
+    
+    public void setHealth(float health){
+        this.health=health;
+    }
+    
     /**
      * @return la variable moving
      */
@@ -191,6 +200,8 @@ public class Mineur {
         if(InputHandler.keys[20] || InputHandler.keys[47]) {
             moving = true;
             dirMineur = Direction.Bas;
+            health = health - 0.01f;
+            
         }
         
         

@@ -111,6 +111,7 @@ public class CellsHandler {
         int idLadder2 = (Integer)idLadder;
         TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("ladder.gif");
         cell.setTile(tileSet.getTile(idLadder2));
+        System.out.println(idLadder2);
         layerObjets.setCell(x, y, cell);
         //System.out.println("Pos en X" + x + "Pos en Y" + y);
         
@@ -147,6 +148,13 @@ public class CellsHandler {
         int idPierre2 = (Integer)idPierre;
         TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("stone.png");
         cell.setTile(tileSet.getTile(idPierre2));
+        while(layerSurface.getCell(xBloc, yBloc+1).getTile().getId() == idPierre2){
+            layerSurface.setCell(xBloc, yBloc+1,null);
+            System.out.println("Pos du bloc null :"+xBloc+"  pos du bloc en Y"+ yBloc);
+            layerSurface.setCell(xBloc, yBloc, cell);
+            System.out.println("Pos du bloc pierre :"+xBloc+"  pos du bloc en Y"+ yBloc);
+            yBloc++;
+        }
     }
  
     
@@ -172,6 +180,7 @@ public class CellsHandler {
                 Vector2 positionLorsDuCassage = mineur.getPosition().cpy();
                 System.out.println("Condition test :");
                 System.out.println(isCellSurfaceHere(xBloc, yBloc) + "" + mineur.isMineurAuSol() + "" + positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f));
+                if(isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
                 int idBlock = (Integer) layerSurface.getCell(xBloc, yBloc).getTile().getId();
                 int idPierre = (Integer) mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid");
                 if(idBlock != idPierre && isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
@@ -183,6 +192,7 @@ public class CellsHandler {
                     layerSurface.setCell(xBloc, yBloc, null);
                     if(isCellDessous(xBloc, yBloc))
                         pierreTombe(xBloc,yBloc);
+                    }
                 }
             }
         }, dureeMinage);
