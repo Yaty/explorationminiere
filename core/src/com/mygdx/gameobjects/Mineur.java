@@ -92,6 +92,7 @@ public class Mineur {
     private final TiledMap map;
     private final CellsHandler cellsHandler;
     private Deplacement deplacement;
+    private boolean poserEchelle = true;
     
     /**
      * Constructeur du Mineur
@@ -152,6 +153,10 @@ public class Mineur {
     public float getVelociteMaxEchelle() {
         return ECHELLE_VELOCITE;
     }
+    
+    public boolean getPoserEchelle(){
+        return poserEchelle;
+    }
 
     /**
      * @param moving valeur qui va être affecté
@@ -189,13 +194,16 @@ public class Mineur {
         }
         
         
-        if(InputHandler.keys[33] && this.nbEchelle > 0 ){ // Echelle (E)
+        if(InputHandler.keys[33] && this.nbEchelle > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut)){ // Echelle (E)
             cellsHandler.setLadder((int) position.x,(int) position.y);
-               //soon limiter par nb echelle
+            nbEchelle = nbEchelle - 1;
+            System.out.println(nbEchelle);
+            //soon limiter par nb echelle
+            poserEchelle = false;
         }
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit
-        if(moving && !(deplacement instanceof Fluide)) { // Si on est dans déplacement dit de type fluide et que le mineur n'est pas en train de sauter
+        if(moving && !(deplacement instanceof Fluide)) {// Si on est dans déplacement dit de type fluide et que le mineur n'est pas en train de sauter
             wasMoving = true;
             deplacement = new Fluide(this);
         } else if(!moving && wasMoving && !(deplacement instanceof Amortissement) && etat.equals(Etat.Deplacement)){ // Sinon c'est un amortissement
@@ -207,6 +215,7 @@ public class Mineur {
 
         
         if(deplacement != null) {
+            poserEchelle = true;
             //System.out.println("1Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
             deplacement.move();
             if(isOnEchelle && !cellsHandler.isLadderHere((int) position.x, (int) position.y))

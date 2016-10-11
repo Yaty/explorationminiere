@@ -111,8 +111,9 @@ public class CellsHandler {
         int idLadder2 = (Integer)idLadder;
         TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("ladder.gif");
         cell.setTile(tileSet.getTile(idLadder2));
-        System.out.println(idLadder2);
         layerObjets.setCell(x, y, cell);
+        //System.out.println("Pos en X" + x + "Pos en Y" + y);
+        
     }
     
     /**
@@ -122,6 +123,37 @@ public class CellsHandler {
      */
     private boolean isCellSurfaceHere(int x, int y) {
         return layerSurface.getCell(x, y) != null;
+    }
+    
+    
+    private boolean isCellDessous(int xBloc, int yBloc){
+        int xCellUp = xBloc;
+        int yCellUp = yBloc+1;
+        Object idPierre =  mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid");
+        int idPierre2 = (Integer) idPierre;
+
+        if(layerSurface.getCell(xCellUp, yCellUp).getTile().getId() == idPierre2){
+            if(layerSurface.getCell(xBloc, yBloc) == null){
+                System.out.println("VIDE DESSOUS");
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private void pierreTombe(int xBloc, int yBloc){ 
+        Cell cell = new Cell();
+        Object idPierre = mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid");
+        int idPierre2 = (Integer)idPierre;
+        TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("stone.png");
+        cell.setTile(tileSet.getTile(idPierre2));
+        yBloc = yBloc+1;
+        layerSurface.setCell(xBloc, yBloc,null);
+        System.out.println("Pos du bloc null :"+xBloc+"  pos du bloc en Y"+ yBloc);
+        yBloc = yBloc-1;
+
+        layerSurface.setCell(xBloc, yBloc, cell);
+        System.out.println("Pos du bloc pierre :"+xBloc+"  pos du bloc en Y"+ yBloc);
     }
  
     
@@ -147,13 +179,17 @@ public class CellsHandler {
                 Vector2 positionLorsDuCassage = mineur.getPosition().cpy();
                 System.out.println("Condition test :");
                 System.out.println(isCellSurfaceHere(xBloc, yBloc) + "" + mineur.isMineurAuSol() + "" + positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f));
-                if(isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
+                int idBlock = (Integer) layerSurface.getCell(xBloc, yBloc).getTile().getId();
+                int idPierre = (Integer) mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid");
+                if(idBlock != idPierre && isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
                     Object idDiam =  mineur.getMap().getTileSets().getTileSet("diamond_block.png").getProperties().get("firstgid");
                     int idDiam2 = (Integer) idDiam;
                     if(layerSurface.getCell(xBloc, yBloc).getTile().getId() == idDiam2) {
                         victory = true;
                     }
                     layerSurface.setCell(xBloc, yBloc, null);
+                    if(isCellDessous(xBloc, yBloc))
+                        pierreTombe(xBloc,yBloc);
                 }
             }
         }, dureeMinage);
