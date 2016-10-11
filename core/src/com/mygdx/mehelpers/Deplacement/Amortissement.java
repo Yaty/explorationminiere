@@ -64,7 +64,7 @@ public class Amortissement extends Deplacement {
                         targetPosition.set((float) ((int) ( mineur.getPosition().x + 1) + (0.5 - mineur.getLARGEUR()/2)),  mineur.getPosition().y);
                         hasTarget = true;
                     }
-                    break;    
+                    break;
                 default:
                     break;
         }

@@ -147,13 +147,6 @@ public class CellsHandler {
         int idPierre2 = (Integer)idPierre;
         TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("stone.png");
         cell.setTile(tileSet.getTile(idPierre2));
-        yBloc = yBloc+1;
-        layerSurface.setCell(xBloc, yBloc,null);
-        System.out.println("Pos du bloc null :"+xBloc+"  pos du bloc en Y"+ yBloc);
-        yBloc = yBloc-1;
-
-        layerSurface.setCell(xBloc, yBloc, cell);
-        System.out.println("Pos du bloc pierre :"+xBloc+"  pos du bloc en Y"+ yBloc);
     }
  
     

@@ -82,7 +82,6 @@ public class GameRenderer {
 
         renderMineur();
         //if(InputHandler.keys[30]) 
-            renderDebug(); // Si on appui sur B, on affiche le debug
     }
     
     private void renderBackground() {
