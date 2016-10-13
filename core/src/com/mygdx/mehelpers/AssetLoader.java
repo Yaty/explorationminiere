@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 
 public class AssetLoader {
-    public static Texture mineurTexture, backgroundTexture, healthBarTexture;
     public static Animation debout, marcher, sauter;
     public static TextureRegion[] regions;
     // private static Sprite background;

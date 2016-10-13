@@ -150,9 +150,6 @@ public class CellsHandler {
         cell.setTile(tileSet.getTile(idPierre2));
         while(layerSurface.getCell(xBloc, yBloc+1).getTile().getId() == idPierre2){
             layerSurface.setCell(xBloc, yBloc+1,null);
-            System.out.println("Pos du bloc null :"+xBloc+"  pos du bloc en Y"+ yBloc);
-            layerSurface.setCell(xBloc, yBloc, cell);
-            System.out.println("Pos du bloc pierre :"+xBloc+"  pos du bloc en Y"+ yBloc);
             yBloc++;
         }
     }
@@ -169,29 +166,14 @@ public class CellsHandler {
 
         final Vector2 positionLancement = mineur.getPosition().cpy();
         // Faudrait lamper vers le bloc ou il va
-        
         // Commencement du minage
         mineur.setEtatMineur(Etat.Miner);
         int dureeMinage = calculDureeMinage();
-        System.out.println("Durée minage : " + dureeMinage);
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() { // Fin du minage
                 Vector2 positionLorsDuCassage = mineur.getPosition().cpy();
-                System.out.println("Condition test :");
-                System.out.println(isCellSurfaceHere(xBloc, yBloc) + "" + mineur.isMineurAuSol() + "" + positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f));
                 if(isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
-                int idBlock = (Integer) layerSurface.getCell(xBloc, yBloc).getTile().getId();
-                int idPierre = (Integer) mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid");
-                if(idBlock != idPierre && isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
-                    Object idDiam =  mineur.getMap().getTileSets().getTileSet("diamond_block.png").getProperties().get("firstgid");
-                    int idDiam2 = (Integer) idDiam;
-                    if(layerSurface.getCell(xBloc, yBloc).getTile().getId() == idDiam2) {
-                        victory = true;
-                    }
-                    layerSurface.setCell(xBloc, yBloc, null);
-                    if(isCellDessous(xBloc, yBloc))
-                        pierreTombe(xBloc,yBloc);
                     }
                 }
             }

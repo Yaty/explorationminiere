@@ -14,12 +14,4 @@ public class DesktopLauncher {
      * @param arg Non utilisé
      */
     public static void main (String[] arg) {
-            LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-            // Configuration - A prendre d'un fichier plus tard
-            config.title = "Exploration Miniere";
-            config.width = 960; // Voir si c'est trop gros
-            config.height = 960;
-            config.resizable = false;
-            LwjglApplication lwjglApplication = new LwjglApplication(new MEGame(), config);
-	}
 }
