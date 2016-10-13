@@ -200,7 +200,6 @@ public class Mineur {
         if(InputHandler.keys[20] || InputHandler.keys[47]) {
             moving = true;
             dirMineur = Direction.Bas;
-            health = health - 0.01f;
             
         }
         
