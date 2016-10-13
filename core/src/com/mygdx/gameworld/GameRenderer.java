@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.mygdx.mehelpers.AssetLoader;
 import static javax.swing.Spring.width;
 
@@ -121,6 +122,8 @@ public class GameRenderer {
         spriteBatch.begin();
         NinePatch health = new NinePatch(AssetLoader.healthBarTexture);
         health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth(), AssetLoader.healthBarTexture.getHeight());
+        NinePatch healthbarContainer = new NinePatch(AssetLoader.healthbarContainerTexture);
+        healthbarContainer.draw(spriteBatch, 5, 5, AssetLoader.healthbarContainerTexture.getWidth(), AssetLoader.healthbarContainerTexture.getHeight());
         spriteBatch.end();
     }
     
