@@ -14,6 +14,7 @@ public class DesktopLauncher {
      * @param arg Non utilisé
      */
     public static void main (String[] arg) {
+
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         // Configuration - A prendre d'un fichier plus tard
         config.title = "Exploration Miniere";

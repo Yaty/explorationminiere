@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
 
 // On devrait charger la map en tmx ici ! ?
 // Tout en static car on ne va pas créer plusieurs instances de cette classe
@@ -28,7 +27,7 @@ public class AssetLoader {
         mineurTexture = new Texture(Gdx.files.internal("mineur.png"));
         backgroundTexture = new Texture(Gdx.files.internal("background.png"));
         healthBarTexture = new Texture(Gdx.files.internal("gui_healthbar.png"));
-        healthbarContainerTexture=  new Texture(Gdx.files.internal("gui_healthbar_container.png"));
+        //healthbarContainerTexture = new Texture(Gdx.files.internal("gui_healthbar_container.png"));
         // A modif selon l'image du mineur
         //healthBar = TextureRegion.split(healthBarTexture, 30, 30)[0];
         regions = TextureRegion.split(mineurTexture, 36, 52)[0];
