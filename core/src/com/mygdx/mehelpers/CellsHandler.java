@@ -132,11 +132,12 @@ public class CellsHandler {
         int yCellUp = yBloc+1;
         Object idPierre =  mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid");
         int idPierre2 = (Integer) idPierre;
-
-        if(layerSurface.getCell(xCellUp, yCellUp).getTile().getId() == idPierre2){
-            if(layerSurface.getCell(xBloc, yBloc) == null){
-                System.out.println("VIDE DESSOUS");
-                return true;
+        if(layerSurface.getCell(xCellUp, yCellUp).getTile() != null) {
+            if(layerSurface.getCell(xCellUp, yCellUp).getTile().getId() == idPierre2){
+                if(layerSurface.getCell(xBloc, yBloc) == null){
+                    System.out.println("VIDE DESSOUS");
+                    return true;
+                }
             }
         }
         return false;

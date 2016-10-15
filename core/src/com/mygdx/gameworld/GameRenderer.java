@@ -14,9 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.mygdx.mehelpers.AssetLoader;
-import static javax.swing.Spring.width;
 
 /**
  *
@@ -27,6 +25,7 @@ public class GameRenderer {
     private final GameWorld gameWorld;
     private final OrthographicCamera orthoCamera; // Caméra Orthographique
     private final OrthogonalTiledMapRenderer tiledMapRenderer; // Va dessiner la map
+
     private final float UNITE = 1/64f;
     private final ShapeRenderer debugRenderer;
     private float runTime = 0;
@@ -131,6 +130,7 @@ public class GameRenderer {
      * Va rendre le mode debug
      * Ajout des lignes jaunes pour définir les blocs
      * Ajout du rectangle rouge pour définir le mineur
+     * ATTENTION FAIT BUGUER SI GROSSE CARTE 
      */       
     private void renderDebug () {      
         spriteBatch.begin();
@@ -149,7 +149,6 @@ public class GameRenderer {
         debugRenderer.begin(ShapeType.Line);
         debugRenderer.setColor(Color.RED);
         debugRenderer.rect(gameWorld.getMineur().getPosition().x, gameWorld.getMineur().getPosition().y, gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getHAUTEUR());
-        debugRenderer.rect(0, 5, gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getHAUTEUR());
         debugRenderer.setColor(Color.YELLOW);
         TiledMapTileLayer layer = (TiledMapTileLayer) gameWorld.getMap().getLayers().get("surface");
         for (int y = 0; y <= layer.getHeight(); y++) {
@@ -162,5 +161,17 @@ public class GameRenderer {
                 }
         }
         debugRenderer.end();
+    }
+    
+    public GameWorld getGameWorld() {
+        return gameWorld;
+    }
+    
+    public float getUnite() {
+        return UNITE;
+    }
+    
+    public OrthographicCamera getCamera() {
+        return orthoCamera;
     }
 }
