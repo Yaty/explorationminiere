@@ -26,7 +26,7 @@ public class GenerationAleatoire {
     private final Date date;
     private final DateFormat dateFormat;
     private final Random random;
-    private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre;
+    private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis;
     
     public GenerationAleatoire(String blocsSurface[], String blocsObjet[], String chemin, String nomNiveau, int niveau) {
         this.blocsSurface = blocsSurface;
@@ -43,18 +43,25 @@ public class GenerationAleatoire {
             else if (blocsSurface[i].equals("glowstone.png")) idGlowstone = i + 1;
             else if (blocsSurface[i].equals("grass_side.png")) idHerbe = i + 1;
             else if (blocsSurface[i].equals("stone.png")) idPierre = i + 1;
+            else if (blocsSurface[i].equals("coal_ore.png")) idCharbon = i + 1;
+            else if (blocsSurface[i].equals("emerald_ore.png")) idEmeraude = i + 1;
+            else if (blocsSurface[i].equals("gold_ore.png")) idOr = i + 1;
+            else if (blocsSurface[i].equals("iron_ore.png")) idFer = i + 1;
+            else if (blocsSurface[i].equals("lapis_ore.png")) idLapis = i + 1;
         }
         generer();
     }
 
-    private int genererIdentifiantBloc(int i) {
-        int rand = random.nextInt(100);
-        if(rand <= 30) { // de 0 à 30
-            return idPierre;
-        } else if (rand <= 50) { // de 31 à 50
-            return idGlowstone;
-        }
-        return idTerre; // le reste
+    private int genererIdentifiantBloc(int profondeur) {
+        int rand = random.nextInt(99);              // 100 valeurs possibles - 0 à 99
+        if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
+        else if (rand <= 29) return idGlowstone;    // de 20 à 29 - 10%
+        else if (rand <= 39) return idCharbon;      // de 30 à 39 - 10%
+        else if (rand <= 47) return idFer;          // de 40 à 47 - 8%
+        else if (rand <= 52) return idOr;           // de 48 à 52 - 5%
+        else if (rand <= 56) return idLapis;        // de 53 à 56 - 4%
+        else if (rand <= 59) return idEmeraude;     // de 57 à 59 - 3%
+        return idTerre;                             // le reste -> 40%
     }
     
     /**
