@@ -148,7 +148,7 @@ public class CellsHandler {
         TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("stone.png");
         cell.setTile(tileSet.getTile(idPierre2));
         //On parcourt les blocs des bas en haut tant que ce sont des blocs de pierre
-        if(layerSurface.getCell(xBloc, yBloc+1).getTile() != null) {
+        if(layerSurface.getCell(xBloc, yBloc+1).getTile() != null && layerSurface.getCell(xBloc, yBloc+1) != null) {
             while(layerSurface.getCell(xBloc, yBloc+1).getTile().getId() == idPierre2){
                 int yBlocCible = yBloc;
                 int xBlocCible = xBloc;

@@ -84,8 +84,8 @@ public class GenerationAleatoire {
                     iterateur++;
                 }
                 
-                int hauteur = 3000;//getProfondeurGeneration();
-                int largeur = 3000;//(int) Math.round(0.4 * hauteur);
+                int hauteur = getProfondeurGeneration();
+                int largeur = (int) Math.round(0.4 * hauteur);
                 
                 input.append(TAB).append("<layer name=\"surface\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
                 
