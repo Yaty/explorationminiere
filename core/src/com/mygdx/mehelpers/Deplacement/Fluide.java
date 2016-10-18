@@ -34,7 +34,6 @@ public class Fluide extends Deplacement {
             case Haut:
                 if(!collision.isTiledHere(x, y+1)) { // Si pas de bloc en x et y + 1
                     if(mineur.isOnEchelle()) {
-                        System.out.println("On commence à monter sur l'échelle !");
                         velocite.y = mineur.getVelociteMaxEchelle();
                         mineur.setMineurAuSol(false);
                         mineur.setEtatMineur(Etat.Echelle);

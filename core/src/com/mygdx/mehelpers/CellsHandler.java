@@ -111,12 +111,20 @@ public class CellsHandler {
         int idLadder2 = (Integer)idLadder;
         TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("ladder.gif");
         cell.setTile(tileSet.getTile(idLadder2));
-        System.out.println(idLadder2);
         layerObjets.setCell(x, y, cell);
-        //System.out.println("Pos en X" + x + "Pos en Y" + y);
-        
     }
     
+    public void setPilier(int x, int y){
+        Cell cell = new Cell();
+        Object idPilier = mineur.getMap().getTileSets().getTileSet("pilier.gif").getProperties().get("firstgid");
+        int idPilier2 = (Integer)idPilier;
+        TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("pilier.gif");
+        cell.setTile(tileSet.getTile(idPilier2));
+        if(mineur.isTeteVersLaDroite())
+            layerObjets.setCell(x+1, y, cell);
+        else
+            layerObjets.setCell(x-1, y, cell);
+    }
     /**
      * @param x l'entier en abscisse
      * @param y l'entier en ordonnée
@@ -124,6 +132,10 @@ public class CellsHandler {
      */
     private boolean isCellSurfaceHere(int x, int y) {
         return layerSurface.getCell(x, y) != null;
+    }
+    
+    public boolean isCellObjectHere(int x, int y){
+        return layerObjets.getCell(x, y) == null;
     }
     
     
@@ -134,7 +146,6 @@ public class CellsHandler {
         int idPierre2 = (Integer) idPierre;
         if(layerSurface.getCell(xCellUp, yCellUp) != null && layerSurface.getCell(xCellUp, yCellUp).getTile() != null) {
             if(layerSurface.getCell(xCellUp, yCellUp).getTile().getId() == idPierre2){
-                    System.out.println("VIDE DESSOUS");
                     return true;
             }
         }
@@ -148,21 +159,27 @@ public class CellsHandler {
         TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("stone.png");
         cell.setTile(tileSet.getTile(idPierre2));
         //On parcourt les blocs des bas en haut tant que ce sont des blocs de pierre
-        if(layerSurface.getCell(xBloc, yBloc+1).getTile() != null && layerSurface.getCell(xBloc, yBloc+1) != null) {
-            while(layerSurface.getCell(xBloc, yBloc+1).getTile().getId() == idPierre2){
-                int yBlocCible = yBloc;
-                int xBlocCible = xBloc;
-                //On parcourt les blocs de haut vers le bas tant que le bloc cible est vide 
-                while(layerSurface.getCell(xBlocCible, yBlocCible) == null){
-                    yBlocCible--;
+        Object idPilier =  mineur.getMap().getTileSets().getTileSet("pilier.gif").getProperties().get("firstgid");
+        int idPilier2 = (Integer) idPilier;
+            if(layerSurface.getCell(xBloc, yBloc+1).getTile() != null && layerSurface.getCell(xBloc, yBloc+1) != null){
+                while(layerSurface.getCell(xBloc, yBloc+1).getTile().getId() == idPierre2){
+                    int yBlocCible = yBloc;
+                    int xBlocCible = xBloc;
+                    //On parcourt les blocs de haut vers le bas tant que le bloc cible est vide 
+                    while(layerSurface.getCell(xBlocCible, yBlocCible) == null){
+                        if(layerObjets.getCell(xBlocCible, yBlocCible) != null)
+                            System.out.println("ICI");
+                            System.out.println(layerObjets.getCell(xBlocCible, yBlocCible).getTile().getId());
+                            if(layerObjets.getCell(xBlocCible, yBlocCible).getTile().getId() != idPilier2 )
+                                yBlocCible--;
+                    }
+                    //On met les blocs aux bonnes positions
+                    layerSurface.setCell(xBloc, yBloc+1,null);
+                    layerSurface.setCell(xBlocCible, yBlocCible+1, cell);
+                    yBloc++;
                 }
-                //On met les blocs aux bonnes positions
-                layerSurface.setCell(xBloc, yBloc+1,null);
-                layerSurface.setCell(xBlocCible, yBlocCible+1, cell);
-                yBloc++;
             }
-            }
-        }
+    }
  
     
     /**
@@ -187,10 +204,14 @@ public class CellsHandler {
                 if(isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
                     int idBlock = (Integer) layerSurface.getCell(xBloc, yBloc).getTile().getId();
                     int idPierre = (Integer) mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid");
+                    System.out.println(mineur.getMap().getTileSets().getTileSet("stone.png") + " " + mineur.getMap().getTileSets().getTileSet("stone.png").getProperties() + " " + mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid"));
                     int idGlow = (Integer) mineur.getMap().getTileSets().getTileSet("glowstone.png").getProperties().get("firstgid");
                     if(idBlock != idPierre && isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
                         Object idDiam =  mineur.getMap().getTileSets().getTileSet("diamond_block.png").getProperties().get("firstgid");
                         int idDiam2 = (Integer) idDiam;
+                        
+                    System.out.println("le mineur est"+ mineur.getMap());
+                    
                         if(layerSurface.getCell(xBloc, yBloc).getTile().getId() == idDiam2) {
                             victory = true;
                         } 
