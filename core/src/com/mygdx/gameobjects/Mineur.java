@@ -193,8 +193,8 @@ public class Mineur {
             dirMineur = Direction.Bas;
         }
         
-        
-        if(InputHandler.keys[33] && this.nbEchelle > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut)){ // Echelle (E)
+        // faut un timer dans le cas ou on monte une echelle 
+        if(InputHandler.keys[33] && this.nbEchelle > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut) && this.isOnEchelle()==false ){ // Echelle (E)
             cellsHandler.setLadder((int) position.x,(int) position.y);
             nbEchelle = nbEchelle - 1;
             System.out.println(nbEchelle);
