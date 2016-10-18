@@ -202,7 +202,6 @@ public class Mineur {
         if(InputHandler.keys[20] || InputHandler.keys[47]) {
             moving = true;
             dirMineur = Direction.Bas;
-            
         }
         
         // faut un timer dans le cas ou on monte une echelle 
@@ -230,8 +229,6 @@ public class Mineur {
         
         // Ca bug car il faut empecher tout deplacement tant que le joueur est en vol
         
-
-        
         if(deplacement != null) {
             poserEchelle = true;
             //System.out.println("1Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
@@ -239,7 +236,7 @@ public class Mineur {
             if(isOnEchelle && !cellsHandler.isLadderHere((int) position.x, (int) position.y))
                 isOnEchelle = false;
             //System.out.println("2Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
-            if(deplacement.getVelocite().isZero()) {
+            if(deplacement.getVelocite().isZero() && !etat.equals(Etat.Miner)) {
                 deplacement = null;
                 wasMoving = false;
                 dirMineur = Direction.Arret;
@@ -248,7 +245,7 @@ public class Mineur {
                     isOnEchelle = true;
             }          
         }
-        
+               
         //Si la vie du mineur tombe en dessous de 0
         if(health <= 0f){
             health = 1f;
