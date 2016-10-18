@@ -161,25 +161,35 @@ public class CellsHandler {
         //On parcourt les blocs des bas en haut tant que ce sont des blocs de pierre
         Object idPilier =  mineur.getMap().getTileSets().getTileSet("pilier.gif").getProperties().get("firstgid");
         int idPilier2 = (Integer) idPilier;
-            if(layerSurface.getCell(xBloc, yBloc+1).getTile() != null && layerSurface.getCell(xBloc, yBloc+1) != null){
-                while(layerSurface.getCell(xBloc, yBloc+1).getTile().getId() == idPierre2){
-                    int yBlocCible = yBloc;
-                    int xBlocCible = xBloc;
-                    //On parcourt les blocs de haut vers le bas tant que le bloc cible est vide 
-                    while(layerSurface.getCell(xBlocCible, yBlocCible) == null){
-                        if(layerObjets.getCell(xBlocCible, yBlocCible) != null)
-                            System.out.println("ICI");
-                            System.out.println(layerObjets.getCell(xBlocCible, yBlocCible).getTile().getId());
-                            if(layerObjets.getCell(xBlocCible, yBlocCible).getTile().getId() != idPilier2 )
-                                yBlocCible--;
+        
+        if(layerSurface.getCell(xBloc, yBloc+1).getTile() != null && layerSurface.getCell(xBloc, yBloc+1) != null){
+            while(layerSurface.getCell(xBloc, yBloc+1).getTile().getId() == idPierre2){
+                int yBlocCible = yBloc;
+                int xBlocCible = xBloc;
+                //On parcourt les blocs de haut vers le bas tant que le bloc cible est vide 
+                while(layerSurface.getCell(xBlocCible, yBlocCible) == null){
+                    yBlocCible--;
+                    System.out.println("1");
+                    if(layerObjets.getCell(xBlocCible, yBlocCible) != null){
+                        System.out.println("2");
+                        System.out.println("GET ID:" + layerObjets.getCell(xBlocCible, yBlocCible).getTile().getId());
+                        System.out.println("idPilier2:" + idPilier2);
+                        if(layerObjets.getCell(xBlocCible, yBlocCible).getTile().getId() == idPilier2 ){
+                            System.out.println("Pilier en dessous");
+                            break;
+                        }
+                        else {
+                            System.out.println("Aucun pilier en dessous");
+                        }
                     }
-                    //On met les blocs aux bonnes positions
-                    layerSurface.setCell(xBloc, yBloc+1,null);
-                    layerSurface.setCell(xBlocCible, yBlocCible+1, cell);
-                    yBloc++;
+                //On met les blocs aux bonnes positions
+                layerSurface.setCell(xBloc, yBloc+1,null);
+                layerSurface.setCell(xBlocCible, yBlocCible+1, cell);
+                yBloc++;
                 }
             }
-    }
+        }
+    }        
  
     
     /**
@@ -229,7 +239,7 @@ public class CellsHandler {
                                 public void run(){
                                     pierreTombe(xBloc,yBloc);
                                 }
-                            }, 1000);
+                            }, 3000);
                         }
                     }
                 }
