@@ -44,6 +44,7 @@ public class Fluide extends Deplacement {
                         };
                     } else if(!mineur.getEtatMineur().equals(Etat.Sauter)) {
                         velocite.y = mineur.getSAUT_VELOCITE();
+                        mineur.setHealth(mineur.getHealth()-0.01f);
                         mineur.setMineurAuSol(false);
                         mineur.setEtatMineur(Etat.Sauter);
                     }

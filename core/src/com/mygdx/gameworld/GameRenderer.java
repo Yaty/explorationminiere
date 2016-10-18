@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -24,6 +25,7 @@ public class GameRenderer {
     private final GameWorld gameWorld;
     private final OrthographicCamera orthoCamera; // Caméra Orthographique
     private final OrthogonalTiledMapRenderer tiledMapRenderer; // Va dessiner la map
+
     private final float UNITE = 1/64f;
     private final ShapeRenderer debugRenderer;
     private float runTime = 0;
@@ -81,8 +83,9 @@ public class GameRenderer {
         tiledMapRenderer.render();
 
         renderMineur();
+        renderGUI();
         //if(InputHandler.keys[30]) 
-            renderDebug(); // Si on appui sur B, on affiche le debug
+        //renderDebug(); // Si on appui sur B, on affiche le debug
     }
     
     private void renderBackground() {
@@ -114,10 +117,20 @@ public class GameRenderer {
         batcher.end();
     }
     
+    private void renderGUI(){
+        spriteBatch.begin();
+        NinePatch health = new NinePatch(AssetLoader.healthBarTexture);
+        health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth(), AssetLoader.healthBarTexture.getHeight());
+        //NinePatch healthbarContainer = new NinePatch(AssetLoader.healthbarContainerTexture);
+        //healthbarContainer.draw(spriteBatch, 5, 5, AssetLoader.healthbarContainerTexture.getWidth(), AssetLoader.healthbarContainerTexture.getHeight());
+        spriteBatch.end();
+    }
+    
     /**
      * Va rendre le mode debug
      * Ajout des lignes jaunes pour définir les blocs
      * Ajout du rectangle rouge pour définir le mineur
+     * ATTENTION FAIT BUGUER SI GROSSE CARTE 
      */       
     private void renderDebug () {      
         spriteBatch.begin();
@@ -136,7 +149,6 @@ public class GameRenderer {
         debugRenderer.begin(ShapeType.Line);
         debugRenderer.setColor(Color.RED);
         debugRenderer.rect(gameWorld.getMineur().getPosition().x, gameWorld.getMineur().getPosition().y, gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getHAUTEUR());
-        debugRenderer.rect(0, 5, gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getHAUTEUR());
         debugRenderer.setColor(Color.YELLOW);
         TiledMapTileLayer layer = (TiledMapTileLayer) gameWorld.getMap().getLayers().get("surface");
         for (int y = 0; y <= layer.getHeight(); y++) {
@@ -149,5 +161,17 @@ public class GameRenderer {
                 }
         }
         debugRenderer.end();
+    }
+    
+    public GameWorld getGameWorld() {
+        return gameWorld;
+    }
+    
+    public float getUnite() {
+        return UNITE;
+    }
+    
+    public OrthographicCamera getCamera() {
+        return orthoCamera;
     }
 }
