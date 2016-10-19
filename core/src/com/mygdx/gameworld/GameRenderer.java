@@ -30,7 +30,7 @@ public class GameRenderer {
     private final ShapeRenderer debugRenderer;
     private float runTime = 0;
     private final SpriteBatch spriteBatch;
-    private BitmapFont etat, direction, deplacement, velocite, position, target;
+    private final BitmapFont etat, direction, deplacement, velocite, position, target, argent;
     
     /**
      * @param gameWorld un objet gameWorld
@@ -52,7 +52,8 @@ public class GameRenderer {
         deplacement = new BitmapFont(); 
         velocite = new BitmapFont();
         position = new BitmapFont();
-        target = new BitmapFont();  
+        target = new BitmapFont();
+        argent = new BitmapFont();
     }
     
     /**
@@ -121,8 +122,7 @@ public class GameRenderer {
         spriteBatch.begin();
         NinePatch health = new NinePatch(AssetLoader.healthBarTexture);
         health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth(), AssetLoader.healthBarTexture.getHeight());
-        //NinePatch healthbarContainer = new NinePatch(AssetLoader.healthbarContainerTexture);
-        //healthbarContainer.draw(spriteBatch, 5, 5, AssetLoader.healthbarContainerTexture.getWidth(), AssetLoader.healthbarContainerTexture.getHeight());
+        argent.draw(spriteBatch, "Argent : " + gameWorld.getMineur().getArgent() + "$", 800, 25);
         spriteBatch.end();
     }
     

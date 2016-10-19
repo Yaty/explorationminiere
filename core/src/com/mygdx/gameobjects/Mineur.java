@@ -16,11 +16,27 @@ import com.mygdx.mehelpers.InputHandler;
  */
 public class Mineur {
     private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
-
+    private int argent;
     int nbEchelle = 10;
 
     public void setEtatMineur(Etat etat) {
         this.etat = etat;
+    }
+
+    public void gestionArgent(int id) {
+        if (id == cellsHandler.getIdDiamant()) argent += 500;
+        else if (id == cellsHandler.getIdCharbon()) argent += 10;
+        else if (id == cellsHandler.getIdTerre()) argent++;
+        else if (id == cellsHandler.getIdEmeraude()) argent += 100;
+        else if (id == cellsHandler.getIdGlowstone()) argent += 10;
+        else if (id == cellsHandler.getIdOr()) argent += 50;
+        else if (id == cellsHandler.getIdHerbe()) argent++;
+        else if (id == cellsHandler.getIdFer()) argent += 30;
+        else if (id == cellsHandler.getIdLapis()) argent += 80;
+    }
+
+    public int getArgent() {
+        return argent;
     }
 
     /**
@@ -118,7 +134,7 @@ public class Mineur {
         wasInAmortissement = false;
         wasMoving = false;
         cellsHandler = new CellsHandler(this);
-        
+        argent = 0;
     }
     
     /**
@@ -127,8 +143,9 @@ public class Mineur {
     private float getXDepart() {
         TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get("surface");
         return layer.getWidth()/2 + LARGEUR/2;
-        
     }
+    
+    
      /**
      * @return La coordonnée en Y du mineur au départ du jeu
      */   
