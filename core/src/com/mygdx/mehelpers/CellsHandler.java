@@ -170,7 +170,8 @@ public class CellsHandler {
                 while(layerSurface.getCell(xBlocCible, yBlocCible) == null){
                     yBlocCible--;
                     System.out.println("1");
-                    if(layerObjets.getCell(xBlocCible, yBlocCible) != null){
+                    System.out.println(layerObjets.getCell(xBlocCible, yBlocCible));
+                    if(layerObjets.getCell(xBlocCible, yBlocCible+1) != null){
                         System.out.println("2");
                         System.out.println("GET ID:" + layerObjets.getCell(xBlocCible, yBlocCible).getTile().getId());
                         System.out.println("idPilier2:" + idPilier2);
