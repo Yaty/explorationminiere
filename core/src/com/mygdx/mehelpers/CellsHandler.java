@@ -115,15 +115,17 @@ public class CellsHandler {
     }
     
     public void setPilier(int x, int y){
-        Cell cell = new Cell();
-        Object idPilier = mineur.getMap().getTileSets().getTileSet("pilier.gif").getProperties().get("firstgid");
-        int idPilier2 = (Integer)idPilier;
-        TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("pilier.gif");
-        cell.setTile(tileSet.getTile(idPilier2));
-        if(mineur.isTeteVersLaDroite())
-            layerObjets.setCell(x+1, y, cell);
-        else
-            layerObjets.setCell(x-1, y, cell);
+            Cell cell = new Cell();
+            Object idPilier = mineur.getMap().getTileSets().getTileSet("pilier.gif").getProperties().get("firstgid");
+            int idPilier2 = (Integer)idPilier;
+            TiledMapTileSet tileSet = mineur.getMap().getTileSets().getTileSet("pilier.gif");
+            cell.setTile(tileSet.getTile(idPilier2));
+            System.out.println( mineur.isTeteVersLaDroite() + "prout" );
+            System.out.println(!isCellSurfaceHere(x+1, y) + "prout 2"  );
+            if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y))
+                layerObjets.setCell(x+1, y, cell);
+            else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y))
+                layerObjets.setCell(x-1, y, cell);
     }
     /**
      * @param x l'entier en abscisse

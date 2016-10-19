@@ -216,7 +216,7 @@ public class Mineur {
         }
         
         if(InputHandler.keys[48]){
-            cellsHandler.setPilier((int) position.x, (int) position.y);
+                cellsHandler.setPilier((int) position.x, (int) position.y);
         }
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit
