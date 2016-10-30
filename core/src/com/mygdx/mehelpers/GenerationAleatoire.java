@@ -77,9 +77,11 @@ public class GenerationAleatoire {
             fichier.createNewFile();
             FileWriter writer = new FileWriter(fichier);
             try {
+                int hauteur = getProfondeurGeneration();
+                int largeur = (int) Math.round(0.4 * hauteur);
                 StringBuilder input = new StringBuilder();
                 int iterateur = 1;
-                input.append("<!-- Carte générée aléatoirement le ").append(dateFormat.format(date)).append(" pour le niveau ").append(niveau).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"15\" height=\"15\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
+                input.append("<!-- Carte générée aléatoirement le ").append(dateFormat.format(date)).append(" pour le niveau ").append(niveau).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"" + largeur + "\" height=\"" + hauteur + "\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
                 
                 for (String blocsSurface1 : blocsSurface) {
                     input.append(TAB).append("<tileset firstgid=\"").append(iterateur).append("\" name=\"").append(blocsSurface1).append("\" tilewidth=\"64\" tileheight=\"64\" tilecount=\"1\" columns=\"1\">\n").append(TAB).append(TAB).append("<image source=\"../../").append(blocsSurface1).append("\" width=\"64\" height=\"64\"/>\n").append(TAB).append("</tileset>\n\n");
@@ -91,8 +93,6 @@ public class GenerationAleatoire {
                     iterateur++;
                 }
                 
-                int hauteur = getProfondeurGeneration();
-                int largeur = (int) Math.round(0.4 * hauteur);
                 
                 input.append(TAB).append("<layer name=\"surface\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
                 

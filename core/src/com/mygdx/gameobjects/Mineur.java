@@ -191,6 +191,18 @@ public class Mineur {
         this.moving = moving;
     }
 
+    private void gestionVie() {
+        // Note : Toutes la gestion ne se passe pas ici (pour la saut c'est dans Deplacement et pour le descente c'est dans CellsHandler)
+        //Si la vie du mineur tombe en dessous de 0
+        if(dirMineur == Direction.Gauche || dirMineur == Direction.Droite) health -= 0.0005f;
+        if(health <= 0f){
+            health = 1f;
+            position.x=getXDepart();
+            position.y=getYDepart();
+        }
+        else if(health > 1f) health = 1f;
+    }   
+    
     /**
      * @param deltaTime temps passé durant la dernière frame
      */
@@ -204,13 +216,10 @@ public class Mineur {
         if(InputHandler.keys[45] || InputHandler.keys[21]) {
             moving = true;
             dirMineur = Direction.Gauche;
-            health = health - 0.0005f;
-            
         }
         if (InputHandler.keys[32] || InputHandler.keys[22]) {
             moving = true;
             dirMineur = Direction.Droite;
-            health = health - 0.0005f;
         }
         if ((InputHandler.keys[19] || InputHandler.keys[54]) && mineurAuSol) {
             moving = true;
@@ -262,14 +271,8 @@ public class Mineur {
                     isOnEchelle = true;
             }          
         }
-               
-        //Si la vie du mineur tombe en dessous de 0
-        if(health <= 0f){
-            health = 1f;
-            position.x=getXDepart();
-            position.y=getYDepart();
-        }
-        else if(health > 1f) health = 1f;
+        
+        gestionVie();
     }  
 
     public Deplacement getDeplacement() {

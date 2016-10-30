@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.mygdx.gameobjects.Mineur;
+import com.mygdx.gameworld.GameRenderer;
 
 /**
  *
@@ -26,12 +27,14 @@ public class Collision {
     };
     private Rectangle mineurRect;
     private int debutX, debutY, finX, finY;
+    private final float largeurMap;
     
     /**
      * @param deplacement objet Deplacement
      */
     public Collision(Deplacement deplacement) {
         this.deplacement = deplacement;
+        largeurMap = deplacement.mineur.getMap().getProperties().get("width", Integer.class);
     }
     
     /**
@@ -56,9 +59,22 @@ public class Collision {
         if(deplacement.getMineur().getDirectionMineur().equals(Mineur.Direction.Droite)) { // Si vers la droite
             // hitbox à droite
             debutX = finX = (int) (deplacement.getMineur().getPosition().x + deplacement.getMineur().getLARGEUR() + deplacement.getVelocite().x);
+            if((deplacement.getMineur().getPosition().x + deplacement.getMineur().getLARGEUR() + deplacement.getVelocite().x) >= largeurMap) {
+                deplacement.getVelocite().x = 0;
+                deplacement.getMineur().setDirectionMineur(Mineur.Direction.Arret);
+                deplacement.getMineur().setEtatMineur(Mineur.Etat.Arret);         
+                return;
+            }
+            
         } else if(deplacement.getMineur().getDirectionMineur().equals(Mineur.Direction.Gauche)) { // Vers la gauche
             // hitbox à gauche
             debutX = finX = (int) (deplacement.getMineur().getPosition().x + deplacement.getVelocite().x);
+            if((deplacement.getMineur().getPosition().x + deplacement.getVelocite().x) <= 0) {
+                deplacement.getVelocite().x = 0;
+                deplacement.getMineur().setDirectionMineur(Mineur.Direction.Arret);
+                deplacement.getMineur().setEtatMineur(Mineur.Etat.Arret);
+                return;
+            }
         }
         
         debutY = (int) deplacement.getMineur().getPosition().x;
@@ -85,6 +101,9 @@ public class Collision {
             debutY = finY = (int) (deplacement.getMineur().getPosition().y + deplacement.getMineur().getHAUTEUR() + deplacement.getVelocite().y);
         } else {
             debutY = finY = (int) (deplacement.getMineur().getPosition().y + deplacement.getVelocite().y);
+            if((deplacement.getMineur().getPosition().y + deplacement.getVelocite().y) <= 0) {
+                deplacement.getVelocite().y = 0;                
+            }
         }
         debutX = (int)(deplacement.getMineur().getPosition().x);
         finX = (int) (deplacement.getMineur().getPosition().x + deplacement.getMineur().getLARGEUR());

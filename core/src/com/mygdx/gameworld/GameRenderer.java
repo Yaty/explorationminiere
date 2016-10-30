@@ -71,15 +71,12 @@ public class GameRenderer {
         //Gdx.app.log("GameRendrer", "Deltatime : " + deltaTime);
         gameWorld.getMineur().update(deltaTime);
         // Voir avec l'unité, c'est le bordel
+        
         orthoCamera.position.x = gameWorld.getMineur().getPosition().x;
         orthoCamera.position.y = gameWorld.getMineur().getPosition().y;
         orthoCamera.update();
         
         renderBackground();
-        
-        //Gdx.app.log("Position orthoCaméra", orthoCamera.position.toString());
-        //Gdx.app.log("Position mineur", gameWorld.getMineur().getPosition().toString());
-        //Gdx.app.log("GameRenderer", (String) gameWorld.getMineur().getEtatMineur().name());
         tiledMapRenderer.setView(orthoCamera);
         tiledMapRenderer.render();
 
