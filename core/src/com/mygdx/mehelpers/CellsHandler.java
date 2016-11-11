@@ -121,15 +121,19 @@ public class CellsHandler {
         Cell cell = new Cell();
         cell.setTile(tileSet.getTile(idEchelle));
         layerObjets.setCell(x, y, cell);
+        mineur.getInventaire().enleverEchelle();
     }
     
     public void setPilier(int x, int y){
         Cell cell = new Cell();
         cell.setTile(tileSet.getTile(idPilier));
-        if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y))
+        if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
             layerObjets.setCell(x+1, y, cell);
-        else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y))
+            mineur.getInventaire().enleverPilier();
+        } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
             layerObjets.setCell(x-1, y, cell);
+            mineur.getInventaire().enleverPilier();
+        }
     }
     
     /**
@@ -226,11 +230,11 @@ public class CellsHandler {
  
     /*
      Renvoi une durée en MS.
-     Durée = 1000ms + 100 ms tout les 10 blocs
+     Durée = 1000ms + 100 ms tout les 10 blocs * la vitesse de la pioche
     */
     private int calculDureeMinage() {
         int profondeur = layerSurface.getHeight() - (int) mineur.getPosition().y;
-        return 1000 + 100 * (profondeur/10);
+        return (int) (1000 + 100 * (profondeur/10) * mineur.getInventaire().getPioche().getVitesse()); // On ajoute la vitesse de la pioche, la cast arrondit au millième -> pas génant
     }
 
     public int getIdPierre() {

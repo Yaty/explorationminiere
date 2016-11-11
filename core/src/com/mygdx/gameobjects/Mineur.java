@@ -1,5 +1,6 @@
 package com.mygdx.gameobjects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
@@ -17,7 +18,7 @@ import com.mygdx.mehelpers.InputHandler;
 public class Mineur {
     private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
     private int argent;
-    int nbEchelle = 10;
+    private final Inventaire inventaire;
 
     public void setEtatMineur(Etat etat) {
         this.etat = etat;
@@ -135,6 +136,7 @@ public class Mineur {
         wasMoving = false;
         cellsHandler = new CellsHandler(this);
         argent = 0;
+        inventaire = new Inventaire();
     }
     
     /**
@@ -143,6 +145,10 @@ public class Mineur {
     private float getXDepart() {
         TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get("surface");
         return layer.getWidth()/2 + LARGEUR/2;
+    }
+    
+    public Inventaire getInventaire() {
+        return inventaire;
     }
     
     
@@ -231,18 +237,20 @@ public class Mineur {
         }
         
         // faut un timer dans le cas ou on monte une echelle 
-        if(InputHandler.keys[33] && this.nbEchelle > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut) && this.isOnEchelle()==false ){ // Echelle (E)
+        if(InputHandler.keys[33] && inventaire.getEchelles() > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut) && this.isOnEchelle()==false ){ // Echelle (E)
             if(this.getCellsHandler().isCellObjectHere((int)position.x, (int)position.y)){
                 cellsHandler.setLadder((int) position.x,(int) position.y);
-                nbEchelle = nbEchelle - 1;
-                System.out.println(nbEchelle);
-                //soon limiter par nb echelle
+                try {
+                    inventaire.ajouterEchelles(-1);
+                } catch (Exception ex) {
+                    Gdx.app.debug("Exception suppression échelles", ex.getMessage());
+                }
                 poserEchelle = false;
             }
         }
         
         if(InputHandler.keys[48]){
-                cellsHandler.setPilier((int) position.x, (int) position.y);
+            cellsHandler.setPilier((int) position.x, (int) position.y);
         }
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit
@@ -271,7 +279,6 @@ public class Mineur {
                     isOnEchelle = true;
             }          
         }
-        
         gestionVie();
     }  
 
