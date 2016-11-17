@@ -1,11 +1,20 @@
 package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.mygdx.gameobjects.Inventaire;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
+import com.mygdx.mehelpers.InputHandler;
 import com.mygdx.mehelpers.KeyBoard;
+import com.mygdx.mehelpers.inventaire.InventoryActor;
 import com.mygdx.minexploration.MEGame;
+import static com.mygdx.screens.InventoryScreen.stage;
 
 /**
  * Classe qui est l'écran du jeu, c'est elle qui contient les éléments du jeu
@@ -17,11 +26,13 @@ public class GameScreen implements Screen {
     private final GameRenderer gameRenderer;
     private final MEGame game;
     
+    private InventoryActor inventoryActor;
+    public static Stage stage;
+    
     /**
      * Lance le jeu au niveau 1
      * @param game le jeu
-     * @param partie
-     * @param level
+     * @param cheminMap
      */ 
     public GameScreen(MEGame game, String cheminMap) {
         Gdx.app.log("GameScreen", "GameScreen créé");
@@ -39,6 +50,13 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("GameScreen", "show appelé");
+        stage = new Stage();
+
+        Skin skin = new Skin(Gdx.files.internal("skin/inventaire/uiskin.json"));
+
+        DragAndDrop dragAndDrop = new DragAndDrop();
+        inventoryActor = new InventoryActor(new Inventaire(), dragAndDrop, skin);
+        stage.addActor(inventoryActor);
     }
     
     /**
@@ -51,6 +69,18 @@ public class GameScreen implements Screen {
         if(gameWorld.getMineur().getCellsHandler().isVictory()) {
             game.createMenuFin();
         }
+
+        // show the inventory when any key is pressed
+        if (InputHandler.isDown(37)) {
+            if(inventoryActor.isVisible())
+                inventoryActor.setVisible(false);
+            else
+                inventoryActor.setVisible(true);
+        }
+
+        // handle all inputs and draw the whole UI
+        stage.act(delta);
+        stage.draw();
     }
     
     /**
@@ -91,5 +121,7 @@ public class GameScreen implements Screen {
      * Méthode appelée quand on demande de supprimer le contenu de l'écran
      */   
     @Override
-    public void dispose() {}
+    public void dispose() {
+        stage.dispose();
+    }
 }

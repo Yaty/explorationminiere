@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.gameobjects.Item;
 import com.mygdx.gameobjects.Mineur;
 import com.mygdx.gameobjects.Mineur.Etat;
 import java.util.Timer;
@@ -121,7 +122,7 @@ public class CellsHandler {
         Cell cell = new Cell();
         cell.setTile(tileSet.getTile(idEchelle));
         layerObjets.setCell(x, y, cell);
-        mineur.getInventaire().enleverEchelle();
+        mineur.getInventaire().store(Item.ECHELLE, 1);
     }
     
     public void setPilier(int x, int y){
@@ -129,10 +130,10 @@ public class CellsHandler {
         cell.setTile(tileSet.getTile(idPilier));
         if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
             layerObjets.setCell(x+1, y, cell);
-            mineur.getInventaire().enleverPilier();
+            mineur.getInventaire().remove(Item.PILIER, 1);
         } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
             layerObjets.setCell(x-1, y, cell);
-            mineur.getInventaire().enleverPilier();
+            mineur.getInventaire().remove(Item.PILIER, 1);
         }
     }
     

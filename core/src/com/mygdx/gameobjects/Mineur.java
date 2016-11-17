@@ -237,11 +237,11 @@ public class Mineur {
         }
         
         // faut un timer dans le cas ou on monte une echelle 
-        if(InputHandler.keys[33] && inventaire.getEchelles() > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut) && this.isOnEchelle()==false ){ // Echelle (E)
+        if(InputHandler.keys[33] && inventaire.firstSlotWithItem(Item.ECHELLE).getAmount() > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut) && this.isOnEchelle()==false ){ // Echelle (E)
             if(this.getCellsHandler().isCellObjectHere((int)position.x, (int)position.y)){
                 cellsHandler.setLadder((int) position.x,(int) position.y);
                 try {
-                    inventaire.ajouterEchelles(-1);
+                    inventaire.remove(Item.ECHELLE, 1);
                 } catch (Exception ex) {
                     Gdx.app.debug("Exception suppression échelles", ex.getMessage());
                 }
