@@ -59,9 +59,7 @@ public class MEGame extends Game {
     private void newLevel() {
         // Remplissage du dossier
             // Création du dossier du niveau level
-        File dir = new File("./map/" + idGame + "/" + level);
-        dir.mkdir();      
-        dir = new File("./map/");
+        File dir = new File("./map/");
             // Remplissage du dossier par un TMX généré
         File[] surfaceFiles = dir.listFiles(new FilenameFilter() {
             @Override
@@ -84,21 +82,20 @@ public class MEGame extends Game {
         for(int i = 0 ; i < objetFiles.length ; i++)
             objet[i] = objetFiles[i].getName();
                 
-        GenerationAleatoire generateur = new GenerationAleatoire(surface, objet, "./map/" + idGame + "/" + level + "/map.tmx", nomGame, level);
+        GenerationAleatoire generateur = new GenerationAleatoire(surface, objet, "./map/" + idGame + "/map.tmx", nomGame, level);
             
         // Lancement de la partie sur le niveau 1
-        setScreen(new GameScreen(this, "./map/" + idGame + "/" + level + "/map.tmx"));
+        setScreen(new GameScreen(this, "./map/" + idGame + "/map.tmx"));
     }
     
-    public void loadingGame(int idGame, String nomGame, int level) {
+    public void loadingGame(int idGame, String nomGame) {
         this.idGame = idGame;
         this.nomGame = nomGame;
-        this.level = level;
         loadingLevel();
     }
     
     private void loadingLevel() {
-        setScreen(new GameScreen(this, "./map/" + idGame + "/" + level + "/map.tmx"));
+        setScreen(new GameScreen(this, "./map/" + idGame + "/map.tmx"));
     }
     
     public void backToMainMenuScreen(){

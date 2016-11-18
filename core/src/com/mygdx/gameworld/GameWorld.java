@@ -17,6 +17,7 @@ public class GameWorld {
      *
      */
     public GameWorld(String cheminMap) {
+        System.out.println(cheminMap);            
         map = new TmxMapLoader().load(cheminMap);
         mineur = new Mineur(map);
     }
