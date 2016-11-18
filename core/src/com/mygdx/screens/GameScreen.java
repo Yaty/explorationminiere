@@ -1,12 +1,13 @@
 package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.gameobjects.Inventaire;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
@@ -14,7 +15,6 @@ import com.mygdx.mehelpers.InputHandler;
 import com.mygdx.mehelpers.KeyBoard;
 import com.mygdx.mehelpers.inventaire.InventoryActor;
 import com.mygdx.minexploration.MEGame;
-import static com.mygdx.screens.InventoryScreen.stage;
 
 /**
  * Classe qui est l'écran du jeu, c'est elle qui contient les éléments du jeu
@@ -25,8 +25,10 @@ public class GameScreen implements Screen {
     private final GameWorld gameWorld;
     private final GameRenderer gameRenderer;
     private final MEGame game;
+    private boolean pause;
     
     private InventoryActor inventoryActor;
+    private MenuPause menuPause;
     public static Stage stage;
     
     /**
@@ -39,7 +41,7 @@ public class GameScreen implements Screen {
         this.game = game;
         gameWorld = new GameWorld(cheminMap);
         gameRenderer = new GameRenderer(gameWorld);
-        Gdx.input.setInputProcessor(new KeyBoard());   
+        pause = false;
     }
     
     
@@ -52,11 +54,23 @@ public class GameScreen implements Screen {
         Gdx.app.log("GameScreen", "show appelé");
         stage = new Stage();
 
-        Skin skin = new Skin(Gdx.files.internal("skin/inventaire/uiskin.json"));
+        // On utilise un "hub" qui va switcher entre nos classes qui gères les entrées -> pouvoir recuperer les clics du stage et les entrées du jeu
+        InputProcessor clavier = new KeyBoard();
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(clavier);
+        inputMultiplexer.addProcessor(stage);
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
+        Skin skin = new Skin(Gdx.files.internal("skin/inventaire/uiskin.json"));
+        Skin skin2 = new Skin(Gdx.files.internal("skin/uiskin.json"));
+    
         DragAndDrop dragAndDrop = new DragAndDrop();
         inventoryActor = new InventoryActor(new Inventaire(), dragAndDrop, skin);
         stage.addActor(inventoryActor);
+        
+        menuPause = new MenuPause(skin2, game, this);
+
+        stage.addActor(menuPause);
     }
     
     /**
@@ -64,20 +78,31 @@ public class GameScreen implements Screen {
      */   
     @Override
     public void render(float delta) {
-        gameWorld.update(delta);
-        gameRenderer.render(gameWorld.getMineur().getRunTime());
-        if(gameWorld.getMineur().getCellsHandler().isVictory()) {
-            game.createMenuFin();
-        }
+        if(!pause) {
+            gameWorld.update(delta);
+            gameRenderer.render(gameWorld.getMineur().getRunTime());
+            if(gameWorld.getMineur().getCellsHandler().isVictory()) {
+                game.createMenuFin();
+            }
 
-        // show the inventory when any key is pressed
-        if (InputHandler.isDown(37)) {
-            if(inventoryActor.isVisible())
-                inventoryActor.setVisible(false);
-            else
-                inventoryActor.setVisible(true);
+            // show the inventory when any key is pressed
+            if (Gdx.input.isKeyJustPressed(37)) {
+                if(inventoryActor.isVisible())
+                    inventoryActor.setVisible(false);
+                else
+                    inventoryActor.setVisible(true);
+            }
         }
-
+        if (Gdx.input.isKeyJustPressed(44) || Gdx.input.isKeyJustPressed(131)) {
+            if(menuPause.isVisible()) {
+                menuPause.setVisible(false);
+                this.unPause();
+            } else {
+                menuPause.setVisible(true);
+                this.pause();
+            }
+        }
+        
         // handle all inputs and draw the whole UI
         stage.act(delta);
         stage.draw();
@@ -99,6 +124,11 @@ public class GameScreen implements Screen {
     @Override
     public void pause() {
         Gdx.app.log("GameScreen", "pause appelé");
+        pause = true;
+    }
+    
+    public void unPause() {
+        pause = false;
     }
     
     /**

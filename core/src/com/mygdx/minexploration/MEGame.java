@@ -1,6 +1,7 @@
 package com.mygdx.minexploration;
 
 import com.badlogic.gdx.Game; // On importe Game qui implémente ApplicationListener
+import com.badlogic.gdx.Gdx;
 import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.GenerationAleatoire;
 import com.mygdx.screens.GameScreen;
@@ -27,6 +28,14 @@ public class MEGame extends Game {
         // Chargement des textures, assignation du screen au menu principal
         AssetLoader.load();
         setScreen(new MainMenuScreen(this));
+    }
+    
+    public void save() {
+        Gdx.app.log("MEGame", "Sauvegarde.");
+    }
+    
+    public void quitAndSave() {
+        Gdx.app.log("MEGame", "Sauvegarde puis extinction.");
     }
     
     /**
