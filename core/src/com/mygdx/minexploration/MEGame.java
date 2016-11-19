@@ -2,6 +2,7 @@ package com.mygdx.minexploration;
 
 import com.badlogic.gdx.Game; // On importe Game qui implémente ApplicationListener
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.GenerationAleatoire;
 import com.mygdx.screens.GameScreen;
@@ -19,6 +20,7 @@ public class MEGame extends Game {
     private int idGame; // id de la partie chargé
     private String nomGame; // nom de la game
     private int level;
+    private SauvegardeHandler save;
     
     /**
      *
@@ -32,6 +34,10 @@ public class MEGame extends Game {
     
     public void save() {
         Gdx.app.log("MEGame", "Sauvegarde.");
+        if(getScreen().getClass().getSimpleName().equals("GameScreen")) { // Pour être sûr qu'on lui envoi une référence vers l'instance de GameScreen
+            save = new SauvegardeHandler(this);
+            save.save();
+        }
     }
     
     public void quitAndSave() {
@@ -123,5 +129,12 @@ public class MEGame extends Game {
         AssetLoader.dispose();
     }
     
+    public int getLevel() {
+        return level;
+    }
+    
+    public String getNomGame() {
+        return nomGame;
+    }
 
 }
