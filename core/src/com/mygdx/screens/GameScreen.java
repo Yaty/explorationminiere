@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.gameobjects.Inventaire;
 import com.mygdx.gameworld.GameRenderer;
@@ -30,6 +31,7 @@ public class GameScreen implements Screen {
     private InventoryActor inventoryActor;
     private MenuPause menuPause;
     public static Stage stage;
+    private int idPartie;
     
     /**
      * Lance le jeu au niveau 1
@@ -40,11 +42,26 @@ public class GameScreen implements Screen {
         Gdx.app.log("GameScreen", "GameScreen créé");
         this.game = game;
         gameWorld = new GameWorld(cheminMap);
+        
+        String id = new String();
+        int i = 6;
+        
+        while(true) {
+            if(Character.isDigit(cheminMap.charAt(i))) {
+                id += cheminMap.charAt(i);
+                i++;
+            } else
+                break;            
+        }
+
+        idPartie = Integer.parseInt(id);
         gameRenderer = new GameRenderer(gameWorld);
         pause = false;
     }
     
-    
+    public int getIdPartie() {
+        return idPartie;
+    }
     
     /**
      * Méthode appelée à la création du jeu
@@ -153,5 +170,9 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+    
+    public GameWorld getWorld() {
+        return gameWorld;
     }
 }
