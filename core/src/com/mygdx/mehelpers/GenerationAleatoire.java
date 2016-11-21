@@ -20,7 +20,6 @@ import java.util.Random;
 public class GenerationAleatoire {
     private final String blocsSurface[], blocsObjet[];
     private final String chemin;
-    private final String nomNiveau;
     private final int niveau;
     private final char TAB = (char) 9; // TABulation
     private final Date date;
@@ -28,11 +27,10 @@ public class GenerationAleatoire {
     private final Random random;
     private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis;
     
-    public GenerationAleatoire(String blocsSurface[], String blocsObjet[], String chemin, String nomNiveau, int niveau) {
+    public GenerationAleatoire(String blocsSurface[], String blocsObjet[], String chemin, int niveau) {
         this.blocsSurface = blocsSurface;
         this.blocsObjet = blocsObjet;
         this.chemin = chemin;
-        this.nomNiveau = nomNiveau;
         this.niveau = niveau;
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         this.date = new Date();
@@ -81,7 +79,7 @@ public class GenerationAleatoire {
                 int largeur = (int) Math.round(0.4 * hauteur);
                 StringBuilder input = new StringBuilder();
                 int iterateur = 1;
-                input.append("<!-- Carte générée aléatoirement le ").append(dateFormat.format(date)).append(" pour le niveau ").append(niveau).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
+                input.append("<!-- Carte générée aléatoirement le ").append(dateFormat.format(date)).append(" pour le niveau ").append(niveau).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\" level=\"").append(niveau).append("\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
                 
                 for (String blocsSurface1 : blocsSurface) {
                     input.append(TAB).append("<tileset firstgid=\"").append(iterateur).append("\" name=\"").append(blocsSurface1).append("\" tilewidth=\"64\" tileheight=\"64\" tilecount=\"1\" columns=\"1\">\n").append(TAB).append(TAB).append("<image source=\"../").append(blocsSurface1).append("\" width=\"64\" height=\"64\"/>\n").append(TAB).append("</tileset>\n\n");
@@ -154,7 +152,6 @@ public class GenerationAleatoire {
         } catch(IOException io2) {
             System.out.println("Erreur lors de la création du fichier : " + io2.getMessage());           
         }
-        String chemin2 = chemin.substring(0, chemin.length()-7);   
     }   
     
     private int getProfondeurGeneration() {

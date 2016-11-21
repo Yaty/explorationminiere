@@ -10,13 +10,15 @@ import com.mygdx.gameobjects.Mineur;
  */
 public class GameWorld {
     
-    private final TiledMap map;
+    private TiledMap map;
     private final Mineur mineur;
+    private final String cheminMap;
 
     /**
      *
      */
     public GameWorld(String cheminMap) {
+        this.cheminMap = cheminMap;
         map = new TmxMapLoader().load(cheminMap);
         mineur = new Mineur(map);
     }
@@ -41,6 +43,11 @@ public class GameWorld {
      */
     public Mineur getMineur() {
         return mineur;
+    }
+
+    public void reload() {
+        map = new TmxMapLoader().load(cheminMap);
+        mineur.reload(map);
     }
     
     

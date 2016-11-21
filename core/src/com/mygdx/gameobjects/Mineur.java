@@ -40,6 +40,17 @@ public class Mineur {
         return argent;
     }
 
+    public void reload(TiledMap map) {
+        this.map = map;
+        etat = Etat.Arret;
+        dirMineur = Direction.Arret;
+        position.set(getXDepart(), getYDepart());
+        mineurAuSol = teteVersLaDroite = true;
+        isOnEchelle = false;
+        wasMoving = false;   
+        cellsHandler.reload();
+    }
+        
     /**
      * Représente la direction du mineur
      */
@@ -104,9 +115,9 @@ public class Mineur {
     private Direction dirMineur;
     private final Vector2 position;
     private float runTime;
-    private boolean teteVersLaDroite, mineurAuSol, moving, isInAmortissement, wasInAmortissement, wasMoving, isOnEchelle;
+    private boolean teteVersLaDroite, mineurAuSol, moving, wasMoving, isOnEchelle;
     private final float UNITE = 1/64f;
-    private final TiledMap map;
+    private TiledMap map;
     private final CellsHandler cellsHandler;
     private Deplacement deplacement;
     private boolean poserEchelle = true;
@@ -130,9 +141,7 @@ public class Mineur {
         position = new Vector2(getXDepart(), getYDepart());
         runTime = 0f;
         mineurAuSol = teteVersLaDroite = true;
-        isInAmortissement = false;
         isOnEchelle = false;
-        wasInAmortissement = false;
         wasMoving = false;
         cellsHandler = new CellsHandler(this);
         argent = 0;

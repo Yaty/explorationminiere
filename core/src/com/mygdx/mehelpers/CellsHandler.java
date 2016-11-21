@@ -22,7 +22,7 @@ import java.util.TimerTask;
 public class CellsHandler {
     private boolean victory;
     private final Mineur mineur;
-    private final TiledMapTileLayer layerSurface, layerObjets;
+    private TiledMapTileLayer layerSurface, layerObjets;
     private final boolean[] cellsSAM; // CellsSurfaceAroundMineur
     private final int idPierre, idDiamant, idCharbon, idTerre, idEmeraude, idGlowstone, idOr, idHerbe, idFer, idLapis, idEchelle, idPilier;
     private final TiledMapTileSets tileSet;
@@ -49,6 +49,11 @@ public class CellsHandler {
         idLapis = (Integer) mineur.getMap().getTileSets().getTileSet("lapis_ore.png").getProperties().get("firstgid");
         idEchelle = (Integer) mineur.getMap().getTileSets().getTileSet("ladder.gif").getProperties().get("firstgid");
         idPilier = (Integer) mineur.getMap().getTileSets().getTileSet("pilier.gif").getProperties().get("firstgid");
+    }
+    
+    public void reload() {
+        layerSurface = (TiledMapTileLayer) mineur.getMap().getLayers().get("surface");
+        layerObjets =  (TiledMapTileLayer) mineur.getMap().getLayers().get("objets");        
     }
     
     /**
@@ -284,6 +289,10 @@ public class CellsHandler {
 
     public int getIdPilier() {
         return idPilier;
+    }
+
+    public void setVictory(boolean b) {
+        this.victory = b;
     }
     
 }

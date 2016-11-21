@@ -15,4 +15,8 @@ public abstract class Outil {
     public Outil(String nom) {
         this.nom = nom;
     }
+    
+    public String getNom() {
+        return nom;
+    }
 }

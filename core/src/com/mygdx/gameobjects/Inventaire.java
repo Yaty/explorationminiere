@@ -50,7 +50,7 @@ public class Inventaire {
 
         // create some random items
         for (Slot slot : slots) {
-            slot.add(Item.values()[MathUtils.random(0, Item.values().length - 1)], 1);
+            slot.add(Item.values()[MathUtils.random(0, Item.values().length - 1)], MathUtils.random(1, 100));
         }
 
         // create a few random empty slots

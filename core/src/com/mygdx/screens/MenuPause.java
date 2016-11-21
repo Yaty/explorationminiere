@@ -32,7 +32,7 @@ public class MenuPause extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setVisible(false);
-                screen.unPause();
+                screen.resume();
             }
         });
         sauvegarder.addListener(new ClickListener() {

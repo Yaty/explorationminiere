@@ -12,10 +12,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.gameobjects.Inventaire;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
+import com.mygdx.mehelpers.GenerationAleatoire;
 import com.mygdx.mehelpers.InputHandler;
 import com.mygdx.mehelpers.KeyBoard;
 import com.mygdx.mehelpers.inventaire.InventoryActor;
 import com.mygdx.minexploration.MEGame;
+import java.io.File;
+import java.io.FilenameFilter;
 
 /**
  * Classe qui est l'écran du jeu, c'est elle qui contient les éléments du jeu
@@ -99,10 +102,11 @@ public class GameScreen implements Screen {
             gameWorld.update(delta);
             gameRenderer.render(gameWorld.getMineur().getRunTime());
             if(gameWorld.getMineur().getCellsHandler().isVictory()) {
-                game.createMenuFin();
+                newLevel();
+                gameWorld.getMineur().getCellsHandler().setVictory(false);
             }
 
-            // show the inventory when any key is pressed
+            // I
             if (Gdx.input.isKeyJustPressed(37)) {
                 if(inventoryActor.isVisible())
                     inventoryActor.setVisible(false);
@@ -110,10 +114,11 @@ public class GameScreen implements Screen {
                     inventoryActor.setVisible(true);
             }
         }
+        // P ou ESC
         if (Gdx.input.isKeyJustPressed(44) || Gdx.input.isKeyJustPressed(131)) {
             if(menuPause.isVisible()) {
                 menuPause.setVisible(false);
-                this.unPause();
+                resume();
             } else {
                 menuPause.setVisible(true);
                 this.pause();
@@ -123,6 +128,38 @@ public class GameScreen implements Screen {
         // handle all inputs and draw the whole UI
         stage.act(delta);
         stage.draw();
+    }
+    
+    public void newLevel() {
+        // Remplissage du dossier
+        // Création du dossier du niveau level
+        File dir = new File("./map/");
+            // Remplissage du dossier par un TMX généré
+        File[] surfaceFiles = dir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File folder, String name) {
+                return name.toLowerCase().endsWith(".png");
+            }
+        });
+        
+        File[] objetFiles = dir.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File folder, String name) {
+                return name.toLowerCase().endsWith(".gif");
+            }
+        });
+        String surface[] = new String[surfaceFiles.length];
+        for(int i = 0 ; i < surfaceFiles.length ; i++)
+            surface[i] = surfaceFiles[i].getName();
+        
+        String objet[] = new String[objetFiles.length];
+        for(int i = 0 ; i < objetFiles.length ; i++)
+            objet[i] = objetFiles[i].getName();
+                
+        game.setLevel(game.getLevel()+1);
+        GenerationAleatoire generateur = new GenerationAleatoire(surface, objet, "./map/" + idPartie + "/map.tmx", game.getLevel());
+        gameWorld.reload();
+        gameRenderer.reload(gameWorld.getMap());
     }
     
     /**
@@ -144,16 +181,13 @@ public class GameScreen implements Screen {
         pause = true;
     }
     
-    public void unPause() {
-        pause = false;
-    }
-    
     /**
      * Méthode appelée quand le jeu passe sort de la pause
      */   
     @Override
     public void resume() {
         Gdx.app.log("GameScreen", "resume appelé");
+        pause = false;
     }
     
     /**

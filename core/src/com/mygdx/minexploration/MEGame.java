@@ -7,7 +7,6 @@ import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.GenerationAleatoire;
 import com.mygdx.screens.GameScreen;
 import com.mygdx.screens.MainMenuScreen;
-import com.mygdx.screens.MenuFin;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -42,6 +41,11 @@ public class MEGame extends Game {
     
     public void quitAndSave() {
         Gdx.app.log("MEGame", "Sauvegarde puis extinction.");
+        if(getScreen().getClass().getSimpleName().equals("GameScreen")) { // Pour être sûr qu'on lui envoi une référence vers l'instance de GameScreen
+            save = new SauvegardeHandler(this);
+            save.save();
+            ShutdownHandler.shutdown();
+        }
     }
     
     /**
@@ -97,7 +101,7 @@ public class MEGame extends Game {
         for(int i = 0 ; i < objetFiles.length ; i++)
             objet[i] = objetFiles[i].getName();
                 
-        GenerationAleatoire generateur = new GenerationAleatoire(surface, objet, "./map/" + idGame + "/map.tmx", nomGame, level);
+        GenerationAleatoire generateur = new GenerationAleatoire(surface, objet, "./map/" + idGame + "/map.tmx", level);
             
         // Lancement de la partie sur le niveau 1
         setScreen(new GameScreen(this, "./map/" + idGame + "/map.tmx"));
@@ -116,10 +120,7 @@ public class MEGame extends Game {
     public void backToMainMenuScreen(){
         setScreen(new MainMenuScreen(this));
     }
-    
-    public void createMenuFin (){
-        setScreen(new MenuFin(this));
-    }    
+
     /**
      *
      */    
@@ -136,5 +137,8 @@ public class MEGame extends Game {
     public String getNomGame() {
         return nomGame;
     }
-
+    
+    public void setLevel(int level) {
+        this.level = level;
+    }
 }
