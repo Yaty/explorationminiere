@@ -258,7 +258,6 @@ public class Mineur {
             }
         }
         
-        if(InputHandler.keys[48]){
         if(InputHandler.keys[46]){
             cellsHandler.setPilier((int) position.x, (int) position.y);
         }
