@@ -24,8 +24,9 @@ public class CellsHandler {
     private final Mineur mineur;
     private TiledMapTileLayer layerSurface, layerObjets;
     private final boolean[] cellsSAM; // CellsSurfaceAroundMineur
-    private final int idPierre, idDiamant, idCharbon, idTerre, idEmeraude, idGlowstone, idOr, idHerbe, idFer, idLapis, idEchelle, idPilier;
+    private final int idPierre, idDiamant, idCharbon, idTerre, idEmeraude, idGlowstone, idOr, idHerbe, idFer, idLapis, idEchelle, idPilier,idTNT;
     private final TiledMapTileSets tileSet;
+    private final int rayonTNT = 5; 
     /**
      * Constructeur par défaut
      * @param mineur Référence au mineur
@@ -49,6 +50,7 @@ public class CellsHandler {
         idLapis = (Integer) mineur.getMap().getTileSets().getTileSet("lapis_ore.png").getProperties().get("firstgid");
         idEchelle = (Integer) mineur.getMap().getTileSets().getTileSet("ladder.gif").getProperties().get("firstgid");
         idPilier = (Integer) mineur.getMap().getTileSets().getTileSet("pilier.gif").getProperties().get("firstgid");
+        idTNT = (Integer) mineur.getMap().getTileSets().getTileSet("tnt.png").getProperties().get("firstgid");
     }
     
     public void reload() {
@@ -141,6 +143,82 @@ public class CellsHandler {
             mineur.getInventaire().remove(Item.PILIER, 1);
         }
     }
+    
+    public void setTNT(int x, int y){
+        Cell cell = new Cell();
+        cell.setTile(tileSet.getTile(idTNT));
+        if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
+            layerObjets.setCell(x+1, y, cell);
+            mineur.getInventaire().remove(Item.TNT, 1);
+        } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
+            layerObjets.setCell(x-1, y, cell);
+            mineur.getInventaire().remove(Item.TNT, 1);
+        }
+    }
+    
+    public void makeTNTexplode(int x, int y){
+        if(mineur.isTeteVersLaDroite() && getObject(x+1, y)==idTNT) {
+            final int x2 = x + 1;
+            final int y2 = y;
+            new Timer().schedule(new TimerTask(){
+                                @Override
+                                public void run(){
+                                    explodeTNT(x2, y2);
+                                }
+                            }, 2500);
+        } else if(!mineur.isTeteVersLaDroite() && getObject(x-1, y)==idTNT) {
+            final int x2 = x - 1;
+            final int y2 = y;
+            
+            new Timer().schedule(new TimerTask(){
+                                @Override
+                                public void run(){
+                                    explodeTNT(x2, y2);
+                                }
+                            }, 2500);
+        }
+        
+    }
+    
+    public void explodeTNT(final int x, final int y){
+        for(int i = -rayonTNT ; i <= rayonTNT; i++ ){
+            for(int j = -rayonTNT ; j <= rayonTNT ; j++){
+                if(getObject(x+i, y+j)!=idTNT ||(i == 0 && j == 0)){
+                    layerSurface.setCell(x+i, y+j, null);
+                    layerObjets.setCell(x+i, y+j, null);
+                }else{
+                    explodeTNT(x+i, y+j);
+                }
+            }  
+        }
+        
+        
+        /*int N = 2*rayonTNT+1;
+ 
+        int xrec, yrec;  // Coordinates inside the rectangle
+
+        // Draw a square of size N*N.
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+                // Start from the left most corner point
+                xrec = i-rayonTNT;
+                yrec = j-rayonTNT;
+
+                // If this point is inside the circle, print it
+                if (xrec*xrec + yrec*yrec <= rayonTNT*rayonTNT+1 ){
+                    if(getObject(x+i, y+j)!=idTNT ||(i == 0 && j == 0)){
+                        layerSurface.setCell(x+i, y+j, null);
+                        layerObjets.setCell(x+i, y+j, null);
+                    }else{
+                        explodeTNT(x+i, y+j);
+                    }
+                }
+            }
+        }*/
+    }
+    
     
     /**
      * @param x l'entier en abscisse
@@ -290,9 +368,33 @@ public class CellsHandler {
     public int getIdPilier() {
         return idPilier;
     }
+    
+    public int getIdTNT(){
+        return idTNT;
+    }
 
     public void setVictory(boolean b) {
         this.victory = b;
+    }
+    
+    public int getBloc(int xBloc,int yBloc){
+        if (layerSurface.getCell(xBloc, yBloc) != null){
+            if(layerSurface.getCell(xBloc, yBloc).getTile() != null){
+                return layerSurface.getCell(xBloc, yBloc).getTile().getId();
+            }
+            else return 0;
+        }
+        else return 0;
+    }
+    
+    public int getObject(int xBloc,int yBloc){
+        if (layerObjets.getCell(xBloc, yBloc) != null){
+            if(layerObjets.getCell(xBloc, yBloc).getTile() != null){
+                return layerObjets.getCell(xBloc, yBloc).getTile().getId();
+            }
+            else return 0;
+        }
+        else return 0;
     }
     
 }

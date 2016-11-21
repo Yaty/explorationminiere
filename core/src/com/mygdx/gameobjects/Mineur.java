@@ -259,7 +259,16 @@ public class Mineur {
         }
         
         if(InputHandler.keys[48]){
+        if(InputHandler.keys[46]){
             cellsHandler.setPilier((int) position.x, (int) position.y);
+        }
+        
+        if(Gdx.input.isKeyJustPressed(48)){
+            cellsHandler.setTNT((int) position.x, (int) position.y);
+        }
+        
+        if(Gdx.input.isKeyJustPressed(53)){
+            cellsHandler.makeTNTexplode((int) position.x, (int) position.y);
         }
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit
