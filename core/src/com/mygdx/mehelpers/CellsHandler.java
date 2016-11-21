@@ -26,7 +26,7 @@ public class CellsHandler {
     private final boolean[] cellsSAM; // CellsSurfaceAroundMineur
     private final int idPierre, idDiamant, idCharbon, idTerre, idEmeraude, idGlowstone, idOr, idHerbe, idFer, idLapis, idEchelle, idPilier,idTNT;
     private final TiledMapTileSets tileSet;
-    private final int rayonTNT = 5; 
+    private final int rayonTNT = 2; 
     /**
      * Constructeur par défaut
      * @param mineur Référence au mineur
@@ -184,11 +184,11 @@ public class CellsHandler {
         for(int i = -rayonTNT ; i <= rayonTNT; i++ ){
             for(int j = -rayonTNT ; j <= rayonTNT ; j++){
                 if(getObject(x+i, y+j)!=idTNT ||(i == 0 && j == 0)){
-                    layerSurface.setCell(x+i, y+j, null);
                     layerObjets.setCell(x+i, y+j, null);
-                }else{
-                    explodeTNT(x+i, y+j);
+                    if(getBloc(x+i, y+j)==idDiamant) victory = true;
+                    else layerSurface.setCell(x+i, y+j, null);
                 }
+                else explodeTNT(x+i, y+j);
             }  
         }
         
@@ -245,6 +245,11 @@ public class CellsHandler {
         return false;
     }
     
+    /**
+     * Fais tomber une ou plusieurs pierres sur 1 ou plusieur blocs de haut s'il y a rien en dessous.
+     * @param xBloc l'entier en abscisse
+     * @param yBloc l'entier en ordonnée
+     */
     private void pierreTombe(int xBloc, int yBloc){ 
         Cell cell = new Cell();
         cell.setTile(tileSet.getTile(idPierre));

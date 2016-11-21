@@ -231,10 +231,12 @@ public class Mineur {
         if(InputHandler.keys[45] || InputHandler.keys[21]) {
             moving = true;
             dirMineur = Direction.Gauche;
+            setTeteVersLaDroite(false);
         }
         if (InputHandler.keys[32] || InputHandler.keys[22]) {
             moving = true;
             dirMineur = Direction.Droite;
+            setTeteVersLaDroite(true);
         }
         if ((InputHandler.keys[19] || InputHandler.keys[54]) && mineurAuSol) {
             moving = true;
