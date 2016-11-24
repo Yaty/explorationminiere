@@ -2,7 +2,6 @@ package com.mygdx.minexploration;
 
 import com.badlogic.gdx.Game; // On importe Game qui implémente ApplicationListener
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.GenerationAleatoire;
 import com.mygdx.screens.GameScreen;

@@ -52,14 +52,61 @@ public class GenerationAleatoire {
 
     private int genererIdentifiantBloc(int profondeur) {
         int rand = random.nextInt(99);              // 100 valeurs possibles - 0 à 99
-        if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
-        else if (rand <= 29) return idGlowstone;    // de 20 à 29 - 10%
-        else if (rand <= 39) return idCharbon;      // de 30 à 39 - 10%
-        else if (rand <= 47) return idFer;          // de 40 à 47 - 8%
-        else if (rand <= 52) return idOr;           // de 48 à 52 - 5%
-        else if (rand <= 56) return idLapis;        // de 53 à 56 - 4%
-        else if (rand <= 59) return idEmeraude;     // de 57 à 59 - 3%
-        return idTerre;                             // le reste -> 40%
+        if (profondeur < 50) {
+            if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
+            else if (rand <= 24) return idGlowstone;    // de 20 à 29 - 10%
+            else if (rand <= 30) return idCharbon;      // de 30 à 39 - 10%
+            else if (rand <= 35) return idFer;          // de 40 à 47 - 8%
+            else if (rand <= 40) return idOr;           // de 48 à 52 - 5%
+            else if (rand <= 43) return idLapis;        // de 53 à 56 - 4%
+            else if (rand <= 45) return idEmeraude;     // de 57 à 59 - 3%
+            return idTerre;                             // le reste -> 40%
+        } else if (profondeur < 150) {
+            if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
+            else if (rand <= 29) return idGlowstone;    // de 20 à 29 - 10%
+            else if (rand <= 39) return idCharbon;      // de 30 à 39 - 10%
+            else if (rand <= 47) return idFer;          // de 40 à 47 - 8%
+            else if (rand <= 52) return idOr;           // de 48 à 52 - 5%
+            else if (rand <= 56) return idLapis;        // de 53 à 56 - 4%
+            else if (rand <= 59) return idEmeraude;     // de 57 à 59 - 3%
+            return idTerre;                             // le reste -> 40%            
+        } else if (profondeur < 300) {
+            if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
+            else if (rand <= 29) return idGlowstone;    // de 20 à 29 - 10%
+            else if (rand <= 39) return idCharbon;      // de 30 à 39 - 10%
+            else if (rand <= 47) return idFer;          // de 40 à 47 - 8%
+            else if (rand <= 52) return idOr;           // de 48 à 52 - 5%
+            else if (rand <= 56) return idLapis;        // de 53 à 56 - 4%
+            else if (rand <= 59) return idEmeraude;     // de 57 à 59 - 3%
+            return idTerre;                             // le reste -> 40%            
+        } else if (profondeur < 500) {
+            if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
+            else if (rand <= 29) return idGlowstone;    // de 20 à 29 - 10%
+            else if (rand <= 39) return idCharbon;      // de 30 à 39 - 10%
+            else if (rand <= 47) return idFer;          // de 40 à 47 - 8%
+            else if (rand <= 52) return idOr;           // de 48 à 52 - 5%
+            else if (rand <= 56) return idLapis;        // de 53 à 56 - 4%
+            else if (rand <= 59) return idEmeraude;     // de 57 à 59 - 3%
+            return idTerre;                             // le reste -> 40%            
+        } else if  (profondeur < 1000) {
+            if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
+            else if (rand <= 29) return idGlowstone;    // de 20 à 29 - 10%
+            else if (rand <= 39) return idCharbon;      // de 30 à 39 - 10%
+            else if (rand <= 47) return idFer;          // de 40 à 47 - 8%
+            else if (rand <= 52) return idOr;           // de 48 à 52 - 5%
+            else if (rand <= 56) return idLapis;        // de 53 à 56 - 4%
+            else if (rand <= 59) return idEmeraude;     // de 57 à 59 - 3%
+            return idTerre;                             // le reste -> 40%            
+        } else {
+            if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
+            else if (rand <= 29) return idGlowstone;    // de 20 à 29 - 10%
+            else if (rand <= 39) return idCharbon;      // de 30 à 39 - 10%
+            else if (rand <= 47) return idFer;          // de 40 à 47 - 8%
+            else if (rand <= 52) return idOr;           // de 48 à 52 - 5%
+            else if (rand <= 56) return idLapis;        // de 53 à 56 - 4%
+            else if (rand <= 59) return idEmeraude;     // de 57 à 59 - 3%
+            return idTerre;                             // le reste -> 40%           
+        }
     }
     
     /**
