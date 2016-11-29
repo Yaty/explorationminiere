@@ -261,12 +261,13 @@ public class Mineur {
         }
         
         if(Gdx.input.isKeyJustPressed(46)){
-            System.out.println("aa");
+            System.out.println("\naa");
             int direction = 0;
             if(this.isTeteVersLaDroite())
                 direction = 1;
             else
                 direction = -1;
+            
             if(cellsHandler.getObject((int) position.x+direction, (int) position.y) == 0){
                 System.out.println("je passe ici");
                 cellsHandler.setPilier((int) position.x, (int) position.y);
@@ -276,6 +277,7 @@ public class Mineur {
         
             }
         }
+        
         if(Gdx.input.isKeyJustPressed(48)){
             cellsHandler.setTNT((int) position.x, (int) position.y);
         }
