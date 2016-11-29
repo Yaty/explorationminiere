@@ -249,8 +249,8 @@ public class Mineur {
         
         // faut un timer dans le cas ou on monte une echelle 
         if(InputHandler.keys[33] && inventaire.firstSlotWithItem(Item.ECHELLE).getAmount() > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut) && this.isOnEchelle()==false ){ // Echelle (E)
-            if(this.getCellsHandler().isCellObjectHere((int)position.x, (int)position.y)){
-                cellsHandler.setLadder((int) position.x,(int) position.y);
+            if(this.getCellsHandler().isCellObjectHere((int)position.x, (int)position.y)){   
+                    cellsHandler.setLadder((int) position.x,(int) position.y);
                 try {
                     inventaire.remove(Item.ECHELLE, 1);
                 } catch (Exception ex) {
@@ -260,10 +260,22 @@ public class Mineur {
             }
         }
         
-        if(InputHandler.keys[46]){
-            cellsHandler.setPilier((int) position.x, (int) position.y);
-        }
+        if(Gdx.input.isKeyJustPressed(46)){
+            System.out.println("aa");
+            int direction = 0;
+            if(this.isTeteVersLaDroite())
+                direction = 1;
+            else
+                direction = -1;
+            if(cellsHandler.getObject((int) position.x+direction, (int) position.y) == 0){
+                System.out.println("je passe ici");
+                cellsHandler.setPilier((int) position.x, (int) position.y);
+            }else{
+                System.out.println("je passe ici aussi");
+                cellsHandler.ramassePilier((int) position.x+direction, (int) position.y);
         
+            }
+        }
         if(Gdx.input.isKeyJustPressed(48)){
             cellsHandler.setTNT((int) position.x, (int) position.y);
         }

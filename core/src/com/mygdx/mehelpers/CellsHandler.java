@@ -120,28 +120,38 @@ public class CellsHandler {
         return false;
     }
     
+    
     /**
      * Ajoute une échelle au coordonnée mis en paramètre
      * @param x l'entier en abscisse
      * @param y l'entier en ordonnée
      */
     public void setLadder(int x,int y){
-        Cell cell = new Cell();
-        cell.setTile(tileSet.getTile(idEchelle));
-        layerObjets.setCell(x, y, cell);
-        mineur.getInventaire().store(Item.ECHELLE, 1);
+        if(!isLadderHere(x,y)){
+            Cell cell = new Cell();
+            cell.setTile(tileSet.getTile(idEchelle));
+            layerObjets.setCell(x, y, cell);
+            mineur.getInventaire().store(Item.ECHELLE, 1);
+        }else{
+            layerObjets.setCell(x, y, null);
+
+        }
     }
     
     public void setPilier(int x, int y){
-        Cell cell = new Cell();
-        cell.setTile(tileSet.getTile(idPilier));
-        if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
-            layerObjets.setCell(x+1, y, cell);
-            mineur.getInventaire().remove(Item.PILIER, 1);
-        } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
-            layerObjets.setCell(x-1, y, cell);
-            mineur.getInventaire().remove(Item.PILIER, 1);
-        }
+            Cell cell = new Cell();
+            cell.setTile(tileSet.getTile(idPilier));
+            if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
+                layerObjets.setCell(x+1, y, cell);
+                mineur.getInventaire().remove(Item.PILIER, 1);
+            } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
+                layerObjets.setCell(x-1, y, cell);
+                mineur.getInventaire().remove(Item.PILIER, 1);
+            }
+    }
+    
+    public void ramassePilier(int x, int y){
+        layerObjets.setCell(x,y,null);
     }
     
     public void setTNT(int x, int y){
@@ -234,11 +244,22 @@ public class CellsHandler {
     }
     
     
+    private boolean isCellDessousPilier(int xBloc, int yBloc){
+        int xCellUp = xBloc;
+        int yCellUp = yBloc+1;
+        if(layerObjets.getCell(xCellUp, yCellUp) != null && layerObjets.getCell(xCellUp, yCellUp).getTile() != null) {
+            if(layerObjets.getCell(xCellUp, yCellUp).getTile().getId() == idPilier){
+                    return true;
+            }
+        }
+        return false;
+    }
+    
     private boolean isCellDessous(int xBloc, int yBloc){
         int xCellUp = xBloc;
         int yCellUp = yBloc+1;
         if(layerSurface.getCell(xCellUp, yCellUp) != null && layerSurface.getCell(xCellUp, yCellUp).getTile() != null) {
-            if(layerSurface.getCell(xCellUp, yCellUp).getTile().getId() == idPierre){
+            if(layerObjets.getCell(xCellUp, yCellUp).getTile().getId() == idPilier){
                     return true;
             }
         }
@@ -273,7 +294,29 @@ public class CellsHandler {
                 }
             }
         }
-    }        
+    }
+    
+    private void pillierTombe(int xBloc, int yBloc){
+        Cell cell = new Cell();
+        cell.setTile(tileSet.getTile(idPilier));
+        //System.out.println(layerObjets.getCell(xBloc, yBloc+1));
+        if(layerObjets.getCell(xBloc, yBloc+1).getTile() != null && layerObjets.getCell(xBloc, yBloc+1)!= null){
+            while(layerObjets.getCell(xBloc, yBloc+1).getTile().getId()==idPilier){
+                int yBlocCible = yBloc;
+                int xBlocCible = xBloc;
+                
+                while(layerObjets.getCell(xBlocCible, yBlocCible+1) != null){
+                    yBlocCible --;
+                    if(layerSurface.getCell(xBlocCible, yBlocCible+1) != null){
+                        break;
+                    }
+                    layerObjets.setCell(xBloc, yBloc+1,null);
+                    layerObjets.setCell(xBlocCible, yBlocCible+1, cell);
+                    yBloc++;
+                }
+            }
+        }
+    }
  
     
     /**
@@ -303,7 +346,10 @@ public class CellsHandler {
                         layerSurface.setCell(xBloc, yBloc, null);
                         if (idBlock == idGlowstone) mineur.setHealth(mineur.getHealth()+0.2f);
                         else mineur.setHealth(mineur.getHealth()-0.01f);                      
-                        if(isCellDessous(xBloc, yBloc)){
+                        if(isCellDessousPilier(xBloc, yBloc)){
+                            System.out.println("trace3");
+                            pillierTombe(xBloc, yBloc);
+                        }else{
                             new Timer().schedule(new TimerTask(){
                                 @Override
                                 public void run(){
