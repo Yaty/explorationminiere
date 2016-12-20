@@ -260,22 +260,9 @@ public class CellsHandler {
     private boolean isCellDessousPilier(int xBloc, int yBloc){
         int xCellUp = xBloc;
         int yCellUp = yBloc+1;
-        if(layerObjets.getCell(xCellUp, yCellUp) != null && layerObjets.getCell(xCellUp, yCellUp).getTile() != null) {
-            if(layerObjets.getCell(xCellUp, yCellUp).getTile().getId() == idPilier){
+            if(getObject(xCellUp, yCellUp) == idPilier){
                     return true;
             }
-        }
-        return false;
-    }
-    
-    private boolean isCellDessous(int xBloc, int yBloc){
-        int xCellUp = xBloc;
-        int yCellUp = yBloc+1;
-        if(layerSurface.getCell(xCellUp, yCellUp) != null && layerSurface.getCell(xCellUp, yCellUp).getTile() != null) {
-            if(layerObjets.getCell(xCellUp, yCellUp).getTile().getId() == idPilier){
-                    return true;
-            }
-        }
         return false;
     }
     
@@ -287,12 +274,16 @@ public class CellsHandler {
     private void pierreTombe(int xBloc, int yBloc){ 
         Cell cell = new Cell();
         cell.setTile(tileSet.getTile(idPierre));
-        //On parcourt les blocs des bas en haut tant que ce sont des blocs de pierre        
+        //On parcourt les blocs de bas en haut tant que ce sont des blocs de pierre        
         while(getBloc(xBloc, yBloc+1) == idPierre){
             int yBlocCible = yBloc;
             int xBlocCible = xBloc;
             //On parcourt les blocs de haut vers le bas tant que le bloc cible est vide 
             while(getBloc(xBlocCible, yBlocCible) == 0){
+                System.out.println("Mineur : " + (int)mineur.getPosition().x + " " + (int)mineur.getPosition().y);
+                System.out.println("BlocCible : " + xBlocCible + " " + yBlocCible);   
+                if((int)mineur.getPosition().x == xBlocCible && (int)mineur.getPosition().y == yBlocCible) 
+                    mineur.setHealth(0f);
                 yBlocCible--;
                 if(getObject(xBlocCible, yBlocCible) == idPilier){
                     break;
@@ -309,7 +300,6 @@ public class CellsHandler {
     private void pillierTombe(int xBloc, int yBloc){
         Cell cell = new Cell();
         cell.setTile(tileSet.getTile(idPilier));
-        //System.out.println(layerObjets.getCell(xBloc, yBloc+1));
         while(getObject(xBloc, yBloc+1)==idPilier){
             int yBlocCible = yBloc;
             int xBlocCible = xBloc;
@@ -347,7 +337,10 @@ public class CellsHandler {
             public void run() { // Fin du minage
                 Vector2 positionLorsDuCassage = mineur.getPosition().cpy();
                 if(isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
+                    int idBlock = (Integer) getBloc(xBloc, yBloc);
                     if(idBlock != idPierre && isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {                
+                        if(getBloc(xBloc, yBloc) == idDiamant) victory = true;
+                        mineur.gestionArgent(getBloc(xBloc, yBloc));
                         layerSurface.setCell(xBloc, yBloc, null);
                         if (idBlock == idGlowstone) mineur.setHealth(mineur.getHealth()+0.2f);
                         else mineur.setHealth(mineur.getHealth()-0.01f);                      
