@@ -207,7 +207,6 @@ public class CellsHandler {
                     if((int)mineur.getPosition().x == (x+i) && (int)mineur.getPosition().y == (y+j)) 
                         mineur.setHealth(0f);
                     layerObjets.setCell(x+i, y+j, null);
-                    if(getBloc(x+i, y+j)==idDiamant) victory = true;
                     if(getBloc(x+i, y+j)==idDiamant) 
                         victory = true;
                     else layerSurface.setCell(x+i, y+j, null);
@@ -289,23 +288,20 @@ public class CellsHandler {
         Cell cell = new Cell();
         cell.setTile(tileSet.getTile(idPierre));
         //On parcourt les blocs des bas en haut tant que ce sont des blocs de pierre        
-        if(layerSurface.getCell(xBloc, yBloc+1).getTile() != null && layerSurface.getCell(xBloc, yBloc+1) != null){
-            while(layerSurface.getCell(xBloc, yBloc+1).getTile().getId() == idPierre){
-                int yBlocCible = yBloc;
-                int xBlocCible = xBloc;
-                //On parcourt les blocs de haut vers le bas tant que le bloc cible est vide 
-                while(layerSurface.getCell(xBlocCible, yBlocCible) == null){
-                    yBlocCible--;
-                    if(layerObjets.getCell(xBlocCible, yBlocCible+1) != null){
-                        if(layerObjets.getCell(xBlocCible, yBlocCible).getTile().getId() == idPilier){
-                            break;
-                        }
-                    }
-                //On met les blocs aux bonnes positions
-                layerSurface.setCell(xBloc, yBloc+1,null);
-                layerSurface.setCell(xBlocCible, yBlocCible+1, cell);
-                yBloc++;
+        while(getBloc(xBloc, yBloc+1) == idPierre){
+            int yBlocCible = yBloc;
+            int xBlocCible = xBloc;
+            //On parcourt les blocs de haut vers le bas tant que le bloc cible est vide 
+            while(getBloc(xBlocCible, yBlocCible) == 0){
+                yBlocCible--;
+                if(getObject(xBlocCible, yBlocCible) == idPilier){
+                    break;
                 }
+
+            //On met les blocs aux bonnes positions
+            layerSurface.setCell(xBloc, yBloc+1,null);
+            layerSurface.setCell(xBlocCible, yBlocCible+1, cell);
+            yBloc++;
             }
         }
     }
@@ -314,20 +310,18 @@ public class CellsHandler {
         Cell cell = new Cell();
         cell.setTile(tileSet.getTile(idPilier));
         //System.out.println(layerObjets.getCell(xBloc, yBloc+1));
-        if(layerObjets.getCell(xBloc, yBloc+1).getTile() != null && layerObjets.getCell(xBloc, yBloc+1)!= null){
-            while(layerObjets.getCell(xBloc, yBloc+1).getTile().getId()==idPilier){
-                int yBlocCible = yBloc;
-                int xBlocCible = xBloc;
-                
-                while(layerObjets.getCell(xBlocCible, yBlocCible+1) != null){
-                    yBlocCible --;
-                    if(layerSurface.getCell(xBlocCible, yBlocCible+1) != null){
-                        break;
-                    }
-                    layerObjets.setCell(xBloc, yBloc+1,null);
-                    layerObjets.setCell(xBlocCible, yBlocCible+1, cell);
-                    yBloc++;
+        while(getObject(xBloc, yBloc+1)==idPilier){
+            int yBlocCible = yBloc;
+            int xBlocCible = xBloc;
+
+            while(getObject(xBlocCible, yBlocCible+1) != 0){
+                yBlocCible --;
+                if(getObject(xBlocCible, yBlocCible+1) != 0){
+                    break;
                 }
+                layerObjets.setCell(xBloc, yBloc+1,null);
+                layerObjets.setCell(xBlocCible, yBlocCible+1, cell);
+                yBloc++;
             }
         }
     }

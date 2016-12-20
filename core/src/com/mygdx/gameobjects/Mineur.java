@@ -212,18 +212,23 @@ public class Mineur {
         if(dirMineur == Direction.Gauche || dirMineur == Direction.Droite) health -= 0.0005f;
         if(health <= 0f){
             health = 1f;
-            position.x=getXDepart();
-            position.y=getYDepart();
-            float y = getYDepart();
-            //position.y=getYDepart();
-            while(cellsHandler.getBloc((int)getXDepart(),(int)y-1) == 0){
-                y--;
-            }
-            position.y = y;
-            
+            respawn(getXDepart(),getYDepart());
         }
         else if(health > 1f) health = 1f;
-    }   
+    }
+    
+    private void respawn(float xspawn,float yspawn){
+        position.x = xspawn;
+        float y = yspawn;
+        float x = xspawn;
+        //position.y=getYDepart();
+        while(cellsHandler.getBloc((int)getXDepart(),(int)y-1) == 0){
+            y--;
+            // Je sais pas encore vraiment ce qu'on va faire ici ... En fait c'est simple mais c'est chiant
+            if(y<0) break;
+        }
+        position.y = y;
+    }
     
     /**
      * @param deltaTime temps passé durant la dernière frame
