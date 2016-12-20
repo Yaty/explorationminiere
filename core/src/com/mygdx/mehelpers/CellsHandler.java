@@ -347,10 +347,7 @@ public class CellsHandler {
             public void run() { // Fin du minage
                 Vector2 positionLorsDuCassage = mineur.getPosition().cpy();
                 if(isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
-                    int idBlock = (Integer) layerSurface.getCell(xBloc, yBloc).getTile().getId();
                     if(idBlock != idPierre && isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {                
-                        if(layerSurface.getCell(xBloc, yBloc).getTile().getId() == idDiamant) victory = true;
-                        mineur.gestionArgent(layerSurface.getCell(xBloc, yBloc).getTile().getId());
                         layerSurface.setCell(xBloc, yBloc, null);
                         if (idBlock == idGlowstone) mineur.setHealth(mineur.getHealth()+0.2f);
                         else mineur.setHealth(mineur.getHealth()-0.01f);                      
