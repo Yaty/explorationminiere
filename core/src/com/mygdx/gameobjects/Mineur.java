@@ -214,6 +214,13 @@ public class Mineur {
             health = 1f;
             position.x=getXDepart();
             position.y=getYDepart();
+            float y = getYDepart();
+            //position.y=getYDepart();
+            while(cellsHandler.getBloc((int)getXDepart(),(int)y-1) == 0){
+                y--;
+            }
+            position.y = y;
+            
         }
         else if(health > 1f) health = 1f;
     }   

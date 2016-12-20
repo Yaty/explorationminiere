@@ -166,10 +166,15 @@ public class CellsHandler {
         }
     }
     
+    // Gestion de l'explosion de la TNT.
+    // Si on regarde à gauche on fait péter la tnt à gauche
+    // Si on regarde à droite on fait péter la tnt à droite
+    // On applique un timer pour laisser au robot le temps de fuir avant d'exploser
     public void makeTNTexplode(int x, int y){
         if(mineur.isTeteVersLaDroite() && getObject(x+1, y)==idTNT) {
             final int x2 = x + 1;
             final int y2 = y;
+            
             new Timer().schedule(new TimerTask(){
                                 @Override
                                 public void run(){
@@ -190,12 +195,21 @@ public class CellsHandler {
         
     }
     
+    // On parcours tout le carré de "rayon" rayonTNT
+    // On supprime tous les blocs dans ce carré
+    // Si un des blocs est une TNT, on appelle cette 
+    // méthode avec les coordonnées de cette TNT.
+    
     public void explodeTNT(final int x, final int y){
         for(int i = -rayonTNT ; i <= rayonTNT; i++ ){
             for(int j = -rayonTNT ; j <= rayonTNT ; j++){
                 if(getObject(x+i, y+j)!=idTNT ||(i == 0 && j == 0)){
+                    if((int)mineur.getPosition().x == (x+i) && (int)mineur.getPosition().y == (y+j)) 
+                        mineur.setHealth(0f);
                     layerObjets.setCell(x+i, y+j, null);
                     if(getBloc(x+i, y+j)==idDiamant) victory = true;
+                    if(getBloc(x+i, y+j)==idDiamant) 
+                        victory = true;
                     else layerSurface.setCell(x+i, y+j, null);
                 }
                 else explodeTNT(x+i, y+j);
