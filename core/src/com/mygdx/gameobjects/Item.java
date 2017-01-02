@@ -12,7 +12,7 @@ package com.mygdx.gameobjects;
 public enum Item {
     TNT("tnt"),
     PIOCHE_BASE("pioche_base"),
-    ECHELLE("echelle"), PILIER("pilier");
+    ECHELLE("echelle"), PILIER("pilier"), MAGASIN("magasin");
 
     private String textureRegion;
 

@@ -2,7 +2,6 @@ package com.mygdx.minexploration;
 
 import com.badlogic.gdx.Game; // On importe Game qui implémente ApplicationListener
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.GenerationAleatoire;
 import com.mygdx.screens.GameScreen;
@@ -57,9 +56,6 @@ public class MEGame extends Game {
         this.idGame = idGame;
         this.nomGame = nomGame;
         this.level = 1;
-        System.out.println("CREATION DUNE NOUVELLE PARTIE");
-        System.out.println("Identifiant (dossier) : " + idGame);
-        System.out.println("Nom de la partie (truc.game) : " + nomGame);
         // Création du dossier
         File dir = new File("./map/" + idGame);
         dir.mkdir();

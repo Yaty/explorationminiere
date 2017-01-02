@@ -1,6 +1,8 @@
 package com.mygdx.gameobjects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
@@ -209,12 +211,16 @@ public class Mineur {
     private void gestionVie() {
         // Note : Toutes la gestion ne se passe pas ici (pour la saut c'est dans Deplacement et pour le descente c'est dans CellsHandler)
         //Si la vie du mineur tombe en dessous de 0
-        if(dirMineur == Direction.Gauche || dirMineur == Direction.Droite) health -= 0.0005f;
+        if(cellsHandler.isMineurInBase() || cellsHandler.isMineurInSurface())
+            health += 0.0005f;
+        else if(dirMineur == Direction.Gauche || dirMineur == Direction.Droite)
+            health -= 0.0005f;
+        
         if(health <= 0f){
             health = 1f;
             respawn(getXDepart(),getYDepart());
-        }
-        else if(health > 1f) health = 1f;
+        } else if(health > 1f)
+            health = 1f;
     }
     
     private void respawn(float xspawn,float yspawn){
@@ -296,6 +302,10 @@ public class Mineur {
         
         if(Gdx.input.isKeyJustPressed(53)){
             cellsHandler.makeTNTexplode((int) position.x, (int) position.y);
+        }
+        
+        if(Gdx.input.isKeyJustPressed(Keys.B)) {
+            cellsHandler.genererBase(isTeteVersLaDroite() ? ((int) position.x)+1 : ((int) position.x)-1, (int) position.y);
         }
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit

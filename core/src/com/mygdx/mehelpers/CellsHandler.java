@@ -5,13 +5,16 @@
  */
 package com.mygdx.mehelpers;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.gameobjects.BaseIntermediaire;
 import com.mygdx.gameobjects.Item;
 import com.mygdx.gameobjects.Mineur;
 import com.mygdx.gameobjects.Mineur.Etat;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,9 +27,12 @@ public class CellsHandler {
     private final Mineur mineur;
     private TiledMapTileLayer layerSurface, layerObjets;
     private final boolean[] cellsSAM; // CellsSurfaceAroundMineur
-    private final int idPierre, idDiamant, idCharbon, idTerre, idEmeraude, idGlowstone, idOr, idHerbe, idFer, idLapis, idEchelle, idPilier,idTNT;
+    private final int idPierre, idDiamant, idCharbon, idTerre, idEmeraude, idGlowstone, idOr, idHerbe, idFer, idLapis, idEchelle, idPilier, idTNT, idTpHome, idMagasin;
     private final TiledMapTileSets tileSet;
     private final int rayonTNT = 2; 
+    private LinkedList<BaseIntermediaire> bases;
+    private final int HAUTEUR_SURFACE = 3;
+    
     /**
      * Constructeur par défaut
      * @param mineur Référence au mineur
@@ -37,6 +43,7 @@ public class CellsHandler {
         this.layerSurface = (TiledMapTileLayer) mineur.getMap().getLayers().get("surface");
         this.layerObjets =  (TiledMapTileLayer) mineur.getMap().getLayers().get("objets");
         this.cellsSAM = new boolean[4]; 
+        bases = new LinkedList();
         tileSet = mineur.getMap().getTileSets();
         idPierre = (Integer) mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid");
         idDiamant = (Integer) mineur.getMap().getTileSets().getTileSet("diamond_block.png").getProperties().get("firstgid");
@@ -51,6 +58,8 @@ public class CellsHandler {
         idEchelle = (Integer) mineur.getMap().getTileSets().getTileSet("ladder.gif").getProperties().get("firstgid");
         idPilier = (Integer) mineur.getMap().getTileSets().getTileSet("pilier.gif").getProperties().get("firstgid");
         idTNT = (Integer) mineur.getMap().getTileSets().getTileSet("tnt.png").getProperties().get("firstgid");
+        idTpHome = (Integer) mineur.getMap().getTileSets().getTileSet("tp_home.png").getProperties().get("firstgid");
+        idMagasin = (Integer) mineur.getMap().getTileSets().getTileSet("magasin.png").getProperties().get("firstgid");
     }
     
     public void reload() {
@@ -421,6 +430,14 @@ public class CellsHandler {
     public int getIdTNT(){
         return idTNT;
     }
+    
+    public int getIdTpHome() {
+        return idTpHome;
+    }
+    
+    public int getIdMagasin() {
+        return idMagasin;
+    }
 
     public void setVictory(boolean b) {
         this.victory = b;
@@ -444,6 +461,54 @@ public class CellsHandler {
             else return 0;
         }
         else return 0;
+    }
+
+    public void genererBase(int x, int y) {
+        // Zone de 6*3
+        for(int i = x-(BaseIntermediaire.LARGEUR/2) ; i <= x+(BaseIntermediaire.LARGEUR/2) ; i++) {
+            for(int j = y ; j <= y + BaseIntermediaire.HAUTEUR ; j++)
+                layerSurface.setCell(i, j, null);
+        }
+        genererMagasin(x, y);
+        genererTpHome(x+1, y);
+        bases.add(new BaseIntermediaire(x-3, y));
+    }
+        
+    private void genererMagasin(int x, int y) {      
+        setCellLayerSurface(x, y, tileSet.getTile(idMagasin), Item.MAGASIN);
+    }
+    
+    private void genererTpHome(int x, int y) {
+        setCellLayerSurface(x, y, tileSet.getTile(idTpHome));
+    }
+    
+    private void setCellLayerSurface(int x, int y, TiledMapTile tile, Item item) {
+        if(tile != null) {
+            Cell cell = new Cell();
+            cell.setTile(tile);
+            layerSurface.setCell(x, y, cell);
+            mineur.getInventaire().remove(item, 1);
+        }
+    }
+    
+    private void setCellLayerSurface(int x, int y, TiledMapTile tile) {
+        if(tile != null) {
+            Cell cell = new Cell();
+            cell.setTile(tile);
+            layerSurface.setCell(x, y, cell);
+        }
+    }
+
+    public boolean isMineurInBase() {
+        for(BaseIntermediaire base : bases) {
+            if(base.contains(mineur.getPosition().x, mineur.getPosition().y))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isMineurInSurface() {
+        return layerSurface.getHeight()- mineur.getPosition().y <= HAUTEUR_SURFACE;
     }
     
 }
