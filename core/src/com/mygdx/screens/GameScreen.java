@@ -1,17 +1,21 @@
 package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.mygdx.gameobjects.Equipement;
 import com.mygdx.gameobjects.Inventaire;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
 import com.mygdx.mehelpers.GenerationAleatoire;
 import com.mygdx.mehelpers.KeyBoard;
+import com.mygdx.mehelpers.inventaire.EquipementActor;
 import com.mygdx.mehelpers.inventaire.InventoryActor;
 import com.mygdx.minexploration.MEGame;
 import java.io.File;
@@ -83,7 +87,12 @@ public class GameScreen implements Screen {
     
         DragAndDrop dragAndDrop = new DragAndDrop();
         inventoryActor = new InventoryActor(new Inventaire(), dragAndDrop, skin);
+        inventoryActor.setMovable(false);
         stage.addActor(inventoryActor);
+        
+        EquipementActor equipement = new EquipementActor(new Equipement(), dragAndDrop, skin);
+        equipement.setMovable(false);
+        stage.addActor(equipement);
         
         menuPause = new MenuPause(skin2, game, this);
 
@@ -102,17 +111,9 @@ public class GameScreen implements Screen {
                 newLevel();
                 gameWorld.getMineur().getCellsHandler().setVictory(false);
             }
-
-            // I
-            if (Gdx.input.isKeyJustPressed(37)) {
-                if(inventoryActor.isVisible())
-                    inventoryActor.setVisible(false);
-                else
-                    inventoryActor.setVisible(true);
-            }
         }
         // P ou ESC
-        if (Gdx.input.isKeyJustPressed(44) || Gdx.input.isKeyJustPressed(131)) {
+        if (Gdx.input.isKeyJustPressed(Keys.P) || Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             if(menuPause.isVisible()) {
                 menuPause.setVisible(false);
                 resume();

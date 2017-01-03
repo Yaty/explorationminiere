@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mineur>
+    <argent>0</argent>
+    <position>
+        <x>250.28125</x>
+        <y>497.0</y>
+    </position>
+    <slot>
+        <nom>ECHELLE</nom>
+        <montant>15</montant>
+    </slot>
+    <slot>
+        <nom>PILIER</nom>
+        <montant>10</montant>
+    </slot>
+    <slot>
+        <nom>MAGASIN</nom>
+        <montant>1</montant>
+    </slot>
+    <slot>
+        <nom>TNT</nom>
+        <montant>5</montant>
+    </slot>
+    <pioche>
+        <nom>PIOCHE</nom>
+        <vitesse>1.0</vitesse>
+    </pioche>
+</mineur><!--Sauvegarde du niveau 0 de la partie mapTest le 03/01/2017 18:13:06.-->

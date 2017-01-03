@@ -1,7 +1,6 @@
 package com.mygdx.gameobjects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -21,6 +20,7 @@ public class Mineur {
     private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
     private int argent;
     private final Inventaire inventaire;
+    private final Equipement equipement;
 
     public void setEtatMineur(Etat etat) {
         this.etat = etat;
@@ -148,6 +148,7 @@ public class Mineur {
         cellsHandler = new CellsHandler(this);
         argent = 0;
         inventaire = new Inventaire();
+        equipement = new Equipement();
     }
     
     /**
@@ -484,5 +485,9 @@ public class Mineur {
      */
     public boolean isMineurAuSol() {
         return mineurAuSol;
+    }
+    
+    public Equipement getEquipement() {
+        return equipement;
     }
 }

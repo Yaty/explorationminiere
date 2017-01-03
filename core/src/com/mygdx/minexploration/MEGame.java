@@ -97,7 +97,7 @@ public class MEGame extends Game {
         for(int i = 0 ; i < objetFiles.length ; i++)
             objet[i] = objetFiles[i].getName();
                 
-        GenerationAleatoire generateur = new GenerationAleatoire(surface, objet, "./map/" + idGame + "/map.tmx", level);
+        new GenerationAleatoire(surface, objet, "./map/" + idGame + "/map.tmx", level);
             
         // Lancement de la partie sur le niveau 1
         setScreen(new GameScreen(this, "./map/" + idGame + "/map.tmx"));

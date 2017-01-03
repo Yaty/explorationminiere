@@ -10,9 +10,7 @@ package com.mygdx.gameobjects;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public enum Item {
-    TNT("tnt"),
-    PIOCHE_BASE("pioche_base"),
-    ECHELLE("echelle"), PILIER("pilier"), MAGASIN("magasin");
+    TNT("tnt"), ECHELLE("echelle"), PILIER("pilier"), MAGASIN("magasin"), PIOCHE("pioche_base");
 
     private String textureRegion;
 

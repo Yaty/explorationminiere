@@ -6,13 +6,9 @@
 package com.mygdx.minexploration;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Mineur;
 import com.mygdx.mehelpers.inventaire.Slot;
@@ -24,7 +20,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -194,9 +189,9 @@ public class SauvegardeHandler {
             // <pioche><nom>Bla</nom><vitesse>X</vitesse></pioche>
             final Element pioche = document.createElement("pioche");
             final Element nomPioche = document.createElement("nom");
-            nomPioche.appendChild(document.createTextNode(mineur.getInventaire().getPioche().getNom()));
+            nomPioche.appendChild(document.createTextNode(mineur.getEquipement().getPioche().getItem().name()));
             final Element vitessePioche = document.createElement("vitesse");
-            vitessePioche.appendChild(document.createTextNode(Float.toString(mineur.getInventaire().getPioche().getVitesse())));
+            vitessePioche.appendChild(document.createTextNode(Float.toString(mineur.getEquipement().getPioche().getParamSuppl())));
             pioche.appendChild(nomPioche);
             pioche.appendChild(vitessePioche);
             racine.appendChild(pioche);            

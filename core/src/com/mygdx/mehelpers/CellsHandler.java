@@ -30,7 +30,7 @@ public class CellsHandler {
     private final int idPierre, idDiamant, idCharbon, idTerre, idEmeraude, idGlowstone, idOr, idHerbe, idFer, idLapis, idEchelle, idPilier, idTNT, idTpHome, idMagasin;
     private final TiledMapTileSets tileSet;
     private final int rayonTNT = 2; 
-    private LinkedList<BaseIntermediaire> bases;
+    private final LinkedList<BaseIntermediaire> bases;
     private final int HAUTEUR_SURFACE = 3;
     
     /**
@@ -269,10 +269,7 @@ public class CellsHandler {
     private boolean isCellDessousPilier(int xBloc, int yBloc){
         int xCellUp = xBloc;
         int yCellUp = yBloc+1;
-            if(getObject(xCellUp, yCellUp) == idPilier){
-                    return true;
-            }
-        return false;
+        return getObject(xCellUp, yCellUp) == idPilier;
     }
     
     /**
@@ -376,7 +373,7 @@ public class CellsHandler {
     */
     private int calculDureeMinage() {
         int profondeur = layerSurface.getHeight() - (int) mineur.getPosition().y;
-        return (int) (1000 + 100 * (profondeur/10) * mineur.getInventaire().getPioche().getVitesse()); // On ajoute la vitesse de la pioche, la cast arrondit au millième -> pas génant
+        return (int) (1000 + 100 * (profondeur/10) * mineur.getEquipement().getPioche().getParamSuppl()); // On ajoute la vitesse de la pioche, la cast arrondit au millième -> pas génant
     }
 
     public int getIdPierre() {

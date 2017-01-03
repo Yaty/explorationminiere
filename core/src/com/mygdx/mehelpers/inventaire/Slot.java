@@ -14,14 +14,24 @@ import java.util.ArrayList;
  */
 public class Slot {
     private Item item;
-
     private int amount;
+    private float paramSuppl; // Pour la pioche
 
     private ArrayList<SlotListener> slotListeners = new ArrayList<SlotListener>();
 
     public Slot(Item item, int amount) {
         this.item = item;
         this.amount = amount;
+    }
+
+    public Slot(Item item, int i, float j) {
+        this.item = item;
+        this.amount = i;
+        this.paramSuppl = j;
+    }
+    
+    public float getParamSuppl() {
+        return paramSuppl;
     }
 
     public boolean isEmpty() {
