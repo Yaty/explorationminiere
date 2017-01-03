@@ -9,7 +9,7 @@ import com.mygdx.mehelpers.inventaire.Slot;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Inventaire {   
-    private ArrayList<Slot> slots;
+    private final ArrayList<Slot> slots;
     
     public Inventaire() {
         slots = new ArrayList();
@@ -18,16 +18,22 @@ public class Inventaire {
         slots.add(new Slot(Item.MAGASIN, 1));
         slots.add(new Slot(Item.TNT, 5));
     }
+
+    public Inventaire(int nbEchelles, int nbPiliers, int nbTnt, int nbMagasin) {
+        slots = new ArrayList();
+        slots.add(new Slot(Item.ECHELLE, nbEchelles));
+        slots.add(new Slot(Item.PILIER, nbPiliers));
+        slots.add(new Slot(Item.MAGASIN, nbMagasin));
+        slots.add(new Slot(Item.TNT, nbTnt));
+    }
     
     public int checkInventory(Item item) {
         int amount = 0;
-
         for (Slot slot : slots) {
             if (slot.getItem() == item) {
                 amount += slot.getAmount();
             }
         }
-
         return amount;
     }
 

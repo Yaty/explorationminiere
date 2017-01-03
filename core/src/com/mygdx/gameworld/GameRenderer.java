@@ -103,11 +103,11 @@ public class GameRenderer {
     private void renderMineur() {
         TextureRegion frame;
         if("Deplacement".equals(gameWorld.getMineur().getEtatMineur().name()))
-            frame = AssetLoader.marcher.getKeyFrame(runTime);
+            frame = (TextureRegion) AssetLoader.marcher.getKeyFrame(runTime);
         else if ("Haut".equals(gameWorld.getMineur().getDirectionMineur().name()))
-            frame = AssetLoader.sauter.getKeyFrame(runTime);
+            frame = (TextureRegion) AssetLoader.sauter.getKeyFrame(runTime);
         else
-            frame = AssetLoader.debout.getKeyFrame(runTime);
+            frame = (TextureRegion) AssetLoader.debout.getKeyFrame(runTime);
         
         //Gdx.app.log("renderMineur", "x : " + gameWorld.getMineur().getPosition().x + " y : " + gameWorld.getMineur().getPosition().y);
         

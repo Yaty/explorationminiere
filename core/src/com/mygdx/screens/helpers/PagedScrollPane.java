@@ -1,4 +1,4 @@
-package com.mydgx.screens.helpers;
+package com.mygdx.screens.helpers;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;

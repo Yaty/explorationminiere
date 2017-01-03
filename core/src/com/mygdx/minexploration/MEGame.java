@@ -100,7 +100,7 @@ public class MEGame extends Game {
         new GenerationAleatoire(surface, objet, "./map/" + idGame + "/map.tmx", level);
             
         // Lancement de la partie sur le niveau 1
-        setScreen(new GameScreen(this, "./map/" + idGame + "/map.tmx"));
+        setScreen(new GameScreen(this, "./map/" + idGame + "/map.tmx", false));
     }
     
     public void loadingGame(int idGame, String nomGame) {
@@ -110,7 +110,7 @@ public class MEGame extends Game {
     }
     
     private void loadingLevel() {
-        setScreen(new GameScreen(this, "./map/" + idGame + "/map.tmx"));
+        setScreen(new GameScreen(this, "./map/" + idGame + "/map.tmx", true));
     }
     
     public void backToMainMenuScreen(){

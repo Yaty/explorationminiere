@@ -174,6 +174,7 @@ public class SauvegardeHandler {
             // <slot><nom>Bla</nom><montant>X</montant></slot>
             for(int i = 0 ; i < slots.size() ; i++) {
                 if(slots.get(i).getItem() != null) { // Un slot vide possède un item null, on ne veut pas l'enregistrer
+                    //System.out.println("DEBUG : " + slots.get(i).getItem() + " " + slots.get(i).getAmount());
                     Element slot = document.createElement("slot");
                     Element nomObjet = document.createElement("nom");
                     nomObjet.appendChild(document.createTextNode(slots.get(i).getItem().name()));
@@ -189,7 +190,7 @@ public class SauvegardeHandler {
             // <pioche><nom>Bla</nom><vitesse>X</vitesse></pioche>
             final Element pioche = document.createElement("pioche");
             final Element nomPioche = document.createElement("nom");
-            nomPioche.appendChild(document.createTextNode(mineur.getEquipement().getPioche().getItem().name()));
+            nomPioche.appendChild(document.createTextNode(mineur.getEquipement().getPioche().getItem().getNom()));
             final Element vitessePioche = document.createElement("vitesse");
             vitessePioche.appendChild(document.createTextNode(Float.toString(mineur.getEquipement().getPioche().getParamSuppl())));
             pioche.appendChild(nomPioche);

@@ -151,6 +151,27 @@ public class Mineur {
         equipement = new Equipement();
     }
     
+    public Mineur(TiledMap map, int argent, Vector2 position, Inventaire inventaire, Equipement equipement) {
+        GRAVITE = -0.1f;
+        LARGEUR = UNITE * AssetLoader.regions[0].getRegionWidth();
+        HAUTEUR = UNITE * AssetLoader.regions[0].getRegionHeight();
+        MAX_VELOCITE = 2f;
+        SAUT_VELOCITE = 4f;
+        ECHELLE_VELOCITE = 2f;
+        etat = Etat.Arret;
+        dirMineur = Direction.Arret;
+        this.map = map;   
+        runTime = 0f;
+        mineurAuSol = teteVersLaDroite = true;
+        isOnEchelle = false;
+        wasMoving = false;
+        cellsHandler = new CellsHandler(this);
+        this.argent = argent;
+        this.position = position;
+        this.inventaire = inventaire;
+        this.equipement = equipement;
+    }
+    
     /**
      * @return La coordonnée en X du mineur au départ du jeu
      */

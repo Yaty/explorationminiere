@@ -1,7 +1,6 @@
 package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -41,11 +40,12 @@ public class GameScreen implements Screen {
      * Lance le jeu au niveau 1
      * @param game le jeu
      * @param cheminMap
+     * @param chargement
      */ 
-    public GameScreen(MEGame game, String cheminMap) {
+    public GameScreen(MEGame game, String cheminMap, boolean chargement) {
         Gdx.app.log("GameScreen", "GameScreen créé");
         this.game = game;
-        gameWorld = new GameWorld(cheminMap);
+        gameWorld = new GameWorld(cheminMap, chargement);
         
         String id = new String();
         int i = 6;
@@ -86,11 +86,11 @@ public class GameScreen implements Screen {
         Skin skin2 = new Skin(Gdx.files.internal("skin/uiskin.json"));
     
         DragAndDrop dragAndDrop = new DragAndDrop();
-        inventoryActor = new InventoryActor(new Inventaire(), dragAndDrop, skin);
+        inventoryActor = new InventoryActor(gameWorld.getMineur().getInventaire(), dragAndDrop, skin);
         inventoryActor.setMovable(false);
         stage.addActor(inventoryActor);
         
-        EquipementActor equipement = new EquipementActor(new Equipement(), dragAndDrop, skin);
+        EquipementActor equipement = new EquipementActor(gameWorld.getMineur().getEquipement(), dragAndDrop, skin);
         equipement.setMovable(false);
         stage.addActor(equipement);
         

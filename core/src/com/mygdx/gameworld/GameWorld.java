@@ -3,6 +3,7 @@ package com.mygdx.gameworld;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.mygdx.gameobjects.Mineur;
+import com.mygdx.minexploration.ChargementHandler;
 
 /**
  *
@@ -16,11 +17,18 @@ public class GameWorld {
 
     /**
      *
+     * @param cheminMap
+     * @param chargement
      */
-    public GameWorld(String cheminMap) {
+    public GameWorld(String cheminMap, boolean chargement) {
         this.cheminMap = cheminMap;
         map = new TmxMapLoader().load(cheminMap);
-        mineur = new Mineur(map);
+        if(!chargement)
+            mineur = new Mineur(map);
+        else {
+            ChargementHandler chargeur = new ChargementHandler(cheminMap);
+            mineur = new Mineur(map, chargeur.getArgent(), chargeur.getPosition(), chargeur.getInventaire(), chargeur.getEquipement());
+        }
     }
 
     /**

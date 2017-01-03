@@ -140,10 +140,9 @@ public class CellsHandler {
             Cell cell = new Cell();
             cell.setTile(tileSet.getTile(idEchelle));
             layerObjets.setCell(x, y, cell);
-            mineur.getInventaire().store(Item.ECHELLE, 1);
+            mineur.getInventaire().store(Item.ECHELLE, -1);
         }else{
             layerObjets.setCell(x, y, null);
-
         }
     }
     
@@ -152,10 +151,10 @@ public class CellsHandler {
             cell.setTile(tileSet.getTile(idPilier));
             if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
                 layerObjets.setCell(x+1, y, cell);
-                mineur.getInventaire().remove(Item.PILIER, 1);
+                mineur.getInventaire().remove(Item.PILIER, -1);
             } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
                 layerObjets.setCell(x-1, y, cell);
-                mineur.getInventaire().remove(Item.PILIER, 1);
+                mineur.getInventaire().remove(Item.PILIER, -1);
             }
     }
     
@@ -168,10 +167,10 @@ public class CellsHandler {
         cell.setTile(tileSet.getTile(idTNT));
         if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
             layerObjets.setCell(x+1, y, cell);
-            mineur.getInventaire().remove(Item.TNT, 1);
+            mineur.getInventaire().remove(Item.TNT, -1);
         } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
             layerObjets.setCell(x-1, y, cell);
-            mineur.getInventaire().remove(Item.TNT, 1);
+            mineur.getInventaire().remove(Item.TNT, -1);
         }
     }
     
