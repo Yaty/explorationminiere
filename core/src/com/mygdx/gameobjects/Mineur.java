@@ -288,10 +288,8 @@ public class Mineur {
                 direction = -1;
             
             if(cellsHandler.getObject((int) position.x+direction, (int) position.y) == 0){
-                System.out.println("je passe ici");
                 cellsHandler.setPilier((int) position.x, (int) position.y);
             }else{
-                System.out.println("je passe ici aussi");
                 cellsHandler.ramassePilier((int) position.x+direction, (int) position.y);
         
             }

@@ -310,7 +310,7 @@ public class CellsHandler {
             int yBlocCible = yBloc;
             int xBlocCible = xBloc;
 
-            while(getObject(xBlocCible, yBlocCible+1) != 0){
+            //while(getObject(xBlocCible, yBlocCible+1) != 0){
                 yBlocCible --;
                 if(getObject(xBlocCible, yBlocCible+1) != 0){
                     break;
@@ -318,7 +318,7 @@ public class CellsHandler {
                 layerObjets.setCell(xBloc, yBloc+1,null);
                 layerObjets.setCell(xBlocCible, yBlocCible+1, cell);
                 yBloc++;
-            }
+            //}
         }
     }
  
