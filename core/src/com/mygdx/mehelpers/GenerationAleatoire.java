@@ -54,8 +54,7 @@ public class GenerationAleatoire {
         }
         
         for(int j = 0 ; j < blocsObjet.length ; j++) {
-            if(!blocsObjet[j].startsWith("flower")) break;
-            idFleurs.add(i);
+            if(blocsObjet[j].startsWith("flower")) idFleurs.add(i);
             i++;
         }
         generer();
