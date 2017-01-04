@@ -53,6 +53,8 @@ public class GenerationAleatoire {
             else if (blocsSurface[i].equals("lapis_ore.png")) idLapis = i + 1;
         }
         
+        i += 2; // magasin et tp_home
+        
         for(int j = 0 ; j < blocsObjet.length ; j++) {
             if(blocsObjet[j].startsWith("flower")) idFleurs.add(i);
             i++;
