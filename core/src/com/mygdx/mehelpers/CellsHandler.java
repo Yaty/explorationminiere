@@ -372,7 +372,7 @@ public class CellsHandler {
     */
     private int calculDureeMinage() {
         int profondeur = layerSurface.getHeight() - (int) mineur.getPosition().y;
-        return (int) (1000 + 100 * (profondeur/10) * mineur.getEquipement().getPioche().getParamSuppl()); // On ajoute la vitesse de la pioche, la cast arrondit au millième -> pas génant
+        return (int) (1000 + 100 * (profondeur/10) * mineur.getEquipement().getPioche().getItem().getParam()); // On ajoute la vitesse de la pioche, la cast arrondit au millième -> pas génant
     }
 
     public int getIdPierre() {

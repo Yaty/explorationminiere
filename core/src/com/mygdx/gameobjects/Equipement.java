@@ -12,14 +12,12 @@ public class Equipement {
     private Slot slotPioche;
   
     public Equipement() {      
-        slotPioche = new Slot(Item.PIOCHE, 1, 1);
+        slotPioche = new Slot(Item.PIOCHE_BOIS, 1);
     }
     
-    public Equipement(String nom, float vitesse) {
-        Item pioche = Item.PIOCHE;
-        pioche.setNom(nom);
-        slotPioche = new Slot(pioche, 1, vitesse);
-        
+    public Equipement(String nom) {
+        Item pioche = Item.getItemFromTextureName(nom);
+        slotPioche = new Slot(pioche, 1);
     }
     
     public Slot getPioche() {

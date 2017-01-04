@@ -190,11 +190,8 @@ public class SauvegardeHandler {
             // <pioche><nom>Bla</nom><vitesse>X</vitesse></pioche>
             final Element pioche = document.createElement("pioche");
             final Element nomPioche = document.createElement("nom");
-            nomPioche.appendChild(document.createTextNode(mineur.getEquipement().getPioche().getItem().getNom()));
-            final Element vitessePioche = document.createElement("vitesse");
-            vitessePioche.appendChild(document.createTextNode(Float.toString(mineur.getEquipement().getPioche().getParamSuppl())));
+            nomPioche.appendChild(document.createTextNode(mineur.getEquipement().getPioche().getItem().getTextureRegion()));
             pioche.appendChild(nomPioche);
-            pioche.appendChild(vitessePioche);
             racine.appendChild(pioche);            
                 
             // On prépare l'écriture

@@ -76,10 +76,7 @@ public class GameRenderer {
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         float deltaTime = Gdx.graphics.getDeltaTime();
-        //Gdx.app.log("GameRenderer", "Runtime : " + runTime);
-        //Gdx.app.log("GameRendrer", "Deltatime : " + deltaTime);
         gameWorld.getMineur().update(deltaTime);
-        // Voir avec l'unité, c'est le bordel
         
         orthoCamera.position.x = gameWorld.getMineur().getPosition().x;
         orthoCamera.position.y = gameWorld.getMineur().getPosition().y;

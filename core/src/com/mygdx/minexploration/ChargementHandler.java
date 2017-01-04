@@ -50,8 +50,7 @@ public class ChargementHandler {
     public Equipement getEquipement() {
         Element pioche = racine.getChildByName("pioche");
         String nom = pioche.getChildByName("nom").getText();
-        float vitesse = Float.parseFloat(pioche.getChildByName("vitesse").getText());
-        return new Equipement(nom, vitesse);
+        return new Equipement(nom);
     }
     
     public Inventaire getInventaire() {

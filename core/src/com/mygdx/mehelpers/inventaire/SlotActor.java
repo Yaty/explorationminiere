@@ -46,7 +46,7 @@ public class SlotActor extends ImageButton implements SlotListener {
         TextureAtlas icons = new TextureAtlas(Gdx.files.internal("icons/inventaire/icons.atlas"));
         TextureRegion image;
         if (slot.getItem() != null) {
-            System.out.println(slot.getItem());
+            System.out.println(slot.getItem().getNom() + " : " + slot.getItem().getTextureRegion());
             image = icons.findRegion(slot.getItem().getTextureRegion());
         } else {
             // we have a special "empty" region in our atlas file, which is just black
