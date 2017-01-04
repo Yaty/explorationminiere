@@ -125,8 +125,8 @@ public class GenerationAleatoire {
             fichier.createNewFile();
             FileWriter writer = new FileWriter(fichier);
             try {
-                int hauteur = 100;//getProfondeurGeneration();
-                int largeur = 100;//(int) Math.round(0.4 * hauteur);
+                int hauteur = getProfondeurGeneration();
+                int largeur = (int) Math.round(0.4 * hauteur);
                 StringBuilder input = new StringBuilder();
                 int iterateur = 1;
                 input.append("<!-- Carte générée aléatoirement le ").append(dateFormat.format(date)).append(" pour le niveau ").append(niveau).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\" level=\"").append(niveau).append("\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");

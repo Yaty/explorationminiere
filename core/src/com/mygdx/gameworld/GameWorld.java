@@ -1,5 +1,6 @@
 package com.mygdx.gameworld;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.mygdx.gameobjects.Mineur;
@@ -26,8 +27,13 @@ public class GameWorld {
         if(!chargement)
             mineur = new Mineur(map);
         else {
-            ChargementHandler chargeur = new ChargementHandler(cheminMap);
-            mineur = new Mineur(map, chargeur.getArgent(), chargeur.getPosition(), chargeur.getInventaire(), chargeur.getEquipement());
+            int id = Integer.parseInt(cheminMap.replaceAll("[\\D]", ""));
+            if(Gdx.files.internal("./map/" + id + "/save.xml").exists()) {
+                ChargementHandler chargeur = new ChargementHandler(id);
+                mineur = new Mineur(map, chargeur.getArgent(), chargeur.getPosition(), chargeur.getInventaire(), chargeur.getEquipement());
+            } else {
+                mineur = new Mineur(map);
+            }
         }
     }
 

@@ -8,8 +8,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.mygdx.gameobjects.Equipement;
-import com.mygdx.gameobjects.Inventaire;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
 import com.mygdx.mehelpers.GenerationAleatoire;
@@ -33,6 +31,7 @@ public class GameScreen implements Screen {
     
     private InventoryActor inventoryActor;
     private MenuPause menuPause;
+    private MenuPioche menuPioche;
     public static Stage stage;
     private int idPartie;
     
@@ -86,17 +85,23 @@ public class GameScreen implements Screen {
         Skin skin2 = new Skin(Gdx.files.internal("skin/uiskin.json"));
     
         DragAndDrop dragAndDrop = new DragAndDrop();
-        inventoryActor = new InventoryActor(gameWorld.getMineur().getInventaire(), dragAndDrop, skin);
+        inventoryActor = new InventoryActor(gameWorld.getMineur().getInventaire(), dragAndDrop, skin, this);
         inventoryActor.setMovable(false);
         stage.addActor(inventoryActor);
         
-        EquipementActor equipement = new EquipementActor(gameWorld.getMineur().getEquipement(), dragAndDrop, skin);
+        EquipementActor equipement = new EquipementActor(gameWorld.getMineur().getEquipement(), dragAndDrop, skin, this);
         equipement.setMovable(false);
         stage.addActor(equipement);
         
         menuPause = new MenuPause(skin2, game, this);
+        menuPioche = new MenuPioche(skin2, game, this);
 
+        stage.addActor(menuPioche);
         stage.addActor(menuPause);
+    }
+    
+    public MenuPioche getMenuPioche() {
+        return menuPioche;
     }
     
     /**

@@ -136,26 +136,28 @@ public class CellsHandler {
      * @param y l'entier en ordonnée
      */
     public void setLadder(int x,int y){
-        if(!isLadderHere(x,y)){
+        if(!isLadderHere(x,y) && mineur.getInventaire().checkInventory(Item.ECHELLE) > 0){
             Cell cell = new Cell();
             cell.setTile(tileSet.getTile(idEchelle));
             layerObjets.setCell(x, y, cell);
-            mineur.getInventaire().store(Item.ECHELLE, -1);
+            mineur.getInventaire().remove(Item.ECHELLE, 1);
         }else{
             layerObjets.setCell(x, y, null);
         }
     }
     
     public void setPilier(int x, int y){
+        if(mineur.getInventaire().checkInventory(Item.PILIER) > 0) {
             Cell cell = new Cell();
             cell.setTile(tileSet.getTile(idPilier));
             if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
                 layerObjets.setCell(x+1, y, cell);
-                mineur.getInventaire().remove(Item.PILIER, -1);
+                mineur.getInventaire().remove(Item.PILIER, 1);
             } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
                 layerObjets.setCell(x-1, y, cell);
-                mineur.getInventaire().remove(Item.PILIER, -1);
+                mineur.getInventaire().remove(Item.PILIER, 1);
             }
+        }
     }
     
     public void ramassePilier(int x, int y){
@@ -163,14 +165,16 @@ public class CellsHandler {
     }
     
     public void setTNT(int x, int y){
-        Cell cell = new Cell();
-        cell.setTile(tileSet.getTile(idTNT));
-        if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
-            layerObjets.setCell(x+1, y, cell);
-            mineur.getInventaire().remove(Item.TNT, -1);
-        } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
-            layerObjets.setCell(x-1, y, cell);
-            mineur.getInventaire().remove(Item.TNT, -1);
+        if(mineur.getInventaire().checkInventory(Item.TNT) > 0) {
+            Cell cell = new Cell();
+            cell.setTile(tileSet.getTile(idTNT));
+            if(mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x+1, y)) {
+                layerObjets.setCell(x+1, y, cell);
+                mineur.getInventaire().remove(Item.TNT, 1);
+            } else if(!mineur.isTeteVersLaDroite() && !isCellSurfaceHere(x-1,y)) {
+                layerObjets.setCell(x-1, y, cell);
+                mineur.getInventaire().remove(Item.TNT, 1);
+            }
         }
     }
     
@@ -479,7 +483,8 @@ public class CellsHandler {
     }
     
     private void setCellLayerSurface(int x, int y, TiledMapTile tile, Item item) {
-        if(tile != null) {
+        if(tile != null && mineur.getInventaire().checkInventory(item) > 0) {
+            System.out.println("JE POSE " + item.getNom() + " tile " + tile.getId());
             Cell cell = new Cell();
             cell.setTile(tile);
             layerSurface.setCell(x, y, cell);

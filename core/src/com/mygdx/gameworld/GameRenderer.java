@@ -75,8 +75,8 @@ public class GameRenderer {
         Gdx.gl.glClearColor(0, 0, 0, 1); // On vide l'écran, couleur noir
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        float deltaTime = Gdx.graphics.getDeltaTime();
-        gameWorld.getMineur().update(deltaTime);
+        //float deltaTime = Gdx.graphics.getDeltaTime();
+        //gameWorld.getMineur().update(deltaTime);
         
         orthoCamera.position.x = gameWorld.getMineur().getPosition().x;
         orthoCamera.position.y = gameWorld.getMineur().getPosition().y;

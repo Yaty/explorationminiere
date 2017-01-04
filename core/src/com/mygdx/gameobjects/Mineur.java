@@ -17,7 +17,7 @@ import com.mygdx.mehelpers.InputHandler;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Mineur {
-    private final float GRAVITE, LARGEUR, HAUTEUR, MAX_VELOCITE, SAUT_VELOCITE, ECHELLE_VELOCITE;
+    private final float GRAVITE = -0.4f, LARGEUR, HAUTEUR, MAX_VELOCITE = 4f, SAUT_VELOCITE = 8f, ECHELLE_VELOCITE = 6f;
     private int argent;
     private final Inventaire inventaire;
     private final Equipement equipement;
@@ -131,12 +131,8 @@ public class Mineur {
      * @param map la carte
      */
     public Mineur(TiledMap map) {
-        GRAVITE = -0.1f;
         LARGEUR = UNITE * AssetLoader.regions[0].getRegionWidth();
         HAUTEUR = UNITE * AssetLoader.regions[0].getRegionHeight();
-        MAX_VELOCITE = 2f;
-        SAUT_VELOCITE = 4f;
-        ECHELLE_VELOCITE = 2f;
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
         this.map = map;
@@ -152,12 +148,8 @@ public class Mineur {
     }
     
     public Mineur(TiledMap map, int argent, Vector2 position, Inventaire inventaire, Equipement equipement) {
-        GRAVITE = -0.1f;
         LARGEUR = UNITE * AssetLoader.regions[0].getRegionWidth();
         HAUTEUR = UNITE * AssetLoader.regions[0].getRegionHeight();
-        MAX_VELOCITE = 2f;
-        SAUT_VELOCITE = 4f;
-        ECHELLE_VELOCITE = 2f;
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
         this.map = map;   
@@ -325,7 +317,7 @@ public class Mineur {
         }
         
         if(Gdx.input.isKeyJustPressed(Keys.B)) {
-            cellsHandler.genererBase(isTeteVersLaDroite() ? ((int) position.x)+1 : ((int) position.x)-1, (int) position.y);
+            cellsHandler.genererBase(isTeteVersLaDroite() ? ((int) position.x)+1 : ((int) position.x)-2, (int) position.y);
         }
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit

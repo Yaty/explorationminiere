@@ -8,11 +8,14 @@ package com.mygdx.mehelpers.inventaire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mygdx.minexploration.MEGame;
 import com.mygdx.screens.GameScreen;
 
 /**
@@ -21,11 +24,11 @@ import com.mygdx.screens.GameScreen;
  */
 public class SlotActor extends ImageButton implements SlotListener {
 
-    private Slot slot;
+    private final Slot slot;
 
-    private Skin skin;
-
-    public SlotActor(Skin skin, Slot slot) {
+    private final Skin skin;
+    
+    public SlotActor(Skin skin, final Slot slot, final GameScreen screen) {
         super(createStyle(skin, slot));
         this.slot = slot;
         this.skin = skin;
@@ -37,6 +40,15 @@ public class SlotActor extends ImageButton implements SlotListener {
         SlotTooltip tooltip = new SlotTooltip(slot, skin);
         GameScreen.stage.addActor(tooltip);
         addListener(new TooltipListener(tooltip, true));
+        addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                if(slot != null && slot.getItem() != null && slot.getItem().getTextureRegion().toLowerCase().startsWith("pioche")) {
+                    // Ouvrir menu gestion de pioche
+                    screen.getMenuPioche().setVisible(true);
+                }
+            }
+        });
     }
 
     /**
@@ -54,7 +66,6 @@ public class SlotActor extends ImageButton implements SlotListener {
         ImageButtonStyle style = new ImageButtonStyle(skin.get(ButtonStyle.class));
         style.imageUp = new TextureRegionDrawable(image);
         style.imageDown = new TextureRegionDrawable(image);
-
         return style;
     }
 

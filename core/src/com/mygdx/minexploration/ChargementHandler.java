@@ -23,9 +23,8 @@ public class ChargementHandler {
     private XmlReader reader;
     private Element racine;
     
-    public ChargementHandler(String cheminMap) {
+    public ChargementHandler(int id) {
         try {
-            int id = Integer.parseInt(cheminMap.replaceAll("[\\D]", ""));
             this.reader = new XmlReader();
             FileHandle file = Gdx.files.internal("./map/" + id + "/save.xml");
             this.racine = reader.parse(file);

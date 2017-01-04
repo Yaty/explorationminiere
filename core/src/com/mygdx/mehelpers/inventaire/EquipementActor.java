@@ -8,17 +8,17 @@ package com.mygdx.mehelpers.inventaire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.mygdx.gameobjects.Equipement;
+import com.mygdx.screens.GameScreen;
 
 /**
  *
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class EquipementActor extends Window {
-    public EquipementActor(Equipement equipement, DragAndDrop dragAndDrop, Skin skin) {
+    public EquipementActor(Equipement equipement, DragAndDrop dragAndDrop, Skin skin, GameScreen screen) {
         super("Equipement", skin);
         // basic layout
         setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
@@ -26,11 +26,10 @@ public class EquipementActor extends Window {
         row().fill().expandX();
         setColor(Color.GREEN);
 
-        SlotActor slotActor = new SlotActor(skin, equipement.getPioche());
+        SlotActor slotActor = new SlotActor(skin, equipement.getPioche(), screen);
         add(slotActor);
         dragAndDrop.addSource(new SlotSource(slotActor));
         dragAndDrop.addTarget(new SlotTarget(slotActor));
-
         pack();
 
         // it is hidden by default -> plus mtn

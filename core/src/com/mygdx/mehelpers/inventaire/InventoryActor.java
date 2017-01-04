@@ -11,13 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.mygdx.gameobjects.Inventaire;
+import com.mygdx.screens.GameScreen;
 
 /**
  *
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class InventoryActor extends Window {
-    public InventoryActor(Inventaire inventaire, DragAndDrop dragAndDrop, Skin skin) {
+    public InventoryActor(Inventaire inventaire, DragAndDrop dragAndDrop, Skin skin, GameScreen screen) {
         super("Inventaire", skin);
 
         // basic layout
@@ -28,7 +29,7 @@ public class InventoryActor extends Window {
         
         // run through all slots and create SlotActors for each
         for (Slot slot : inventaire.getSlots()) {
-            SlotActor slotActor = new SlotActor(skin, slot);
+            SlotActor slotActor = new SlotActor(skin, slot, screen);
             add(slotActor);
 
             // this can be ignored for now and will be explained in part III
