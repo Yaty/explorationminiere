@@ -66,3 +66,10 @@ pioche_diamant
   orig: 48, 48
   offset: 0, 0
   index: 48
+nothing
+  rotate: false
+  xy: 151, 1
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
