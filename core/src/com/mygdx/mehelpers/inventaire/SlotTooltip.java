@@ -8,14 +8,13 @@ package com.mygdx.mehelpers.inventaire;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.mygdx.gameobjects.Item;
 
 /**
  *
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class SlotTooltip extends Window implements SlotListener {
-    private Skin skin;
+    private final Skin skin;
 
     private Slot slot;
 
@@ -38,6 +37,11 @@ public class SlotTooltip extends Window implements SlotListener {
         this.getTitleLabel().setText(slot.getAmount() + " : " + slot.getItem().getNom());
         Label label = new Label(slot.getItem().getDescription(), skin);
         add(label);
+        if(slot.getItem().getNom().toLowerCase().startsWith("pioche")) {
+            this.row();
+            Label label2 = new Label("Argent nécessaire pour améliorer l'objet : " + slot.getItem().getPrixUpgrade(), skin);
+            add(label2);
+        }
         pack();
     }
 

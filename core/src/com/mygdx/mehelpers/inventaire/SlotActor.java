@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.mygdx.minexploration.MEGame;
+import com.mygdx.gameobjects.Item;
 import com.mygdx.screens.GameScreen;
 
 /**
@@ -43,9 +43,31 @@ public class SlotActor extends ImageButton implements SlotListener {
         addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
-                if(slot != null && slot.getItem() != null && slot.getItem().getTextureRegion().toLowerCase().startsWith("pioche")) {
-                    // Ouvrir menu gestion de pioche
-                    screen.getMenuPioche().setVisible(true);
+                if(slot != null && slot.getItem() != null && slot.getItem().getTextureRegion().toLowerCase().startsWith("pioche") && !slot.getItem().getTextureRegion().equals("pioche_diamant")) {
+                    // Slot équipement
+                    Item pioche = slot.getItem();
+                    int prixUpgrade = pioche.getPrixUpgrade();
+                    System.out.println(pioche.getNom() + prixUpgrade);
+                    if(screen.getWorld().getMineur().getArgent() >= prixUpgrade) {
+                        if(pioche == Item.PIOCHE_BOIS) {
+                            slot.clearSlot();
+                            slot.add(Item.PIOCHE_PIERRE, 1);
+                            screen.getWorld().getMineur().removeArgent(pioche.getPrixUpgrade());
+                        } else if(pioche == Item.PIOCHE_PIERRE) {
+                            slot.clearSlot();
+                            slot.add(Item.PIOCHE_FER, 1);
+                            screen.getWorld().getMineur().removeArgent(pioche.getPrixUpgrade());
+                        } else if(pioche == Item.PIOCHE_FER) {
+                            slot.clearSlot();
+                            slot.add(Item.PIOCHE_OR, 1);
+                            screen.getWorld().getMineur().removeArgent(pioche.getPrixUpgrade());
+                        }  else if(pioche == Item.PIOCHE_OR) {
+                            slot.clearSlot();
+                            slot.add(Item.PIOCHE_DIAMANT, 1);
+                            screen.getWorld().getMineur().removeArgent(pioche.getPrixUpgrade());
+                        }
+                    }
+                    System.out.println(slot.getItem().getNom());
                 }
             }
         });

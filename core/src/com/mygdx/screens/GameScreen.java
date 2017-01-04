@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
     
     private InventoryActor inventoryActor;
     private MenuPause menuPause;
-    private MenuPioche menuPioche;
+
     public static Stage stage;
     private int idPartie;
     
@@ -93,15 +93,9 @@ public class GameScreen implements Screen {
         equipement.setMovable(false);
         stage.addActor(equipement);
         
-        menuPause = new MenuPause(skin2, game, this);
-        menuPioche = new MenuPioche(skin2, game, this);
+        menuPause = new MenuPause(skin2, game);
 
-        stage.addActor(menuPioche);
         stage.addActor(menuPause);
-    }
-    
-    public MenuPioche getMenuPioche() {
-        return menuPioche;
     }
     
     /**

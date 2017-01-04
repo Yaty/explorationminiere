@@ -257,7 +257,7 @@ public class Mineur {
         if (deltaTime == 0) return; // Si rien ne s'est passé on sort
         if(deltaTime > 0.1f) deltaTime = 0.1f; // Pour garder le jeu fluide
         runTime += deltaTime;
-       
+        
         moving = false;
         
         if(InputHandler.keys[45] || InputHandler.keys[21]) {
@@ -496,6 +496,10 @@ public class Mineur {
      */
     public boolean isMineurAuSol() {
         return mineurAuSol;
+    }
+    
+    public void removeArgent(int argent) {
+        this.argent -= argent;
     }
     
     public Equipement getEquipement() {

@@ -20,7 +20,7 @@ import com.mygdx.minexploration.ShutdownHandler;
  */
 public class MenuPause extends Window {
     
-    public MenuPause(Skin skin, final MEGame game, final GameScreen screen) {
+    public MenuPause(Skin skin, final MEGame game) {
         super("Pause", skin);
         TextButton continuer = new TextButton("Continuer", skin);
         TextButton sauvegarder = new TextButton("Sauvegarder", skin);
@@ -30,7 +30,7 @@ public class MenuPause extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 setVisible(false);
-                screen.resume();
+                game.getScreen().resume();
             }
         });
         sauvegarder.addListener(new ClickListener() {

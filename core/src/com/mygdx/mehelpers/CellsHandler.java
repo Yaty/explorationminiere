@@ -14,6 +14,7 @@ import com.mygdx.gameobjects.BaseIntermediaire;
 import com.mygdx.gameobjects.Item;
 import com.mygdx.gameobjects.Mineur;
 import com.mygdx.gameobjects.Mineur.Etat;
+import com.mygdx.gameworld.GameRenderer;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -472,6 +473,7 @@ public class CellsHandler {
         genererMagasin(x, y);
         genererTpHome(x+1, y);
         bases.add(new BaseIntermediaire(x-3, y));
+        GameRenderer.setTist(bases);
     }
         
     private void genererMagasin(int x, int y) {      

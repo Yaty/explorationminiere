@@ -47,21 +47,21 @@ pioche_pierre
   index: 48
 pioche_fer
   rotate: false
-  xy: 51, 151
+  xy: 101, 151
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 48
 pioche_or
   rotate: false
-  xy: 51, 201
+  xy: 151, 151
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 48
 pioche_diamant
   rotate: false
-  xy: 51, 251
+  xy: 201, 151
   size: 48, 48
   orig: 48, 48
   offset: 0, 0

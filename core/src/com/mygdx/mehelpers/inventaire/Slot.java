@@ -37,6 +37,11 @@ public class Slot {
 
         return false;
     }
+    
+    public void clearSlot() {
+        item = null;
+        amount = 0;
+    }
 
     public boolean take(int amount) {
         if (this.amount >= amount) {

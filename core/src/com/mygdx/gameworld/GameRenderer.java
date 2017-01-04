@@ -15,7 +15,12 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
+import com.mygdx.gameobjects.BaseIntermediaire;
 import com.mygdx.mehelpers.AssetLoader;
+import java.util.LinkedList;
 
 /**
  *
@@ -31,8 +36,11 @@ public class GameRenderer {
     private final ShapeRenderer debugRenderer;
     private float runTime = 0;
     private final SpriteBatch spriteBatch;
-    private final BitmapFont etat, direction, deplacement, velocite, position, target, argent;
+    private static SelectBox tpList;
+    private final BitmapFont etat, direction, deplacement, velocite, position, target, argent, tp;
     private final NinePatch health, healthContainer;
+    
+    private final Skin skin;
     
     /**
      * @param gameWorld un objet gameWorld
@@ -59,6 +67,19 @@ public class GameRenderer {
         
         health = new NinePatch(AssetLoader.healthBarTexture);
         healthContainer = new NinePatch(AssetLoader.healthbarContainerTexture);
+        skin = new Skin(Gdx.files.internal("./skin/uiskin.json"));
+        tpList = new SelectBox(skin);
+        tpList.setPosition(Gdx.graphics.getWidth() - 275, Gdx.graphics.getHeight() - 70);
+        tp = new BitmapFont();
+    }
+    
+    private static void setTpList(int nbBases) {
+        Array<String> bases = new Array<String>(nbBases);
+        tpList.setItems(bases);
+    }
+    
+    public static void setTist(LinkedList<BaseIntermediaire> bases) {
+       setTpList(bases.size());
     }
     
     public void reload(TiledMap map) {
@@ -125,7 +146,9 @@ public class GameRenderer {
         spriteBatch.begin();
         healthContainer.draw(spriteBatch, 5, 5, AssetLoader.healthbarContainerTexture.getWidth(), AssetLoader.healthbarContainerTexture.getHeight());
         health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth(), AssetLoader.healthBarTexture.getHeight());
-        argent.draw(spriteBatch, "Argent : " + gameWorld.getMineur().getArgent() + "€", 800, 25);
+        argent.draw(spriteBatch, "Argent : " + gameWorld.getMineur().getArgent(), 800, 25);
+        tp.draw(spriteBatch, "Téléportation : ", Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 20);
+        tpList.draw(spriteBatch, 1);
         spriteBatch.end();
     }
     
