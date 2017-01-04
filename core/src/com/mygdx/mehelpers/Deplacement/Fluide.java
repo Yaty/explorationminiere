@@ -34,6 +34,15 @@ public class Fluide extends Deplacement {
             case Haut:
                 if(!collision.isTiledHere(x, y+1)) { // Si pas de bloc en x et y + 1
                     if(mineur.isOnEchelle()) {
+                            velocite.y = mineur.getVelociteMaxEchelle();
+                            mineur.setMineurAuSol(false);
+                            mineur.setEtatMineur(Etat.Echelle);
+                            mineur.getDirectionMineur();
+                            if(InputHandler.keys[19] && mineur.getCellsHandler().getBloc(x, y-1) ==0){
+                                    System.out.println("je suis ici haut");
+                                    velocite.y = mineur.getGRAVITE(); //faut rester appuyé
+                                    System.out.println(velocite.y);
+                            };
                         velocite.y = mineur.getVelociteMaxEchelle();
                         mineur.setMineurAuSol(false);
                         mineur.setEtatMineur(Etat.Echelle);
@@ -52,6 +61,9 @@ public class Fluide extends Deplacement {
                     lancerDestruction = true;
                     y++;
                 }
+                if(mineur.isOnEchelle() && velocite.y==0){
+                    lancerDestruction = true;
+                }
                 break;
             case Droite:
                 if(!collision.isTiledHere(x+1, y)) {
@@ -65,15 +77,19 @@ public class Fluide extends Deplacement {
                 break;
             case Bas:
                 if(mineur.getEtatMineur().equals(Etat.Echelle)) {
-                    velocite.y = -mineur.getSAUT_VELOCITE();
+                    System.out.println("je suis ici bas");
+                    velocite.y = -mineur.getVelociteMaxEchelle();
                     if(InputHandler.keys[20] || InputHandler.keys[47]){
-                        velocite.y = 0f; //faut rester appuyé
+                        System.out.println("je suis ici bas if");
+                        velocite.y = mineur.getGRAVITE(); //faut rester appuyé
                     }
+
                 } else if(collision.isTiledHere(x, y-1)) {
                     //mineur.setEtatMineur(Etat.Arret);
                     lancerDestruction = true;
                     y--;
                 }
+                System.out.println(velocite.y);
                 break;
             case Gauche:
                 if(!collision.isTiledHere(x-1, y)) {
@@ -88,10 +104,11 @@ public class Fluide extends Deplacement {
             default:
                 break;
         }
+        System.out.println(velocite.y);
         if (lancerDestruction)
             mineur.getCellsHandler().destructionBloc(x, y);
         velocite.x = MathUtils.clamp(velocite.x, -mineur.getMAX_VELOCITE(), mineur.getMAX_VELOCITE()); // On borne
-        velocite.add(0, mineur.getGRAVITE()); // Ajout gravité
+        velocite.add(0, mineur.getGRAVITE()); // Ajout gravité si sur echelle
         if(Math.abs(velocite.x) < 1) { // Si le velocite est trop faible on stop le mineur
             velocite.x = 0; // Et on detecte dans la boucle pour changer de mode de depla
             if(mineur.isMineurAuSol()) mineur.setDirectionMineur(Mineur.Direction.Arret);
@@ -100,6 +117,9 @@ public class Fluide extends Deplacement {
         collision.handleCollision(); // Gestion des colisions
         mineur.getPosition().add(velocite);
         velocite.scl(1/Gdx.graphics.getDeltaTime());
+        if(mineur.isOnEchelle() && Gdx.input.isKeyJustPressed(19) && mineur.getCellsHandler().getBloc(x, y-1) ==0 )
+            velocite.y=0f;
+        System.out.println(velocite.y);
     }
 
     @Override
