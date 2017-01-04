@@ -27,7 +27,8 @@ public class AssetLoader {
         mineurTexture = new Texture(Gdx.files.internal("mineur.png"));
         backgroundTexture = new Texture(Gdx.files.internal("background.png"));
         healthBarTexture = new Texture(Gdx.files.internal("gui_healthbar.png"));
-        //healthbarContainerTexture = new Texture(Gdx.files.internal("gui_healthbar_container.png"));
+        healthbarContainerTexture = new Texture(Gdx.files.internal("gui_healthbar_container.png"));
+        
         // A modif selon l'image du mineur
         //healthBar = TextureRegion.split(healthBarTexture, 30, 30)[0];
         regions = TextureRegion.split(mineurTexture, 36, 52)[0];
@@ -44,5 +45,8 @@ public class AssetLoader {
     public static void dispose() {
         mineurTexture.dispose();
         backgroundTexture.dispose();
-    }   
+        healthBarTexture.dispose();
+        healthbarContainerTexture.dispose();
+    }       
+
 }

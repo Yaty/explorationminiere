@@ -32,6 +32,7 @@ public class GameRenderer {
     private float runTime = 0;
     private final SpriteBatch spriteBatch;
     private final BitmapFont etat, direction, deplacement, velocite, position, target, argent;
+    private final NinePatch health, healthContainer;
     
     /**
      * @param gameWorld un objet gameWorld
@@ -55,6 +56,9 @@ public class GameRenderer {
         position = new BitmapFont();
         target = new BitmapFont();
         argent = new BitmapFont();
+        
+        health = new NinePatch(AssetLoader.healthBarTexture);
+        healthContainer = new NinePatch(AssetLoader.healthbarContainerTexture);
     }
     
     public void reload(TiledMap map) {
@@ -122,9 +126,9 @@ public class GameRenderer {
     
     private void renderGUI(){
         spriteBatch.begin();
-        NinePatch health = new NinePatch(AssetLoader.healthBarTexture);
+        healthContainer.draw(spriteBatch, 5, 5, AssetLoader.healthbarContainerTexture.getWidth(), AssetLoader.healthbarContainerTexture.getHeight());
         health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth(), AssetLoader.healthBarTexture.getHeight());
-        argent.draw(spriteBatch, "Argent : " + gameWorld.getMineur().getArgent() + "$", 800, 25);
+        argent.draw(spriteBatch, "Argent : " + gameWorld.getMineur().getArgent() + "€", 800, 25);
         spriteBatch.end();
     }
     
@@ -132,8 +136,9 @@ public class GameRenderer {
      * Va rendre le mode debug
      * Ajout des lignes jaunes pour définir les blocs
      * Ajout du rectangle rouge pour définir le mineur
-     * ATTENTION FAIT BUGUER SI GROSSE CARTE 
+     * @deprecated A ne utiliser que pour des cartes de taille petite
      */       
+    @Deprecated
     private void renderDebug () {      
         spriteBatch.begin();
         etat.draw(spriteBatch, "Etat : " + gameWorld.getMineur().getEtatMineur().name(), 5, 950);

@@ -73,7 +73,6 @@ public class Slot {
     private void notifyListeners() {
         for (SlotListener slotListener : slotListeners) {
             slotListener.hasChanged(this);
-            System.out.println("ENTENDU POTO");
         }
     }
 

@@ -40,7 +40,7 @@ public class Fluide extends Deplacement {
                         mineur.getDirectionMineur();
                         if(InputHandler.keys[19] || InputHandler.keys[54]){
                             velocite.y = 0.2f - mineur.getGRAVITE(); //faut rester appuyé
-                        };
+                        }
                     } else if(!mineur.getEtatMineur().equals(Etat.Sauter)) {
                         velocite.y = mineur.getSAUT_VELOCITE();
                         mineur.setHealth(mineur.getHealth()-0.01f);

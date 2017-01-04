@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -26,16 +27,20 @@ public class GenerationAleatoire {
     private final DateFormat dateFormat;
     private final Random random;
     private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis;
+    private int idFleurStart, nbFeurs = 0;
+    private LinkedList<Integer> idFleurs;
     
     public GenerationAleatoire(String blocsSurface[], String blocsObjet[], String chemin, int niveau) {
         this.blocsSurface = blocsSurface;
         this.blocsObjet = blocsObjet;
+        this.idFleurs = new LinkedList();
         this.chemin = chemin;
         this.niveau = niveau;
         this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         this.date = new Date();
         this.random = new Random();
-        for(int i = 0 ; i < blocsSurface.length ; i++) {
+        int i;
+        for(i = 0 ; i < blocsSurface.length ; i++) {
             if (blocsSurface[i].equals("diamond_block.png")) idDiamant = i + 1;
             else if (blocsSurface[i].equals("dirt.png")) idTerre = i + 1;
             else if (blocsSurface[i].equals("glowstone.png")) idGlowstone = i + 1;
@@ -46,6 +51,11 @@ public class GenerationAleatoire {
             else if (blocsSurface[i].equals("gold_ore.png")) idOr = i + 1;
             else if (blocsSurface[i].equals("iron_ore.png")) idFer = i + 1;
             else if (blocsSurface[i].equals("lapis_ore.png")) idLapis = i + 1;
+        }
+        
+        for(int j = 0 ; j < blocsObjet.length ; j++) {
+            if(!blocsObjet[j].startsWith("flower")) break;
+            idFleurs.add(i++);
         }
         generer();
     }
@@ -115,8 +125,8 @@ public class GenerationAleatoire {
             fichier.createNewFile();
             FileWriter writer = new FileWriter(fichier);
             try {
-                int hauteur = getProfondeurGeneration();
-                int largeur = (int) Math.round(0.4 * hauteur);
+                int hauteur = 100;//getProfondeurGeneration();
+                int largeur = 100;//(int) Math.round(0.4 * hauteur);
                 StringBuilder input = new StringBuilder();
                 int iterateur = 1;
                 input.append("<!-- Carte générée aléatoirement le ").append(dateFormat.format(date)).append(" pour le niveau ").append(niveau).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\" level=\"").append(niveau).append("\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
@@ -138,7 +148,7 @@ public class GenerationAleatoire {
                 for(int i = 0 ; i < 3 ; i++ ) {
                     input.append(TAB).append(TAB);
                     for(int j = 0 ; j < largeur ; j++) {
-                       input.append("0").append(",");
+                       input.append("0,");
                     }
                     input.append("\n");
                 }
@@ -171,7 +181,22 @@ public class GenerationAleatoire {
                 input.append(TAB).append("<layer name=\"objets\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
                 
                 // Ajout de la matrice objet dans le String input (vide)
-                for(int i = 0 ; i < hauteur ; i++) {
+                
+                for(int i = 0 ; i < 2 ; i++ ) {
+                    input.append(TAB).append(TAB);
+                    for(int j = 0 ; j < largeur ; j++) {
+                       input.append("0,");
+                    }
+                    input.append("\n");
+                }
+                
+                input.append(TAB).append(TAB);
+                for(int j = 0 ; j < largeur ; j++) {
+                   input.append(getIdFleur()).append(",");
+                }
+                input.append("\n");
+                
+                for(int i = 3 ; i < hauteur ; i++) {
                     input.append(TAB).append(TAB);
                     for(int j = 0 ; j < largeur ; j++) {
                         input.append("0,");
@@ -196,6 +221,13 @@ public class GenerationAleatoire {
     
     private int getProfondeurGeneration() {
         return (int) (Math.round(1.19*niveau*niveau+13.86)*10)/10;
+    }
+
+    private String getIdFleur() {
+        Random rand = new Random();
+        int nb = rand.nextInt(99);
+        if(nb < 20) return String.valueOf(idFleurs.get(rand.nextInt(idFleurs.size()-1))); // 20% de fleurs
+        else return "0";
     }
     
 }
