@@ -39,9 +39,7 @@ public class Fluide extends Deplacement {
                             mineur.setEtatMineur(Etat.Echelle);
                             mineur.getDirectionMineur();
                             if(InputHandler.keys[19] && mineur.getCellsHandler().getBloc(x, y-1) ==0){
-                                    System.out.println("je suis ici haut");
                                     velocite.y = mineur.getGRAVITE(); //faut rester appuyé
-                                    System.out.println(velocite.y);
                             };
                         velocite.y = mineur.getVelociteMaxEchelle();
                         mineur.setMineurAuSol(false);
@@ -77,10 +75,8 @@ public class Fluide extends Deplacement {
                 break;
             case Bas:
                 if(mineur.getEtatMineur().equals(Etat.Echelle)) {
-                    System.out.println("je suis ici bas");
                     velocite.y = -mineur.getVelociteMaxEchelle();
                     if(InputHandler.keys[20] || InputHandler.keys[47]){
-                        System.out.println("je suis ici bas if");
                         velocite.y = mineur.getGRAVITE(); //faut rester appuyé
                     }
 
@@ -89,7 +85,6 @@ public class Fluide extends Deplacement {
                     lancerDestruction = true;
                     y--;
                 }
-                System.out.println(velocite.y);
                 break;
             case Gauche:
                 if(!collision.isTiledHere(x-1, y)) {
@@ -104,7 +99,6 @@ public class Fluide extends Deplacement {
             default:
                 break;
         }
-        System.out.println(velocite.y);
         if (lancerDestruction)
             mineur.getCellsHandler().destructionBloc(x, y);
         velocite.x = MathUtils.clamp(velocite.x, -mineur.getMAX_VELOCITE(), mineur.getMAX_VELOCITE()); // On borne
@@ -119,7 +113,6 @@ public class Fluide extends Deplacement {
         velocite.scl(1/Gdx.graphics.getDeltaTime());
         if(mineur.isOnEchelle() && Gdx.input.isKeyJustPressed(19) && mineur.getCellsHandler().getBloc(x, y-1) ==0 )
             velocite.y=0f;
-        System.out.println(velocite.y);
     }
 
     @Override

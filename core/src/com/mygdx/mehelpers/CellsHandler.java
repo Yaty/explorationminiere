@@ -137,15 +137,21 @@ public class CellsHandler {
      * @param y l'entier en ordonnée
      */
     public void setLadder(int x,int y){
+        System.out.println("je suis dans setLadder");
         if(!isLadderHere(x,y) && mineur.getInventaire().checkInventory(Item.ECHELLE) > 0){
             Cell cell = new Cell();
             cell.setTile(tileSet.getTile(idEchelle));
             layerObjets.setCell(x, y, cell);
-            mineur.getInventaire().remove(Item.ECHELLE, 1);
-        }else{
+            mineur.getInventaire().remove(Item.ECHELLE, -1);
+        }else if(isLadderHere(x,y)){
+            System.out.println("Il y a une echelle");
             layerObjets.setCell(x, y, null);
+            mineur.getInventaire().remove(Item.ECHELLE, +1);
+
         }
     }
+    
+    
     
     public void setPilier(int x, int y){
         if(mineur.getInventaire().checkInventory(Item.PILIER) > 0) {
