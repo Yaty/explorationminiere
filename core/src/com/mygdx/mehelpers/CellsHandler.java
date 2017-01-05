@@ -379,7 +379,7 @@ public class CellsHandler {
  
     /*
      Renvoi une durée en MS.
-     Durée = 1000ms + 100 ms tout les 10 blocs * la vitesse de la pioche
+     Durée = 1000ms + 100 ms tout les 10 blocs / la vitesse de la pioche
     */
     private int calculDureeMinage() {
         int profondeur = layerSurface.getHeight() - (int) mineur.getPosition().y;
@@ -471,15 +471,17 @@ public class CellsHandler {
     }
 
     public void genererBase(int x, int y) {
-        // Zone de 6*3
-        for(int i = x-(BaseIntermediaire.LARGEUR/2) ; i <= x+(BaseIntermediaire.LARGEUR/2) ; i++) {
-            for(int j = y ; j <= y + BaseIntermediaire.HAUTEUR ; j++)
-                layerSurface.setCell(i, j, null);
+        if(mineur.getInventaire().checkInventory(Item.MAGASIN) > 0) {
+            // Zone de 6*3
+            for(int i = x-(BaseIntermediaire.LARGEUR/2) ; i <= x+(BaseIntermediaire.LARGEUR/2) ; i++) {
+                for(int j = y ; j < y + BaseIntermediaire.HAUTEUR ; j++)
+                    layerSurface.setCell(i, j, null);
+            }
+            genererMagasin(x, y);
+            genererTpHome(x+1, y);
+            bases.add(new BaseIntermediaire(x-3, y));
+            GameRenderer.setTist(bases);
         }
-        genererMagasin(x, y);
-        genererTpHome(x+1, y);
-        bases.add(new BaseIntermediaire(x-3, y));
-        GameRenderer.setTist(bases);
     }
         
     private void genererMagasin(int x, int y) {      
@@ -491,7 +493,7 @@ public class CellsHandler {
     }
     
     private void setCellLayerSurface(int x, int y, TiledMapTile tile, Item item) {
-        if(tile != null && mineur.getInventaire().checkInventory(item) > 0) {
+        if(tile != null && mineur.getInventaire().firstSlotWithItem(item).getAmount() > 0) {
             System.out.println("JE POSE " + item.getNom() + " tile " + tile.getId());
             Cell cell = new Cell();
             cell.setTile(tile);

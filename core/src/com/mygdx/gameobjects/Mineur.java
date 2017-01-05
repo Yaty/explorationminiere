@@ -55,7 +55,7 @@ public class Mineur {
         mineurAuSol = teteVersLaDroite = true;
         isOnEchelle = false;
         wasMoving = false;
-        deplacement = null;
+        deplacement = new Fluide(this);
     }
 
     public void teleportation(Vector2 posTp) {
@@ -329,11 +329,11 @@ public class Mineur {
             }
         }
         
-        if(Gdx.input.isKeyJustPressed(48)){
+        if(Gdx.input.isKeyJustPressed(Keys.T)){
             cellsHandler.setTNT((int) position.x, (int) position.y);
         }
         
-        if(Gdx.input.isKeyJustPressed(53)){
+        if(Gdx.input.isKeyJustPressed(Keys.Y)){
             cellsHandler.makeTNTexplode((int) position.x, (int) position.y);
         }
         
