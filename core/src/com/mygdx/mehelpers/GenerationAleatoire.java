@@ -27,7 +27,7 @@ public class GenerationAleatoire {
     private final DateFormat dateFormat;
     private final Random random;
     private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis;
-    private int idFleurStart, nbFeurs = 0;
+    private int nbFeurs = 0;
     private LinkedList<Integer> idFleurs;
     
     public GenerationAleatoire(String blocsSurface[], String blocsObjet[], String chemin, int niveau) {
@@ -52,8 +52,6 @@ public class GenerationAleatoire {
             else if (blocsSurface[i].equals("iron_ore.png")) idFer = i + 1;
             else if (blocsSurface[i].equals("lapis_ore.png")) idLapis = i + 1;
         }
-        
-        i += 2; // magasin et tp_home
         
         for(int j = 0 ; j < blocsObjet.length ; j++) {
             if(blocsObjet[j].startsWith("flower")) idFleurs.add(i);

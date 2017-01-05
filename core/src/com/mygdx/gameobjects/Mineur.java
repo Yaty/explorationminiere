@@ -297,9 +297,7 @@ public class Mineur {
         
         // faut un timer dans le cas ou on monte une echelle 
         if(Gdx.input.isKeyJustPressed(33) && inventaire.firstSlotWithItem(Item.ECHELLE).getAmount() > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut) && this.isOnEchelle()==false ){ // Echelle (E)
-            System.out.println("Preminer if");
             if(this.getCellsHandler().isCellObjectHere((int)position.x, (int)position.y)){
-                System.out.println("Deuxieme if");
                 cellsHandler.setLadder((int) position.x,(int) position.y);
                 try {
                     inventaire.remove(Item.ECHELLE, 1);
@@ -314,7 +312,6 @@ public class Mineur {
             }
         
         if(Gdx.input.isKeyJustPressed(46)){
-            System.out.println("\naa");
             int direction = 0;
             if(this.isTeteVersLaDroite())
                 direction = 1;
@@ -338,7 +335,7 @@ public class Mineur {
         }
         
         if(Gdx.input.isKeyJustPressed(Keys.B)) {
-            cellsHandler.genererBase(isTeteVersLaDroite() ? ((int) position.x)+1 : ((int) position.x)-2, (int) position.y);
+            cellsHandler.genererBase((int) position.x, (int) position.y);
         }
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit

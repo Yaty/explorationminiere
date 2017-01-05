@@ -86,7 +86,7 @@ public class GameRenderer {
                 int idSelect = tpList.getSelectedIndex();
                 if(idSelect != -1) {
                     Vector2 posTp = gameWorld.getMineur().getCellsHandler().getBaseById(idSelect).getPos();
-                    posTp.x += 2;
+                    posTp.x += 3;
                     gameWorld.getMineur().teleportation(posTp);
                 }
             }
