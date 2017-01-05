@@ -47,7 +47,6 @@ public class SlotActor extends ImageButton implements SlotListener {
                     // Slot équipement
                     Item pioche = slot.getItem();
                     int prixUpgrade = pioche.getPrixUpgrade();
-                    System.out.println(pioche.getNom() + prixUpgrade);
                     if(screen.getWorld().getMineur().getArgent() >= prixUpgrade) {
                         if(pioche == Item.PIOCHE_BOIS) {
                             slot.clearSlot();
@@ -67,7 +66,6 @@ public class SlotActor extends ImageButton implements SlotListener {
                             screen.getWorld().getMineur().removeArgent(pioche.getPrixUpgrade());
                         }
                     }
-                    System.out.println(slot.getItem().getNom());
                 }
             }
         });

@@ -37,7 +37,7 @@ public class SlotTooltip extends Window implements SlotListener {
         this.getTitleLabel().setText(slot.getAmount() + " : " + slot.getItem().getNom());
         Label label = new Label(slot.getItem().getDescription(), skin);
         add(label);
-        if(slot.getItem().getNom().toLowerCase().startsWith("pioche")) {
+        if(slot.getItem().getNom().toLowerCase().startsWith("pioche") && slot.getItem().getPrixUpgrade() != 0) {
             this.row();
             Label label2 = new Label("Argent nécessaire pour améliorer l'objet : " + slot.getItem().getPrixUpgrade(), skin);
             add(label2);

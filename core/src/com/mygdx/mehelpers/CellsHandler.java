@@ -267,7 +267,7 @@ public class CellsHandler {
      * @param y l'entier en ordonnée
      * @return vrai si cell présente en x et y, faux sinon
      */
-    private boolean isCellSurfaceHere(int x, int y) {
+    public boolean isCellSurfaceHere(int x, int y) {
         return layerSurface.getCell(x, y) != null;
     }
     
@@ -383,7 +383,7 @@ public class CellsHandler {
     */
     private int calculDureeMinage() {
         int profondeur = layerSurface.getHeight() - (int) mineur.getPosition().y;
-        return (int) (1000 + 100 * (profondeur/10) * mineur.getEquipement().getPioche().getItem().getParam()); // On ajoute la vitesse de la pioche, la cast arrondit au millième -> pas génant
+        return (int) ((1000 + 100 * (profondeur/10)) / mineur.getEquipement().getPioche().getItem().getParam()); // On ajoute la vitesse de la pioche, la cast arrondit au millième -> pas génant
     }
 
     public int getIdPierre() {
@@ -518,6 +518,10 @@ public class CellsHandler {
 
     public boolean isMineurInSurface() {
         return layerSurface.getHeight()- mineur.getPosition().y <= HAUTEUR_SURFACE;
+    }
+
+    public BaseIntermediaire getBaseById(int idSelect) {
+        return bases.get(idSelect);
     }
     
 }

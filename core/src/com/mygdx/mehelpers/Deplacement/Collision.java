@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.mygdx.gameobjects.Mineur;
-import com.mygdx.gameworld.GameRenderer;
 
 /**
  *

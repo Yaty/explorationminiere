@@ -40,7 +40,7 @@ public class Fluide extends Deplacement {
                             mineur.getDirectionMineur();
                             if(InputHandler.keys[19] && mineur.getCellsHandler().getBloc(x, y-1) ==0){
                                     velocite.y = mineur.getGRAVITE(); //faut rester appuyé
-                            };
+                            }
                         velocite.y = mineur.getVelociteMaxEchelle();
                         mineur.setMineurAuSol(false);
                         mineur.setEtatMineur(Etat.Echelle);

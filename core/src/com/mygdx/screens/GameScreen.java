@@ -58,7 +58,8 @@ public class GameScreen implements Screen {
         }
 
         idPartie = Integer.parseInt(id);
-        gameRenderer = new GameRenderer(gameWorld);
+        stage = new Stage();
+        gameRenderer = new GameRenderer(gameWorld, stage);
         pause = false;
     }
     
@@ -72,7 +73,6 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("GameScreen", "show appelé");
-        stage = new Stage();
 
         // On utilise un "hub" qui va switcher entre nos classes qui gères les entrées -> pouvoir recuperer les clics du stage et les entrées du jeu
         InputProcessor clavier = new KeyBoard();

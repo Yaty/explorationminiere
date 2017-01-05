@@ -15,9 +15,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.gameobjects.BaseIntermediaire;
 import com.mygdx.mehelpers.AssetLoader;
 import java.util.LinkedList;
@@ -27,27 +32,26 @@ import java.util.LinkedList;
  * @author Hugo
  */
 public class GameRenderer {
-    
     private final GameWorld gameWorld;
     private final OrthographicCamera orthoCamera; // Caméra Orthographique
     private final OrthogonalTiledMapRenderer tiledMapRenderer; // Va dessiner la map
-
     private final float UNITE = 1/64f;
     private final ShapeRenderer debugRenderer;
     private float runTime = 0;
     private final SpriteBatch spriteBatch;
-    private static SelectBox tpList;
+    private static SelectBox<String> tpList;
     private final BitmapFont etat, direction, deplacement, velocite, position, target, argent, tp;
     private final NinePatch health, healthContainer;
-    
     private final Skin skin;
+    private final Stage stage;
+    private final TextButton okTp;
     
     /**
      * @param gameWorld un objet gameWorld
      */
-    public GameRenderer(GameWorld gameWorld) {
+    public GameRenderer(final GameWorld gameWorld, Stage screenStage) {
         this.gameWorld = gameWorld;
-        
+        stage = screenStage;
         tiledMapRenderer = new OrthogonalTiledMapRenderer(gameWorld.getMap(), UNITE);
         
         orthoCamera = new OrthographicCamera();
@@ -64,17 +68,38 @@ public class GameRenderer {
         position = new BitmapFont();
         target = new BitmapFont();
         argent = new BitmapFont();
-        
+
         health = new NinePatch(AssetLoader.healthBarTexture);
         healthContainer = new NinePatch(AssetLoader.healthbarContainerTexture);
+        
         skin = new Skin(Gdx.files.internal("./skin/uiskin.json"));
         tpList = new SelectBox(skin);
-        tpList.setPosition(Gdx.graphics.getWidth() - 275, Gdx.graphics.getHeight() - 70);
+        tpList.setWidth(75);
+        tpList.setPosition(Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 70);
         tp = new BitmapFont();
+        okTp = new TextButton("Ok", skin);
+        okTp.setPosition(Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 65);
+        okTp.setWidth(50);
+        okTp.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                int idSelect = tpList.getSelectedIndex();
+                if(idSelect != -1) {
+                    Vector2 posTp = gameWorld.getMineur().getCellsHandler().getBaseById(idSelect).getPos();
+                    posTp.x += 2;
+                    gameWorld.getMineur().teleportation(posTp);
+                }
+            }
+        });
+        
+        stage.addActor(okTp);
+        stage.addActor(tpList);
     }
     
     private static void setTpList(int nbBases) {
-        Array<String> bases = new Array<String>(nbBases);
+        String[] bases = new String[nbBases];
+        for(int i = 0 ; i< bases.length ; i++) bases[i] = "Base " + String.valueOf(i);
+        tpList.clearItems();
         tpList.setItems(bases);
     }
     
@@ -109,6 +134,9 @@ public class GameRenderer {
 
         renderMineur();
         renderGUI();
+        
+        stage.act();
+        stage.draw();
         //if(InputHandler.keys[30]) 
         //renderDebug(); // Si on appui sur B, on affiche le debug
     }
@@ -148,7 +176,6 @@ public class GameRenderer {
         health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth(), AssetLoader.healthBarTexture.getHeight());
         argent.draw(spriteBatch, "Argent : " + gameWorld.getMineur().getArgent(), 800, 25);
         tp.draw(spriteBatch, "Téléportation : ", Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 20);
-        tpList.draw(spriteBatch, 1);
         spriteBatch.end();
     }
     

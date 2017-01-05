@@ -44,13 +44,29 @@ public class Mineur {
 
     public void reload(TiledMap map) {
         this.map = map;
+        position.set(getXDepart(), getYDepart()); 
+        resetMineur();
+        cellsHandler.reload();
+    }
+    
+    public void resetMineur() {
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
-        position.set(getXDepart(), getYDepart());
         mineurAuSol = teteVersLaDroite = true;
         isOnEchelle = false;
-        wasMoving = false;   
-        cellsHandler.reload();
+        wasMoving = false;
+        deplacement = null;
+    }
+
+    public void teleportation(Vector2 posTp) {
+        int distance = (int) Math.sqrt(Math.pow(posTp.x - position.x, 2) + Math.pow(posTp.y - position.y, 2));
+        int coef = 50;
+        if(!cellsHandler.isCellSurfaceHere((int) posTp.x, (int) posTp.y) && argent >= coef*distance) {
+            position.set(posTp);
+            position.x += LARGEUR/2;
+            resetMineur();
+            argent -= coef * distance;
+        }
     }
         
     /**
@@ -142,7 +158,7 @@ public class Mineur {
         isOnEchelle = false;
         wasMoving = false;
         cellsHandler = new CellsHandler(this);
-        argent = 0;
+        argent = 1000000;
         inventaire = new Inventaire();
         equipement = new Equipement();
     }
@@ -158,7 +174,7 @@ public class Mineur {
         isOnEchelle = false;
         wasMoving = false;
         cellsHandler = new CellsHandler(this);
-        this.argent = argent;
+        this.argent = 1000000;// argent;
         this.position = position;
         this.inventaire = inventaire;
         this.equipement = equipement;
