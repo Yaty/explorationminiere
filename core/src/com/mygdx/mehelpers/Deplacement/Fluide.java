@@ -75,6 +75,7 @@ public class Fluide extends Deplacement {
                 break;
             case Bas:
                 if(mineur.getEtatMineur().equals(Etat.Echelle)) {
+                    mineur.setEtatMineur(Etat.Echelle);
                     velocite.y = -mineur.getVelociteMaxEchelle();
                     if(InputHandler.keys[20] || InputHandler.keys[47]){
                         velocite.y = mineur.getGRAVITE(); //faut rester appuyé
@@ -111,12 +112,25 @@ public class Fluide extends Deplacement {
         collision.handleCollision(); // Gestion des colisions
         mineur.getPosition().add(velocite);
         velocite.scl(1/Gdx.graphics.getDeltaTime());
-        if(mineur.isOnEchelle() && Gdx.input.isKeyJustPressed(19) && mineur.getCellsHandler().getBloc(x, y-1) ==0 )
+        if(mineur.isOnEchelle() && (Gdx.input.isKeyJustPressed(19)) && mineur.getCellsHandler().getBloc(x, y-1) ==0 && mineur.getEtatMineur().equals(Etat.Echelle) )
             velocite.y=0f;
+
+        System.out.println("Vitesse du mineur " + velocite.y);
+        if(velocite.y <= -20f){
+            if(velocite.y <= -20f){
+                System.out.println("boom t'es mort");
+                mineur.tombe();
+            }
+        }
+
     }
 
     @Override
     public Vector2 getTargetPosition() {
         return null;
+    }
+    
+    public float getVelociteY(){
+        return velocite.y;
     }
 }

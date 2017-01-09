@@ -253,6 +253,10 @@ public class Mineur {
             health = 1f;
     }
     
+    public void tombe(){
+        health = 0.005f;
+    }
+    
     private void respawn(float xspawn,float yspawn){
         position.x = xspawn;
         float y = yspawn;
@@ -364,6 +368,7 @@ public class Mineur {
                     isOnEchelle = true;
             }          
         }
+        
         gestionVie();
     }  
 
