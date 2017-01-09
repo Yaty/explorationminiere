@@ -18,11 +18,11 @@ import com.mygdx.screens.GameScreen;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class InventoryActor extends Window {
-    public InventoryActor(Inventaire inventaire, DragAndDrop dragAndDrop, Skin skin, GameScreen screen) {
-        super("Inventaire", skin);
+    public InventoryActor(String nom, Inventaire inventaire, int width, int height, DragAndDrop dragAndDrop, Skin skin, GameScreen screen) {
+        super(nom, skin);
 
         // basic layout
-        setPosition(Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight());
+        setPosition(width, height);
         defaults().space(20);
         row().fill().expandX();
         setColor(Color.RED);

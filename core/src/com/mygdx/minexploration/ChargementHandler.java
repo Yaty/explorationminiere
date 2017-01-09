@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import com.mygdx.gameobjects.Equipement;
 import com.mygdx.gameobjects.Inventaire;
 import java.io.IOException;
 
@@ -46,10 +45,10 @@ public class ChargementHandler {
         return new Vector2(x, y);
     }
     
-    public Equipement getEquipement() {
+    public Inventaire getEquipement() {
         Element pioche = racine.getChildByName("pioche");
         String nom = pioche.getChildByName("nom").getText();
-        return new Equipement(nom);
+        return new Inventaire(nom);
     }
     
     public Inventaire getInventaire() {

@@ -63,16 +63,16 @@ public class GenerationAleatoire {
     // On peut faire ça mieux avec un tableau par zone de profondeur (100 à 200 par ex) contenant les probas
     // et un tableau avec nos blocs, on parcourt et on return
     private int genererIdentifiantBloc(int profondeur) {
-        int rand = random.nextInt(200);              // 100 valeurs possibles - 0 à 99
+        int rand = random.nextInt(200);              // 201 valeurs possibles - 0 à 200
         if(profondeur < 20) {
-            if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
-            else if (rand <= 24) return idGlowstone;    // de 20 à 24 - 5%
-            else if (rand <= 34) return idCharbon;      // de 25 à 34 - 10%
-            else if (rand <= 39) return idFer;          // de 35 à 39 - 5%
-            else if (rand <= 44) return idOr;           // de 40 à 44 - 5%
-            else if (rand <= 47) return idLapis;        // de 45 à 47 - 3%
-            else if (rand <= 49) return idEmeraude;     // de 48 à 49 - 2%
-            return idTerre;                             // le reste -> 50%
+            if(rand <= 19) return idPierre;             // de 0 à 19
+            else if (rand <= 24) return idGlowstone;    // de 20 à 24
+            else if (rand <= 34) return idCharbon;      // de 25 à 34
+            else if (rand <= 39) return idFer;          // de 35 à 39
+            else if (rand <= 44) return idOr;           // de 40 à 44
+            else if (rand <= 47) return idLapis;        // de 45 à 47
+            else if (rand <= 49) return idEmeraude;     // de 48 à 49
+            return idTerre;                             // le reste -> 75%
         } else if (profondeur < 50) {
             if(rand <= 19) return idPierre;             // de 0 à 19 - 20%
             else if (rand <= 23) return idGlowstone;    // de 20 à 23 - 4%

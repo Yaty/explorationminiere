@@ -12,7 +12,7 @@ public class Inventaire {
     private final ArrayList<Slot> slots;
     
     public Inventaire() {
-        slots = new ArrayList();
+        slots = new ArrayList<Slot>();
         slots.add(new Slot(Item.ECHELLE, 15));
         slots.add(new Slot(Item.PILIER, 10));
         slots.add(new Slot(Item.MAGASIN, 1));
@@ -20,11 +20,17 @@ public class Inventaire {
     }
 
     public Inventaire(int nbEchelles, int nbPiliers, int nbTnt, int nbMagasin) {
-        slots = new ArrayList();
+        slots = new ArrayList<Slot>();
         slots.add(new Slot(Item.ECHELLE, nbEchelles));
         slots.add(new Slot(Item.PILIER, nbPiliers));
         slots.add(new Slot(Item.MAGASIN, nbMagasin));
         slots.add(new Slot(Item.TNT, nbTnt));
+    }
+    
+    public Inventaire(String nom) {
+        slots = new ArrayList<Slot>();
+        Item pioche = Item.getItemFromTextureName(nom);
+        slots.add(new Slot(pioche, 1));
     }
     
     public int checkInventory(Item item) {

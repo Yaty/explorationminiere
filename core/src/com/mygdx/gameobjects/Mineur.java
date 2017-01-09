@@ -20,7 +20,7 @@ public class Mineur {
     private final float GRAVITE = -0.4f, LARGEUR, HAUTEUR, MAX_VELOCITE = 4f, SAUT_VELOCITE = 8f, ECHELLE_VELOCITE = 6f;
     private int argent;
     private final Inventaire inventaire;
-    private final Equipement equipement;
+    private final Inventaire equipement;
 
     public void setEtatMineur(Etat etat) {
         this.etat = etat;
@@ -160,10 +160,10 @@ public class Mineur {
         cellsHandler = new CellsHandler(this);
         argent = 1000000;
         inventaire = new Inventaire();
-        equipement = new Equipement();
+        equipement = new Inventaire("pioche_bois");
     }
     
-    public Mineur(TiledMap map, int argent, Vector2 position, Inventaire inventaire, Equipement equipement) {
+    public Mineur(TiledMap map, int argent, Vector2 position, Inventaire inventaire, Inventaire equipement) {
         LARGEUR = UNITE * AssetLoader.regions[0].getRegionWidth();
         HAUTEUR = UNITE * AssetLoader.regions[0].getRegionHeight();
         etat = Etat.Arret;
@@ -174,7 +174,7 @@ public class Mineur {
         isOnEchelle = false;
         wasMoving = false;
         cellsHandler = new CellsHandler(this);
-        this.argent = 1000000;// argent;
+        this.argent = argent;
         this.position = position;
         this.inventaire = inventaire;
         this.equipement = equipement;
@@ -520,7 +520,7 @@ public class Mineur {
         this.argent -= argent;
     }
     
-    public Equipement getEquipement() {
+    public Inventaire getEquipement() {
         return equipement;
     }
 }

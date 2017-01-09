@@ -14,7 +14,6 @@ import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
 import com.mygdx.mehelpers.GenerationAleatoire;
 import com.mygdx.mehelpers.KeyBoard;
-import com.mygdx.mehelpers.inventaire.EquipementActor;
 import com.mygdx.mehelpers.inventaire.InventoryActor;
 import com.mygdx.minexploration.MEGame;
 import java.io.File;
@@ -31,7 +30,6 @@ public class GameScreen implements Screen {
     private final MEGame game;
     private boolean pause;
     
-    private InventoryActor inventoryActor;
     private MenuPause menuPause;
 
     public static Stage stage;
@@ -97,13 +95,13 @@ public class GameScreen implements Screen {
         Skin skin2 = new Skin(Gdx.files.internal("skin/uiskin.json"));
     
         DragAndDrop dragAndDrop = new DragAndDrop();
-        inventoryActor = new InventoryActor(gameWorld.getMineur().getInventaire(), dragAndDrop, skin, this);
+        InventoryActor inventoryActor = new InventoryActor("Inventaire", gameWorld.getMineur().getInventaire(), Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
         inventoryActor.setMovable(false);
         stage.addActor(inventoryActor);
         
-        EquipementActor equipement = new EquipementActor(gameWorld.getMineur().getEquipement(), dragAndDrop, skin, this);
-        equipement.setMovable(false);
-        stage.addActor(equipement);
+        InventoryActor equipementActor = new InventoryActor("Equipement", gameWorld.getMineur().getEquipement(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
+        equipementActor.setMovable(false);
+        stage.addActor(equipementActor);
         
         menuPause = new MenuPause(skin2, game);
 
