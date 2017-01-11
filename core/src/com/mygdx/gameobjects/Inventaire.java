@@ -15,15 +15,15 @@ public class Inventaire {
         slots = new ArrayList<Slot>();
         slots.add(new Slot(Item.ECHELLE, 15));
         slots.add(new Slot(Item.PILIER, 10));
-        slots.add(new Slot(Item.MAGASIN, 1));
+        slots.add(new Slot(Item.BASE, 1));
         slots.add(new Slot(Item.TNT, 5));
     }
 
-    public Inventaire(int nbEchelles, int nbPiliers, int nbTnt, int nbMagasin) {
+    public Inventaire(int nbEchelles, int nbPiliers, int nbTnt, int nbBase) {
         slots = new ArrayList<Slot>();
         slots.add(new Slot(Item.ECHELLE, nbEchelles));
         slots.add(new Slot(Item.PILIER, nbPiliers));
-        slots.add(new Slot(Item.MAGASIN, nbMagasin));
+        slots.add(new Slot(Item.BASE, nbBase));
         slots.add(new Slot(Item.TNT, nbTnt));
     }
     

@@ -5,12 +5,7 @@
  */
 package com.mygdx.mehelpers;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.badlogic.gdx.files.FileHandle;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -23,8 +18,6 @@ public class GenerationAleatoire {
     private final String chemin;
     private final int niveau;
     private final char TAB = (char) 9; // TABulation
-    private final Date date;
-    private final DateFormat dateFormat;
     private final Random random;
     private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis;
     private int nbFeurs = 0;
@@ -36,8 +29,6 @@ public class GenerationAleatoire {
         this.idFleurs = new LinkedList();
         this.chemin = chemin;
         this.niveau = niveau;
-        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        this.date = new Date();
         this.random = new Random();
         int i;
         for(i = 0 ; i < blocsSurface.length ; i++) {
@@ -120,103 +111,90 @@ public class GenerationAleatoire {
      * - 
      */
     private void generer() {
-        File fichier = new File(chemin);
-        try {
-            fichier.createNewFile();
-            FileWriter writer = new FileWriter(fichier);
-            try {
-                int hauteur = getProfondeurGeneration();
-                int largeur = (int) Math.round(0.4 * hauteur);
-                StringBuilder input = new StringBuilder();
-                int iterateur = 1;
-                input.append("<!-- Carte générée aléatoirement le ").append(dateFormat.format(date)).append(" pour le niveau ").append(niveau).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\" level=\"").append(niveau).append("\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
-                
-                for (String blocsSurface1 : blocsSurface) {
-                    input.append(TAB).append("<tileset firstgid=\"").append(iterateur).append("\" name=\"").append(blocsSurface1).append("\" tilewidth=\"64\" tileheight=\"64\" tilecount=\"1\" columns=\"1\">\n").append(TAB).append(TAB).append("<image source=\"../").append(blocsSurface1).append("\" width=\"64\" height=\"64\"/>\n").append(TAB).append("</tileset>\n\n");
-                    iterateur++;
-                }
-                
-                for (String blocsObjet1 : blocsObjet) {
-                    input.append(TAB).append("<tileset firstgid=\"").append(iterateur).append("\" name=\"").append(blocsObjet1).append("\" tilewidth=\"64\" tileheight=\"64\" tilecount=\"1\" columns=\"1\">\n").append(TAB).append(TAB).append("<image source=\"../").append(blocsObjet1).append("\" width=\"64\" height=\"64\"/>\n").append(TAB).append("</tileset>\n\n");
-                    iterateur++;
-                }
-                
-                
-                input.append(TAB).append("<layer name=\"surface\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
-                
-                // Génération de la base de départ
-                for(int i = 0 ; i < 3 ; i++ ) {
-                    input.append(TAB).append(TAB);
-                    for(int j = 0 ; j < largeur ; j++) {
-                       input.append("0,");
-                    }
-                    input.append("\n");
-                }
-                
-                input.append(TAB).append(TAB);
-                for(int i = 0 ; i < largeur ; i++) {
-                    input.append(idHerbe).append(",");
-                }
-                input.append("\n");    
-                
-                int positionDiamantX = random.nextInt(largeur-1);
-                int posDiamMaxY = hauteur-1;
-                int posDiamMinY = (int) (hauteur*0.8f);
-                int positionDiamantY = random.nextInt(posDiamMaxY-posDiamMinY)+posDiamMinY;
-                
-                // Ici ajout de la matrice surface dans le String input
-                for(int i = 4 ; i < hauteur ; i++) {
-                    input.append(TAB).append(TAB);
-                    for(int j = 0 ; j < largeur ; j++) {
-                        if(positionDiamantX == j && positionDiamantY == i)
-                            input.append(idDiamant).append(",");
-                        else
-                            input.append(genererIdentifiantBloc(i)).append(",");
-                    }
-                    input.append("\n");
-                } 
-                input.delete(input.length()-2, input.length()); // On enlève la virgule en trop
-                
-                input.append("\n").append(TAB).append(TAB).append("</data>\n").append(TAB).append("</layer>\n\n");
-                input.append(TAB).append("<layer name=\"objets\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
-                
-                // Ajout de la matrice objet dans le String input (vide)
-                
-                for(int i = 0 ; i < 2 ; i++ ) {
-                    input.append(TAB).append(TAB);
-                    for(int j = 0 ; j < largeur ; j++) {
-                       input.append("0,");
-                    }
-                    input.append("\n");
-                }
-                
-                input.append(TAB).append(TAB);
-                for(int j = 0 ; j < largeur ; j++) {
-                   input.append(getIdFleur()).append(",");
-                }
-                input.append("\n");
-                
-                for(int i = 3 ; i < hauteur ; i++) {
-                    input.append(TAB).append(TAB);
-                    for(int j = 0 ; j < largeur ; j++) {
-                        input.append("0,");
-                    }
-                    input.append("\n");
-                }
-                input.delete(input.length()-2, input.length()); // On enlève la virgule en trop
-                
-                input.append("\n").append(TAB).append(TAB).append("</data>\n").append(TAB).append("</layer>\n</map>");
-                
-                writer.write(input.toString()); 
-                
-            } catch(IOException io1) {
-                System.out.println("Erreur lors de l'écriture dans le fichier : " + io1.getMessage());
-            } finally {
-                writer.close();
-            }
-        } catch(IOException io2) {
-            System.out.println("Erreur lors de la création du fichier : " + io2.getMessage());           
+        FileHandle fichier = new FileHandle(chemin);
+        int hauteur = getProfondeurGeneration();
+        int largeur = (int) Math.round(0.4 * hauteur);
+        StringBuilder input = new StringBuilder();
+        int iterateur = 1;
+        input.append("<!-- Carte générée aléatoirement pour le niveau ").append(niveau).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\" level=\"").append(niveau).append("\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
+
+        for (String blocsSurface1 : blocsSurface) {
+            input.append(TAB).append("<tileset firstgid=\"").append(iterateur).append("\" name=\"").append(blocsSurface1).append("\" tilewidth=\"64\" tileheight=\"64\" tilecount=\"1\" columns=\"1\">\n").append(TAB).append(TAB).append("<image source=\"../").append(blocsSurface1).append("\" width=\"64\" height=\"64\"/>\n").append(TAB).append("</tileset>\n\n");
+            iterateur++;
         }
+
+        for (String blocsObjet1 : blocsObjet) {
+            input.append(TAB).append("<tileset firstgid=\"").append(iterateur).append("\" name=\"").append(blocsObjet1).append("\" tilewidth=\"64\" tileheight=\"64\" tilecount=\"1\" columns=\"1\">\n").append(TAB).append(TAB).append("<image source=\"../").append(blocsObjet1).append("\" width=\"64\" height=\"64\"/>\n").append(TAB).append("</tileset>\n\n");
+            iterateur++;
+        }
+
+
+        input.append(TAB).append("<layer name=\"surface\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
+
+        // Génération de la base de départ
+        for(int i = 0 ; i < 3 ; i++ ) {
+            input.append(TAB).append(TAB);
+            for(int j = 0 ; j < largeur ; j++) {
+               input.append("0,");
+            }
+            input.append("\n");
+        }
+
+        input.append(TAB).append(TAB);
+        for(int i = 0 ; i < largeur ; i++) {
+            input.append(idHerbe).append(",");
+        }
+        input.append("\n");    
+
+        int positionDiamantX = random.nextInt(largeur-1);
+        int posDiamMaxY = hauteur-1;
+        int posDiamMinY = (int) (hauteur*0.8f);
+        int positionDiamantY = random.nextInt(posDiamMaxY-posDiamMinY)+posDiamMinY;
+
+        // Ici ajout de la matrice surface dans le String input
+        for(int i = 4 ; i < hauteur ; i++) {
+            input.append(TAB).append(TAB);
+            for(int j = 0 ; j < largeur ; j++) {
+                if(positionDiamantX == j && positionDiamantY == i)
+                    input.append(idDiamant).append(",");
+                else
+                    input.append(genererIdentifiantBloc(i)).append(",");
+            }
+            input.append("\n");
+        } 
+        input.delete(input.length()-2, input.length()); // On enlève la virgule en trop
+
+        input.append("\n").append(TAB).append(TAB).append("</data>\n").append(TAB).append("</layer>\n\n");
+        input.append(TAB).append("<layer name=\"objets\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
+
+        // Ajout de la matrice objet dans le String input (vide)
+
+        for(int i = 0 ; i < 2 ; i++ ) {
+            input.append(TAB).append(TAB);
+            for(int j = 0 ; j < largeur ; j++) {
+               input.append("0,");
+            }
+            input.append("\n");
+        }
+
+        input.append(TAB).append(TAB);
+        for(int j = 0 ; j < largeur ; j++) {
+           input.append(getIdFleur()).append(",");
+        }
+        input.append("\n");
+
+        for(int i = 3 ; i < hauteur ; i++) {
+            input.append(TAB).append(TAB);
+            for(int j = 0 ; j < largeur ; j++) {
+                input.append("0,");
+            }
+            input.append("\n");
+        }
+        input.delete(input.length()-2, input.length()); // On enlève la virgule en trop
+
+        input.append("\n").append(TAB).append(TAB).append("</data>\n").append(TAB).append("</layer>\n</map>");
+
+        fichier.writeString(input.toString(), false, "UTF-8");
     }   
     
     private int getProfondeurGeneration() {

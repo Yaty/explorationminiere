@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mineur>
+    <argent>1000138</argent>
+    <position>
+        <x>51.033302</x>
+        <y>86.0</y>
+    </position>
+    <slot>
+        <nom>ECHELLE</nom>
+        <montant>13</montant>
+    </slot>
+    <slot>
+        <nom>PILIER</nom>
+        <montant>10</montant>
+    </slot>
+    <slot>
+        <nom>MAGASIN</nom>
+        <montant>0</montant>
+    </slot>
+    <slot>
+        <nom>TNT</nom>
+        <montant>5</montant>
+    </slot>
+    <pioche>
+        <nom>pioche_diamant</nom>
+    </pioche>
+</mineur><!--Sauvegarde du niveau 0 de la partie mapTest le 05/01/2017 15:39:34.-->

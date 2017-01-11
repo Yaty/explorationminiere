@@ -1,0 +1,26 @@
+<mineur>
+	<argent>1000001</argent>
+	<position>
+		<x>3.28125</x>
+		<y>11.0</y>
+	</position>
+	<slot>
+		<nom>ECHELLE</nom>
+		<montant>15</montant>
+	</slot>
+	<slot>
+		<nom>PILIER</nom>
+		<montant>10</montant>
+	</slot>
+	<slot>
+		<nom>BASE</nom>
+		<montant>1</montant>
+	</slot>
+	<slot>
+		<nom>TNT</nom>
+		<montant>5</montant>
+	</slot>
+	<pioche>
+		<nom>pioche_bois</nom>
+	</pioche>
+</mineur>

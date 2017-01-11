@@ -19,114 +19,27 @@ import com.mygdx.mehelpers.InputHandler;
 public class Mineur {
     private final float GRAVITE = -0.4f, LARGEUR, HAUTEUR, MAX_VELOCITE = 4f, SAUT_VELOCITE = 8f, ECHELLE_VELOCITE = 6f;
     private int argent;
-    private final Inventaire inventaire;
-    private final Inventaire equipement;
-
-    public void setEtatMineur(Etat etat) {
-        this.etat = etat;
-    }
-
-    public void gestionArgent(int id) {
-        if (id == cellsHandler.getIdDiamant()) argent += 500;
-        else if (id == cellsHandler.getIdCharbon()) argent += 10;
-        else if (id == cellsHandler.getIdTerre()) argent++;
-        else if (id == cellsHandler.getIdEmeraude()) argent += 100;
-        else if (id == cellsHandler.getIdGlowstone()) argent += 10;
-        else if (id == cellsHandler.getIdOr()) argent += 50;
-        else if (id == cellsHandler.getIdHerbe()) argent++;
-        else if (id == cellsHandler.getIdFer()) argent += 30;
-        else if (id == cellsHandler.getIdLapis()) argent += 80;
-    }
-
-    public int getArgent() {
-        return argent;
-    }
-
-    public void reload(TiledMap map) {
-        this.map = map;
-        position.set(getXDepart(), getYDepart()); 
-        resetMineur();
-        cellsHandler.reload();
-    }
-    
-    public void resetMineur() {
-        etat = Etat.Arret;
-        dirMineur = Direction.Arret;
-        mineurAuSol = teteVersLaDroite = true;
-        isOnEchelle = false;
-        wasMoving = false;
-        deplacement = new Fluide(this);
-    }
-
-    public void teleportation(Vector2 posTp) {
-        int distance = (int) Math.sqrt(Math.pow(posTp.x - position.x, 2) + Math.pow(posTp.y - position.y, 2));
-        int coef = 50;
-        if(!cellsHandler.isCellSurfaceHere((int) posTp.x, (int) posTp.y) && argent >= coef*distance) {
-            position.set(posTp);
-            position.x += LARGEUR/2;
-            resetMineur();
-            argent -= coef * distance;
-        }
-    }
+    private final Inventaire inventaire, equipement;
         
     /**
      * Représente la direction du mineur
      */
     public enum Direction { 
-
-        /**
-         * Va vers le haut (un saut)
-         */
         Haut, 
-
-        /**
-         * Va vers le bas (une chute)
-         */
         Bas, 
-
-        /**
-         * Va vers la gauche
-         */
         Gauche, 
-
-        /** 
-         * Va vers la droite
-         */
         Droite, 
-
-        /**
-         * Ne bouge pas
-         */
-        Arret };
+        Arret
+    };
 
     /**
      * Représente l'état du mineur
      */
     public enum Etat { 
-
-        /**
-         * Il mine
-         */
         Miner, 
-
-        /**
-         * Il se déplace
-         */
         Deplacement, 
-
-        /**
-         * Il est arrêté
-         */
         Arret, 
-
-        /**
-         * Il saute
-         */
         Sauter,
-    
-        /**
-         * Il est sur une échelle
-         */
         Echelle
     };
     private Etat etat;
@@ -186,6 +99,53 @@ public class Mineur {
     private float getXDepart() {
         TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get("surface");
         return layer.getWidth()/2 + LARGEUR/2;
+    }
+    
+    public void setEtatMineur(Etat etat) {
+        this.etat = etat;
+    }
+
+    public void gestionArgent(int id) {
+        if (id == CellsHandler.idDiamant) argent += 500;
+        else if (id == CellsHandler.idCharbon) argent += 10;
+        else if (id == CellsHandler.idTerre) argent++;
+        else if (id == CellsHandler.idEmeraude) argent += 100;
+        else if (id == CellsHandler.idGlowstone) argent += 10;
+        else if (id == CellsHandler.idOr) argent += 50;
+        else if (id == CellsHandler.idHerbe) argent++;
+        else if (id == CellsHandler.idFer) argent += 30;
+        else if (id == CellsHandler.idLapis) argent += 80;
+    }
+
+    public int getArgent() {
+        return argent;
+    }
+
+    public void reload(TiledMap map) {
+        this.map = map;
+        position.set(getXDepart(), getYDepart()); 
+        resetMineur();
+        cellsHandler.reload();
+    }
+    
+    public void resetMineur() {
+        etat = Etat.Arret;
+        dirMineur = Direction.Arret;
+        mineurAuSol = teteVersLaDroite = true;
+        isOnEchelle = false;
+        wasMoving = false;
+        deplacement = new Fluide(this);
+    }
+
+    public void teleportation(Vector2 posTp) {
+        int distance = (int) Math.sqrt(Math.pow(posTp.x - position.x, 2) + Math.pow(posTp.y - position.y, 2));
+        int coef = 50;
+        if(!cellsHandler.isCellSurfaceHere((int) posTp.x, (int) posTp.y) && argent >= coef*distance) {
+            position.set(posTp);
+            position.x += LARGEUR/2;
+            resetMineur();
+            argent -= coef * distance;
+        }
     }
     
     public Inventaire getInventaire() {
@@ -296,33 +256,15 @@ public class Mineur {
         }
         
         // faut un timer dans le cas ou on monte une echelle 
-        if(Gdx.input.isKeyJustPressed(33) && inventaire.firstSlotWithItem(Item.ECHELLE).getAmount() > 0 && this.poserEchelle == true && (this.deplacement == null || this.dirMineur == Direction.Haut) && this.isOnEchelle()==false ){ // Echelle (E)
-            if(this.getCellsHandler().isCellObjectHere((int)position.x, (int)position.y)){
-                cellsHandler.setLadder((int) position.x,(int) position.y);
-                try {
-                    inventaire.remove(Item.ECHELLE, 1);
-                } catch (Exception ex) {
-                    Gdx.app.debug("Exception suppression échelles", ex.getMessage());
-                }
-                poserEchelle = false;
-            }
+        if(Gdx.input.isKeyJustPressed(Keys.E)){ // Echelle (E)
+            cellsHandler.setLadder((int) position.x,(int) position.y);
         }
-        if(!this.getCellsHandler().isCellObjectHere((int)position.x, (int)position.y) && Gdx.input.isKeyJustPressed(33) && this.poserEchelle == true){
-                cellsHandler.setLadder((int) position.x,(int) position.y);
-            }
         
-        if(Gdx.input.isKeyJustPressed(46)){
-            int direction = 0;
-            if(this.isTeteVersLaDroite())
-                direction = 1;
-            else
-                direction = -1;
-            
-            if(cellsHandler.getObject((int) position.x+direction, (int) position.y) == 0){
+        if(Gdx.input.isKeyJustPressed(Keys.R)){
+            if(cellsHandler.getObject((int) position.x, (int) position.y) == 0){
                 cellsHandler.setPilier((int) position.x, (int) position.y);
             }else{
-                cellsHandler.ramassePilier((int) position.x+direction, (int) position.y);
-        
+                cellsHandler.ramassePilier((int) position.x, (int) position.y);
             }
         }
         

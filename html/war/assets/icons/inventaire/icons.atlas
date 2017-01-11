@@ -1,0 +1,75 @@
+
+icons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+tnt
+  rotate: false
+  xy: 1, 201
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
+echelle
+  rotate: false
+  xy: 51, 201
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
+pilier
+  rotate: false
+  xy: 101, 201
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
+base
+  rotate: false
+  xy: 201, 201
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
+pioche_bois
+  rotate: false
+  xy: 1, 151
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
+pioche_pierre
+  rotate: false
+  xy: 51, 151
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
+pioche_fer
+  rotate: false
+  xy: 101, 151
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
+pioche_or
+  rotate: false
+  xy: 151, 151
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
+pioche_diamant
+  rotate: false
+  xy: 201, 151
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48
+nothing
+  rotate: false
+  xy: 151, 1
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 48

@@ -26,7 +26,7 @@ public class Collision {
     };
     private Rectangle mineurRect;
     private int debutX, debutY, finX, finY;
-    private final float largeurMap;
+    private final int largeurMap;
     
     /**
      * @param deplacement objet Deplacement
