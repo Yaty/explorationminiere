@@ -2,8 +2,6 @@ package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -13,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
 import com.mygdx.mehelpers.GenerationAleatoire;
-import com.mygdx.mehelpers.KeyBoard;
 import com.mygdx.mehelpers.inventaire.InventoryActor;
 import com.mygdx.minexploration.MEGame;
 import java.io.File;
@@ -75,11 +72,7 @@ public class GameScreen implements Screen {
         Gdx.app.log("GameScreen", "show appelé");
 
         // On utilise un "hub" qui va switcher entre nos classes qui gères les entrées -> pouvoir recuperer les clics du stage et les entrées du jeu
-        InputProcessor clavier = new KeyBoard();
-        InputMultiplexer inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(clavier);
-        inputMultiplexer.addProcessor(stage);
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        Gdx.input.setInputProcessor(stage);
         
         stage.addListener(new InputListener() {
             @Override
@@ -164,7 +157,7 @@ public class GameScreen implements Screen {
             objet[i] = objetFiles[i].getName();
                 
         game.setLevel(game.getLevel()+1);
-        GenerationAleatoire generateur = new GenerationAleatoire(surface, objet, "./map/" + idPartie + "/map.tmx", game.getLevel());
+        new GenerationAleatoire(surface, objet, "./map/" + idPartie + "/map.tmx", game.getLevel());
         gameWorld.reload();
         gameRenderer.reload(gameWorld.getMap());
     }

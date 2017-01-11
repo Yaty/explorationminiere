@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Mineur;
 import com.mygdx.gameobjects.Mineur.Etat;
-import com.mygdx.mehelpers.InputHandler;
 
 /**
  * Classe gérant le déplacement du mineur en mode fluide
@@ -38,14 +37,14 @@ public class Fluide extends Deplacement {
                             mineur.setMineurAuSol(false);
                             mineur.setEtatMineur(Etat.Echelle);
                             mineur.getDirectionMineur();
-                            if(InputHandler.keys[19] && mineur.getCellsHandler().getBloc(x, y-1) ==0){
+                            if(Gdx.input.isKeyPressed(19) && mineur.getCellsHandler().getBloc(x, y-1) ==0){
                                     velocite.y = mineur.getGRAVITE(); //faut rester appuyé
                             }
                         velocite.y = mineur.getVelociteMaxEchelle();
                         mineur.setMineurAuSol(false);
                         mineur.setEtatMineur(Etat.Echelle);
                         mineur.getDirectionMineur();
-                        if(InputHandler.keys[19] || InputHandler.keys[54]){
+                        if(Gdx.input.isKeyPressed(19) || Gdx.input.isKeyPressed(54)){
                             velocite.y = 0.2f - mineur.getGRAVITE(); //faut rester appuyé
                         }
                     } else if(!mineur.getEtatMineur().equals(Etat.Sauter)) {
@@ -77,7 +76,7 @@ public class Fluide extends Deplacement {
                 if(mineur.getEtatMineur().equals(Etat.Echelle)) {
                     mineur.setEtatMineur(Etat.Echelle);
                     velocite.y = -mineur.getVelociteMaxEchelle();
-                    if(InputHandler.keys[20] || InputHandler.keys[47]){
+                    if(Gdx.input.isKeyPressed(20) || Gdx.input.isKeyJustPressed(47)){
                         velocite.y = mineur.getGRAVITE(); //faut rester appuyé
                     }
 

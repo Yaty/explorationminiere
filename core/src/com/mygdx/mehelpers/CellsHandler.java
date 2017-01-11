@@ -382,8 +382,8 @@ public class CellsHandler {
             BaseIntermediaire base = new BaseIntermediaire(x, y);
             int x2 = x;
             y--; // pour faire genere la base une case plus bas (pour que le mineur soit à l'entrée.
-            for(int i = 0 ; i < base.getHauteur() ; i++) {
-                for(int j = 0 ; j < base.getLargeur() ; j++) {
+            for(int i = 0 ; i < base.height ; i++) {
+                for(int j = 0 ; j < base.width ; j++) {
                     if(layerSurface.getCell(x2, y) != null) {
                         if(layerSurface.getCell(x2, y).getTile().getId() == idDiamant) {
                             victory = true;

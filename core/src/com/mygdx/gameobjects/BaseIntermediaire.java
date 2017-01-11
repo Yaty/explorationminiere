@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.mehelpers.CellsHandler;
 
-public class BaseIntermediaire {    
+public class BaseIntermediaire extends Rectangle {    
     // XXXXX
     // X   X AVEC X = mur, M magasin et vide = air
     //    MX
@@ -26,35 +26,12 @@ public class BaseIntermediaire {
         {CellsHandler.idSolBase, CellsHandler.idSolBase, CellsHandler.idSolBase, CellsHandler.idSolBase, CellsHandler.idSolBase}
     };
     
-    private final int LARGEUR, HAUTEUR;
-    
-    private final int x, y;
-    
-    private final Rectangle base;
-    
     public BaseIntermediaire(int x0, int y0) {
-        x = x0;
-        y = y0;
-        HAUTEUR = CELLS.length;
-        LARGEUR = CELLS[0].length;
-        base = new Rectangle(this.x, this.y, LARGEUR, HAUTEUR);
+        super(x0, y0, CELLS[0].length, CELLS.length);
     } 
-    
-    public boolean contains(float x, float y) {
-        return base.contains(x, y);
-    }
 
     public Vector2 getPos() {
         return new Vector2(x, y);
-    }
-
-    public int getHauteur() {
-        return HAUTEUR;
-    }
-
-    public int getLargeur() {
-        return LARGEUR;
-    }
-    
+    }   
     
 }

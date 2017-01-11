@@ -30,7 +30,7 @@ public class GameWorld {
             int id = Integer.parseInt(cheminMap.replaceAll("[\\D]", ""));
             if(Gdx.files.internal("./map/" + id + "/save.xml").exists()) {
                 ChargementHandler chargeur = new ChargementHandler(id);
-                mineur = new Mineur(map, chargeur.getArgent(), chargeur.getPosition(), chargeur.getInventaire(), chargeur.getEquipement());
+                mineur = new Mineur(map, chargeur.getArgent(), chargeur.getPosition(), chargeur.getInventaire(), chargeur.getEquipement(), chargeur.getHealth());
             } else {
                 mineur = new Mineur(map);
             }

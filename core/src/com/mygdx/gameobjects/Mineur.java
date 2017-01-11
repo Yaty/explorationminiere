@@ -10,7 +10,6 @@ import com.mygdx.mehelpers.CellsHandler;
 import com.mygdx.mehelpers.Deplacement.Amortissement;
 import com.mygdx.mehelpers.Deplacement.Deplacement;
 import com.mygdx.mehelpers.Deplacement.Fluide;
-import com.mygdx.mehelpers.InputHandler;
 
 /**
  * Classe représentant le personnage du Mineur
@@ -76,7 +75,7 @@ public class Mineur {
         equipement = new Inventaire("pioche_bois");
     }
     
-    public Mineur(TiledMap map, int argent, Vector2 position, Inventaire inventaire, Inventaire equipement) {
+    public Mineur(TiledMap map, int argent, Vector2 position, Inventaire inventaire, Inventaire equipement, float health) {
         LARGEUR = UNITE * AssetLoader.regions[0].getRegionWidth();
         HAUTEUR = UNITE * AssetLoader.regions[0].getRegionHeight();
         etat = Etat.Arret;
@@ -91,6 +90,7 @@ public class Mineur {
         this.position = position;
         this.inventaire = inventaire;
         this.equipement = equipement;
+        this.health = health;
     }
     
     /**
@@ -237,24 +237,23 @@ public class Mineur {
         if (deltaTime == 0) return; // Si rien ne s'est passé on sort
         if(deltaTime > 0.1f) deltaTime = 0.1f; // Pour garder le jeu fluide
         runTime += deltaTime;
+      
         
-        moving = false;
-        
-        if(InputHandler.keys[45] || InputHandler.keys[21]) {
+        if(Gdx.input.isKeyPressed(Keys.G) || Gdx.input.isKeyPressed(Keys.LEFT)) {
             moving = true;
             dirMineur = Direction.Gauche;
             setTeteVersLaDroite(false);
         }
-        if (InputHandler.keys[32] || InputHandler.keys[22]) {
+        if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) {
             moving = true;
             dirMineur = Direction.Droite;
             setTeteVersLaDroite(true);
         }
-        if ((InputHandler.keys[19] || InputHandler.keys[54]) && mineurAuSol) {
+        if ((Gdx.input.isKeyPressed(Keys.Z) || Gdx.input.isKeyPressed(Keys.UP)) && mineurAuSol) {
             moving = true;
             dirMineur = Direction.Haut;
         }
-        if(InputHandler.keys[20] || InputHandler.keys[47]) {
+        if(Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) {
             moving = true;
             dirMineur = Direction.Bas;
         }
@@ -312,7 +311,12 @@ public class Mineur {
         }
         
         gestionVie();
-    }  
+        resetForNextLoop();
+    }
+    
+    private void resetForNextLoop() {
+        moving = false;
+    }
 
     public Deplacement getDeplacement() {
         return this.deplacement;

@@ -43,8 +43,13 @@ public class MEGame extends Game {
         if(getScreen().getClass().getSimpleName().equals("GameScreen")) { // Pour être sûr qu'on lui envoi une référence vers l'instance de GameScreen
             save = new SauvegardeHandler(this);
             save.save();
-            ShutdownHandler.shutdown();
+            
         }
+    }
+    
+    public void shutdown() {
+        dispose();
+        Gdx.app.exit();
     }
     
     /**
@@ -124,6 +129,7 @@ public class MEGame extends Game {
     public void dispose() {
         super.dispose();
         AssetLoader.dispose();
+        screen.dispose();
     }
     
     public int getLevel() {

@@ -18,15 +18,13 @@ import com.mygdx.screens.GameScreen;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
 /**
  *
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class SauvegardeHandler {
-    private MEGame game;
+    private final MEGame game;
     
     public SauvegardeHandler(MEGame game) {
         this.game = game;
@@ -52,7 +50,7 @@ public class SauvegardeHandler {
         final char TAB = (char) 9;
         int largeur = map.getProperties().get("width", Integer.class);
         int hauteur = map.getProperties().get("height", Integer.class);
-        // Date du jour pour l'écrire en commentaire
+        
         FileHandle fichier = new FileHandle("./map/" + idPartie + "/map.tmx");
         StringBuilder input = new StringBuilder();
         input.append("<!-- Carte générée aléatoirement pour le niveau ").append(game.getLevel()).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\" level=\"").append(game.getLevel()).append("\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
@@ -110,7 +108,7 @@ public class SauvegardeHandler {
         
         int idPartie = gameScreen.getIdPartie();
         
-       try {
+        try {
             StringWriter writer = new StringWriter();
             XmlWriter xml = new XmlWriter(writer);
             XmlWriter racine = xml.element("mineur");
@@ -124,6 +122,9 @@ public class SauvegardeHandler {
                 .element("y")
                     .text(vecteurPosition.y)
                 .pop()
+            .pop()
+            .element("vie")
+                .text(mineur.getHealth())
             .pop();
                 
             // Pour chaque slot de l'inventaire on sauvegarde le nom et le montant
@@ -152,7 +153,7 @@ public class SauvegardeHandler {
             file.writeString(writer.toString(), false, "UTF-8");
                            
         } catch (IOException ex) {
-            Gdx.app.error("SaveHandler", Arrays.toString(ex.getStackTrace()));
+            Gdx.app.error("SaveHandler", "Erreur Xml", ex);
         }
     }
 }

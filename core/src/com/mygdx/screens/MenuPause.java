@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.minexploration.MEGame;
-import com.mygdx.minexploration.ShutdownHandler;
 
 /**
  *
@@ -48,7 +47,7 @@ public class MenuPause extends Window {
         quitterSansSauvegarder.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ShutdownHandler.shutdown();
+                game.shutdown();
             }
         });
 

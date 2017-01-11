@@ -69,4 +69,9 @@ public class ChargementHandler {
         return new Inventaire(nbEchelles, nbPiliers, nbTnt, nbMagasin);
     }
     
+    public float getHealth() {
+        Element vie = racine.getChildByName("vie");
+        return Float.parseFloat(vie.getText());
+    }
+    
 }
