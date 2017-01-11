@@ -7,6 +7,7 @@ package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -33,7 +34,7 @@ public class ChoosePropertiesScreen implements Screen {
     private final SpriteBatch batch;
     private final BitmapFont font;
     private final Skin skin;
-    private String[] directories;
+    private FileHandle[] directories;
     
     /**
      * Ce constructeur est appelé pour créer une partie au niveau 1
@@ -61,7 +62,7 @@ public class ChoosePropertiesScreen implements Screen {
     }
     
     private int getNumPartie() {
-        File file = new File("./map/");
+        FileHandle file = new FileHandle("./map/");
         directories = file.list(new FilenameFilter() {
           @Override
           public boolean accept(File current, String name) {
@@ -70,8 +71,8 @@ public class ChoosePropertiesScreen implements Screen {
         });
         int maxi = 1;
         for(int i = 0 ; i < directories.length ; i++) {
-            if(Integer.parseInt(directories[i]) > maxi)
-                maxi = Integer.parseInt(directories[i]);
+            if(Integer.parseInt(directories[i].name()) > maxi)
+                maxi = Integer.parseInt(directories[i].name());
         }
         return maxi+1;
     }

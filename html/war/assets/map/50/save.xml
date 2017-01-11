@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mineur>
+    <argent>1000001</argent>
+    <position>
+        <x>4.1889396</x>
+        <y>12.0</y>
+    </position>
+    <slot>
+        <nom>ECHELLE</nom>
+        <montant>15</montant>
+    </slot>
+    <slot>
+        <nom>PILIER</nom>
+        <montant>10</montant>
+    </slot>
+    <slot>
+        <nom>BASE</nom>
+        <montant>1</montant>
+    </slot>
+    <slot>
+        <nom>TNT</nom>
+        <montant>5</montant>
+    </slot>
+    <pioche>
+        <nom>pioche_bois</nom>
+    </pioche>
+</mineur><!--Sauvegarde du niveau 1 de la partie kk le 10/01/2017 23:35:29.-->

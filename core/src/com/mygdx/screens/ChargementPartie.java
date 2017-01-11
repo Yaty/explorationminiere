@@ -7,6 +7,7 @@ package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -35,7 +36,8 @@ public class ChargementPartie implements Screen {
     private final BitmapFont font;
     private final SpriteBatch batch;
     private final SelectBox<String> sb;
-    private String nomDossier[], nom[];
+    private String nomParties[];
+    private FileHandle nomDossiers[];
     
     public ChargementPartie(MEGame game) {
         this.game = game;
@@ -69,8 +71,7 @@ public class ChargementPartie implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
-                    //game.setScreen(new ChargementNiveau(game, Integer.parseInt(nomDossier[sb.getSelectedIndex()]), nom[sb.getSelectedIndex()]));
-                    game.loadingGame(Integer.parseInt(nomDossier[sb.getSelectedIndex()]), nom[sb.getSelectedIndex()]);
+                    game.loadingGame(Integer.parseInt(nomDossiers[sb.getSelectedIndex()].name()), nomParties[sb.getSelectedIndex()]);
                 };
         });
         stage.addActor(valider);
@@ -100,30 +101,28 @@ public class ChargementPartie implements Screen {
     private void createListe(String text) {
         // https://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html
         // On va lister les parties (équivalente à des dossiers) dans le tableau directories
-        File file = new File(text);
-        String[] directories = file.list(new FilenameFilter() {
-          @Override
-          public boolean accept(File current, String name) {
-            return new File(current, name).isDirectory();
-          }
+        FileHandle map = new FileHandle(text);
+        nomDossiers = map.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isDirectory();
+            }
         });
         
-        nom = new String[directories.length];
-        nomDossier = new String[directories.length];
-        for(int j = 0 ; j < directories.length ; j++) {
-            File folder = new File(text + directories[j]);
-            File[] files = folder.listFiles(new FilenameFilter() {
+        nomParties = new String[nomDossiers.length];
+        for(int j = 0 ; j < nomDossiers.length ; j++) {
+            FileHandle folder = new FileHandle(text + nomDossiers[j].name());
+            FileHandle[] files = folder.list(new FilenameFilter() {
                 @Override
                 public boolean accept(File folder, String name) {
                     return name.toLowerCase().endsWith(".name");
                 }
             });
-            nomDossier[j] = folder.getName();
-            nom[j] = files[0].getName().substring(0, files[0].getName().length()-5);
+            nomParties[j] = files[0].name().substring(0, files[0].name().length()-5);
         }
         
         // Set up the SelectionBox with content
-        sb.setItems(nom);
+        sb.setItems(nomParties);
 
         //For easier handling of Widgets
         Table table = new Table();

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mineur>
+    <argent>830611</argent>
+    <position>
+        <x>2.21875</x>
+        <y>16.0</y>
+    </position>
+    <slot>
+        <nom>ECHELLE</nom>
+        <montant>15</montant>
+    </slot>
+    <slot>
+        <nom>PILIER</nom>
+        <montant>10</montant>
+    </slot>
+    <slot>
+        <nom>MAGASIN</nom>
+        <montant>1</montant>
+    </slot>
+    <slot>
+        <nom>TNT</nom>
+        <montant>5</montant>
+    </slot>
+    <pioche>
+        <nom>pioche_diamant</nom>
+    </pioche>
+</mineur><!--Sauvegarde du niveau 2 de la partie TestRefact le 09/01/2017 09:01:01.-->

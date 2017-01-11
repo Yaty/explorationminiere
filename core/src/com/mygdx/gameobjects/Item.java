@@ -13,7 +13,7 @@ public enum Item {
     TNT("tnt", "TNT", "Permet de faire exploser des blocs aux alentours !", 0, 0),
     ECHELLE("echelle", "Echelle", "Afin de pouvoir remonter à la surface.", 0, 0),
     PILIER("pilier", "Pilier", "Pour éviter que les blocs de pierre vous tombent sur la tete ;)", 0, 0),
-    MAGASIN("magasin", "Magasin", "Afin d'acheter de nouveaux objets.", 0, 0),
+    BASE("base", "Base", "Permet de générer une base lorsque vous appuyez sur B.", 0, 0),
     PIOCHE_BOIS("pioche_bois", "Pioche en bois", "Cette pioche va vous permettre de casser des blocs.", 1, 5000),
     PIOCHE_PIERRE("pioche_pierre", "Pioche en pierre", "Cette pioche va vous permettre de casser des blocs.", 1.5f, 15000),
     PIOCHE_FER("pioche_fer", "Pioche en fer", "Cette pioche va vous permettre de casser des blocs.", 2, 50000),
@@ -29,7 +29,7 @@ public enum Item {
         else if(nom.toLowerCase().equals("tnt")) return Item.TNT;
         else if (nom.toLowerCase().equals("echelle")) return Item.ECHELLE;
         else if (nom.toLowerCase().equals("pilier")) return Item.PILIER;
-        else if (nom.toLowerCase().equals("magasin")) return Item.MAGASIN;
+        else if (nom.toLowerCase().equals("base")) return Item.BASE;
         else return null;
     }
 
