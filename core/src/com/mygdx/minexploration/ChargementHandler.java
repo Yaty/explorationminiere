@@ -25,7 +25,7 @@ public class ChargementHandler {
     public ChargementHandler(int id) {
         try {
             this.reader = new XmlReader();
-            FileHandle file = Gdx.files.internal("./map/" + id + "/save.xml");
+            FileHandle file = Gdx.files.local("./map/" + id + "/save.xml");
             this.racine = reader.parse(file);
         } catch (IOException ex) {
             Gdx.app.error("ChargementHandler", "Parse file erreur.", ex);

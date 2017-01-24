@@ -6,7 +6,6 @@
 package com.mygdx.minexploration;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
@@ -25,9 +24,17 @@ import java.util.ArrayList;
  */
 public class SauvegardeHandler {
     private final MEGame game;
+    private GameScreen gameScreen;
+    private int idPartie;
+    private final int TILEWIDTH = 64, TILEHEIGHT = 64;
     
     public SauvegardeHandler(MEGame game) {
         this.game = game;
+    }
+    
+    private void updateRef() {
+        gameScreen = (GameScreen) game.getScreen();
+        idPartie = gameScreen.getIdPartie();
     }
     
     /**
@@ -36,77 +43,81 @@ public class SauvegardeHandler {
      * Sauvegarde la position, l'argent, la pioche et l'inventaire du mineur
      */
     public void save() {
+        updateRef();
         saveMineur();
         saveMap();
     }
     
-    // LibGDX n'a pas de méthode pour enregistrer une TiledMap, il faut le faire nous même
     private void saveMap() {
-        GameScreen gameScreen = (GameScreen) game.getScreen();
-        int idPartie = gameScreen.getIdPartie();
         TiledMap map = gameScreen.getWorld().getMap();
         TiledMapTileLayer surface = (TiledMapTileLayer) map.getLayers().get("surface");
         TiledMapTileLayer objets = (TiledMapTileLayer) map.getLayers().get("objets");
-        final char TAB = (char) 9;
         int largeur = map.getProperties().get("width", Integer.class);
         int hauteur = map.getProperties().get("height", Integer.class);
         
-        FileHandle fichier = new FileHandle("./map/" + idPartie + "/map.tmx");
-        StringBuilder input = new StringBuilder();
-        input.append("<!-- Carte générée aléatoirement pour le niveau ").append(game.getLevel()).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\" level=\"").append(game.getLevel()).append("\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
-
-        int iterateur = 1;
-        for(TiledMapTileSet tileset : map.getTileSets()) {
-            input.append(TAB).append("<tileset firstgid=\"").append(iterateur).append("\" name=\"").append(tileset.getName()).append("\" tilewidth=\"64\" tileheight=\"64\" tilecount=\"1\" columns=\"1\">\n").append(TAB).append(TAB).append("<image source=\"../").append(tileset.getName()).append("\" width=\"64\" height=\"64\"/>\n").append(TAB).append("</tileset>\n\n");
-            iterateur++;
-        }
-
-        input.append(TAB).append("<layer name=\"surface\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
-
-        // Ici ajout de la matrice surface dans le String input
-        // On parcour de haut en bas car le 0,0 et en bas à gauche sur la matrice
-        for(int i = hauteur - 1 ; i > -1 ; i--) {
-            input.append(TAB).append(TAB);
-            for(int j = 0 ; j < largeur  ; j++) {
-                if(surface.getCell(j, i) == null)
-                    input.append("0,");
-                else
-                    input.append(surface.getCell(j, i).getTile().getId()).append(",");
+        try {
+            StringWriter writer = new StringWriter();
+            XmlWriter xml = new XmlWriter(writer);
+            XmlWriter racine = xml.element("map");
+            racine.attribute("version", "1.0").attribute("orientation", "orthogonal").attribute("renderorder", "left-up").attribute("width", largeur).attribute("height", hauteur).attribute("level", game.getLevel()).attribute("tilewidth", TILEWIDTH).attribute("tileheight", TILEHEIGHT).attribute("nextobjectid", "2");
+            
+            int compteurDeBloc = 1;
+            for(TiledMapTileSet tileset : map.getTileSets()) {
+                racine
+                .element("tileset").attribute("firstgid", compteurDeBloc++).attribute("name", tileset.getName()).attribute("tilewidth", TILEWIDTH).attribute("tileheight", TILEHEIGHT).attribute("tilecount", "1").attribute("columns", "1")
+                    .element("image").attribute("source", "../" + tileset.getName()).attribute("width", TILEWIDTH).attribute("height", TILEHEIGHT)
+                    .pop()
+                .pop();
             }
-            input.append("\n");
+            
+            final String matriceSurfaces = tileLayerToString(surface), matriceObjets = tileLayerToString(objets);
+            
+            racine
+            .element("layer").attribute("name", "surface").attribute("width", largeur).attribute("height", hauteur)
+                .element("data").attribute("encoding", "csv")
+                    .text(matriceSurfaces)
+                .pop()
+            .pop()
+            .element("layer").attribute("name", "objets").attribute("width", largeur).attribute("height", hauteur)
+                .element("data").attribute("encoding", "csv")
+                    .text(matriceObjets)
+                .pop()
+            .pop();
+            
+            racine.pop(); // Fermeture balise map
+            
+            Gdx.files.local("map/" + idPartie + "/map.tmx").writeString(writer.toString(), false, "UTF-8"); // Ecriture
+        } catch (IOException ex) {
+            Gdx.app.error("SauvegardeHandler", "Erreur lors de la sauvegarde de la carte.", ex);
+            Gdx.app.exit();
         }
-        input.delete(input.length()-2, input.length()); // On enlève la virgule en trop
-
-        input.append("\n").append(TAB).append(TAB).append("</data>\n").append(TAB).append("</layer>\n\n");
-        input.append(TAB).append("<layer name=\"objets\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
-
-        // Ajout de la matrice objet dans le String input (vide)
-        for(int i = hauteur - 1 ; i > -1 ; i--) {
-            input.append(TAB).append(TAB);
-            for(int j = 0 ; j < largeur  ; j++) {
-                if(objets.getCell(j, i) == null)
-                    input.append("0,");
+    }
+    
+    private String tileLayerToString(TiledMapTileLayer layer) {
+        StringBuilder str = new StringBuilder();
+        final int hauteurLayer = layer.getHeight();
+        final int largeurLayer = layer.getWidth();
+        final char TAB = (char) 9;
+        
+        for(int i = hauteurLayer - 1 ; i > -1 ; i--) {
+            for(int j = 0 ; j < largeurLayer  ; j++) {
+                if(layer.getCell(j, i) == null)
+                    str.append("0,");
                 else
-                    input.append(objets.getCell(j, i).getTile().getId()).append(",");
+                   str.append(layer.getCell(j, i).getTile().getId()).append(",");
             }
-            input.append("\n");
         }
-        input.delete(input.length()-2, input.length()); // On enlève la virgule en trop
-
-        input.append("\n").append(TAB).append(TAB).append("</data>\n").append(TAB).append("</layer>\n</map>");               
-
-        fichier.writeString(input.toString(), false, "UTF-8");
+        str.delete(str.length()-1, str.length()); // Suppression \n et ,
+        
+        return str.toString();        
     }
     
     private void saveMineur() {
         // On récupère les informations dans des variables
-        GameScreen gameScreen = (GameScreen) game.getScreen();
         Mineur mineur = gameScreen.getWorld().getMineur();
         String montantArgent = Integer.toString(mineur.getArgent());
         Vector2 vecteurPosition = mineur.getPosition();
         ArrayList<Slot> slots = mineur.getInventaire().getSlots();
-        
-        int idPartie = gameScreen.getIdPartie();
         
         try {
             StringWriter writer = new StringWriter();
@@ -149,8 +160,7 @@ public class SauvegardeHandler {
             
             xml.pop();
             
-            FileHandle file = new FileHandle("./map/" + idPartie + "/save.xml");
-            file.writeString(writer.toString(), false, "UTF-8");
+            Gdx.files.local("map/" + idPartie + "/save.xml").writeString(writer.toString(), false, "UTF-8");
                            
         } catch (IOException ex) {
             Gdx.app.error("SaveHandler", "Erreur Xml", ex);

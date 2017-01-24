@@ -49,7 +49,7 @@ public class ChargementPartie implements Screen {
         font.getData().setScale(1);
         font.setColor(Color.BROWN);
         Gdx.input.setInputProcessor(stage); // Le stage va s'occuper des E/S
-        createListe("./map/");
+        createListe("map");
         createBtn("Valider");
     }
   
@@ -111,7 +111,8 @@ public class ChargementPartie implements Screen {
         
         nomParties = new String[nomDossiers.length];
         for(int j = 0 ; j < nomDossiers.length ; j++) {
-            FileHandle folder = new FileHandle(text + nomDossiers[j].name());
+            FileHandle folder = new FileHandle(text + '/' + nomDossiers[j].name());
+            System.out.println("Folder : " + folder.path());
             FileHandle[] files = folder.list(new FilenameFilter() {
                 @Override
                 public boolean accept(File folder, String name) {

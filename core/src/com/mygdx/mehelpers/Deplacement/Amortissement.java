@@ -46,6 +46,7 @@ public class Amortissement extends Deplacement {
             mineur.setMoving(false); // Ne bouge pas
             mineur.setWasMoving(false); // On reset
             hasTarget = false; // Idem
+            return;
         }
         int x, y;
         switch(mineur.getDirectionMineur()) {
@@ -64,8 +65,6 @@ public class Amortissement extends Deplacement {
                         targetPosition.set((float) ((int) ( mineur.getPosition().x + 1) + (0.5 - mineur.getLARGEUR()/2)),  mineur.getPosition().y);
                         hasTarget = true;
                     }
-                    break;
-                default:
                     break;
         }
         velocite.x = (targetPosition.x - mineur.getPosition().x) * VITESSE_AMORTISSEMENT * Gdx.graphics.getDeltaTime();   

@@ -263,7 +263,6 @@ public class CellsHandler {
         Cell cell = new Cell();
         cell.setTile(tileSet.getTile(idBloc));
         // Tant qu'il y a un bloc a faire tomber
-        int compteur = 1;
         while(getObject(xBloc, yBloc) == idBloc){
             int yBlocCible = yBloc-1;
 
@@ -303,7 +302,7 @@ public class CellsHandler {
                 Vector2 positionLorsDuCassage = mineur.getPosition().cpy();
                 if(isCellSurfaceHere(xBloc, yBloc) && mineur.isMineurAuSol() && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
                     int idBlock = (Integer) getBloc(xBloc, yBloc);
-                    if(idBlock != idPierre) {                
+                    if(idBlock != idPierre && idBlock != idSolBase && idBlock != idMagasin) {                
                         if(idBlock == idDiamant) {
                             victory = true;
                             return;
@@ -319,7 +318,6 @@ public class CellsHandler {
                             new Timer().scheduleTask(new Timer.Task(){
                                 @Override
                                 public void run() {
-                                    System.out.println("CHUTE DU PILIER");
                                     faireTomberUnBlocObjetDeCoord(xBloc, yBloc+1, idPilier);
                                 }
                             }, 1);
@@ -327,7 +325,6 @@ public class CellsHandler {
                             new Timer().scheduleTask(new Timer.Task(){
                                 @Override
                                 public void run(){
-                                    System.out.println("CHUTE DE LA PIERRE");
                                     faireTomberUnBlocSurfaceDeCoord(xBloc, yBloc+1, idPierre);
                                 }
                             }, 2.5f);
@@ -371,13 +368,19 @@ public class CellsHandler {
         else return 0;
     }
     
-    private boolean tileIsInMap(int x, int y) {
+    public boolean coordIsInMap(int x, int y) {
         return x >= 0 && x <= mineur.getMap().getProperties().get("width", Integer.class)-1 && y >= 0 && x <= mineur.getMap().getProperties().get("height", Integer.class)-1;
     }
-
+    private boolean isBaseGenerable(int x, int y) {
+        BaseIntermediaire baseTmp = new BaseIntermediaire(x, y);
+        int xFin = x + (int) baseTmp.width - 1;
+        int yFin = y + (int) baseTmp.height - 2;
+        return layerSurface.getCell(xFin, yFin) != null;
+    }
+    
     // X et y = position du mineur ou il a appuyé
     public void genererBase(int x, int y) {
-        if(mineur.getInventaire().checkInventory(Item.BASE) > 0) {
+        if(mineur.getInventaire().checkInventory(Item.BASE) > 0 && isBaseGenerable(x, y)) {
             System.out.println("Création d'une base.");
             BaseIntermediaire base = new BaseIntermediaire(x, y);
             int x2 = x;
@@ -393,7 +396,15 @@ public class CellsHandler {
                     Cell cell = new Cell();
                     TiledMapTile tile = tileSet.getTile(BaseIntermediaire.CELLS[i][j]);
                     cell.setTile(tile);
-                    layerSurface.setCell(x2, y, cell);
+                    if(tile != null && tile.getId() == idMagasin) { // Si magasin
+                        layerSurface.setCell(x2, y, null);
+                        layerObjets.setCell(x2, y, cell);
+                    } else if (tile != null) { // Si non vide
+                        layerSurface.setCell(x2, y, cell);
+                    } else { // Le reste (le vide)
+                        layerSurface.setCell(x2, y, null);
+                        layerObjets.setCell(x2, y, null);
+                    }
                     x2++;
                 }
                 x2 = x;

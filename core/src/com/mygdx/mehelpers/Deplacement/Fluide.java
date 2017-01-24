@@ -114,10 +114,8 @@ public class Fluide extends Deplacement {
         if(mineur.isOnEchelle() && (Gdx.input.isKeyJustPressed(19)) && mineur.getCellsHandler().getBloc(x, y-1) ==0 && mineur.getEtatMineur().equals(Etat.Echelle) )
             velocite.y=0f;
 
-        System.out.println("Vitesse du mineur " + velocite.y);
         if(velocite.y <= -20f){
             if(velocite.y <= -20f){
-                System.out.println("boom t'es mort");
                 mineur.tombe();
             }
         }

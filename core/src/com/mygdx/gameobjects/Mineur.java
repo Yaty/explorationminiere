@@ -140,11 +140,13 @@ public class Mineur {
     public void teleportation(Vector2 posTp) {
         int distance = (int) Math.sqrt(Math.pow(posTp.x - position.x, 2) + Math.pow(posTp.y - position.y, 2));
         int coef = 50;
-        if(!cellsHandler.isCellSurfaceHere((int) posTp.x, (int) posTp.y) && argent >= coef*distance) {
-            position.set(posTp);
-            position.x += LARGEUR/2;
-            resetMineur();
-            argent -= coef * distance;
+        if(!cellsHandler.isCellSurfaceHere((int) posTp.x, (int) posTp.y) && cellsHandler.coordIsInMap((int) posTp.x, (int) posTp.y)) {
+            if (argent >= coef*distance) {
+                position.set(posTp);
+                position.x += LARGEUR/2;
+                resetMineur();
+                argent -= coef * distance;
+            }
         }
     }
     

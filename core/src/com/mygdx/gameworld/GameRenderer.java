@@ -1,5 +1,7 @@
 package com.mygdx.gameworld;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -47,6 +50,7 @@ public class GameRenderer {
     
     /**
      * @param gameWorld un objet gameWorld
+     * @param screenStage
      */
     public GameRenderer(final GameWorld gameWorld, Stage screenStage) {
         this.gameWorld = gameWorld;
@@ -91,6 +95,7 @@ public class GameRenderer {
             }
         });
         
+        
         stage.addActor(okTp);
         stage.addActor(tpList);
     }
@@ -108,6 +113,10 @@ public class GameRenderer {
     
     public void reload(TiledMap map) {
         tiledMapRenderer.setMap(map);
+    }
+    
+    private void dispose() {
+        stage.dispose();
     }
     
     /**

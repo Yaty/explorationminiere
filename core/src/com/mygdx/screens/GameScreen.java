@@ -44,16 +44,12 @@ public class GameScreen implements Screen {
         gameWorld = new GameWorld(cheminMap, chargement);
         
         String id = new String();
-        int i = 6;
-        
-        while(true) {
-            if(Character.isDigit(cheminMap.charAt(i))) {
-                id += cheminMap.charAt(i);
-                i++;
-            } else
-                break;            
+        int i = 4;
+        while(Character.isDigit(cheminMap.charAt(i))) {
+            id += cheminMap.charAt(i);
+            i++;
         }
-
+        
         idPartie = Integer.parseInt(id);
         stage = new Stage();
         gameRenderer = new GameRenderer(gameWorld, stage);

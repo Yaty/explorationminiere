@@ -5,6 +5,7 @@
  */
 package com.mygdx.mehelpers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import java.util.LinkedList;
 import java.util.Random;
@@ -20,8 +21,7 @@ public class GenerationAleatoire {
     private final char TAB = (char) 9; // TABulation
     private final Random random;
     private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis;
-    private int nbFeurs = 0;
-    private LinkedList<Integer> idFleurs;
+    private final LinkedList<Integer> idFleurs;
     
     public GenerationAleatoire(String blocsSurface[], String blocsObjet[], String chemin, int niveau) {
         this.blocsSurface = blocsSurface;
@@ -44,8 +44,10 @@ public class GenerationAleatoire {
             else if (blocsSurface[i].equals("lapis_ore.png")) idLapis = i + 1;
         }
         
-        for(int j = 0 ; j < blocsObjet.length ; j++) {
-            if(blocsObjet[j].startsWith("flower")) idFleurs.add(i);
+        for (String blocsObjet1 : blocsObjet) {
+            if (blocsObjet1.startsWith("flower")) {
+                idFleurs.add(i);
+            }
             i++;
         }
         generer();
@@ -111,7 +113,7 @@ public class GenerationAleatoire {
      * - 
      */
     private void generer() {
-        FileHandle fichier = new FileHandle(chemin);
+        FileHandle fichier = Gdx.files.local(chemin);
         int hauteur = getProfondeurGeneration();
         int largeur = (int) Math.round(0.4 * hauteur);
         StringBuilder input = new StringBuilder();
