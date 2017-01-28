@@ -7,6 +7,12 @@ package com.mygdx.mehelpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.graphics.Texture;
+import com.github.czyzby.noise4j.map.Grid;
+import com.github.czyzby.noise4j.map.generator.cellular.CellularAutomataGenerator;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -16,11 +22,12 @@ import java.util.Random;
  */
 public class GenerationAleatoire {
     private final String blocsSurface[], blocsObjet[];
+    private Grid caves, liquides;
     private final String chemin;
     private final int niveau;
     private final char TAB = (char) 9; // TABulation
     private final Random random;
-    private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis;
+    private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis, idLave;
     private final LinkedList<Integer> idFleurs;
     
     public GenerationAleatoire(String blocsSurface[], String blocsObjet[], String chemin, int niveau) {
@@ -44,12 +51,12 @@ public class GenerationAleatoire {
             else if (blocsSurface[i].equals("lapis_ore.png")) idLapis = i + 1;
         }
         
-        for (String blocsObjet1 : blocsObjet) {
-            if (blocsObjet1.startsWith("flower")) {
-                idFleurs.add(i);
-            }
+        for(int j = 0 ; j < blocsObjet.length ; j++) {
             i++;
+            if(blocsObjet[j].equals("lave.gif")) idLave = i;
+            else if (blocsObjet[j].startsWith("flower")) idFleurs.add(i);
         }
+
         generer();
     }
     
@@ -114,8 +121,12 @@ public class GenerationAleatoire {
      */
     private void generer() {
         FileHandle fichier = Gdx.files.local(chemin);
-        int hauteur = getProfondeurGeneration();
-        int largeur = (int) Math.round(0.4 * hauteur);
+        int hauteur = 200;//getProfondeurGeneration();
+        int largeur = 200;//(int) Math.round(0.4 * hauteur);
+        
+        caves = genererGrid(hauteur, largeur, 0.515f, 2, 13, 12, 15);
+        liquides = genererGrid(hauteur, largeur, 0.65f, 2, 13, 9, 6);
+        
         StringBuilder input = new StringBuilder();
         int iterateur = 1;
         input.append("<!-- Carte générée aléatoirement pour le niveau ").append(niveau).append(" -->\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<map version=\"1.0\" orientation=\"orthogonal\" renderorder=\"left-up\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\" level=\"").append(niveau).append("\" tilewidth=\"64\" tileheight=\"64\" nextobjectid=\"2\">\n");
@@ -158,9 +169,15 @@ public class GenerationAleatoire {
             input.append(TAB).append(TAB);
             for(int j = 0 ; j < largeur ; j++) {
                 if(positionDiamantX == j && positionDiamantY == i)
-                    input.append(idDiamant).append(",");
-                else
-                    input.append(genererIdentifiantBloc(i)).append(",");
+                    input.append(idDiamant).append(',');
+                else {
+                    if(caves.get(j, i) == 1f) {
+                        input.append(0).append(',');
+                    } else if (liquides.get(j, i) == 1f) {
+                        input.append(0).append(',');
+                    } else // Si on est pas une cave ou pas dans une zone de liquide = c'est un bloc
+                        input.append(genererIdentifiantBloc(i)).append(',');
+                }
             }
             input.append("\n");
         } 
@@ -174,7 +191,7 @@ public class GenerationAleatoire {
         for(int i = 0 ; i < 2 ; i++ ) {
             input.append(TAB).append(TAB);
             for(int j = 0 ; j < largeur ; j++) {
-               input.append("0,");
+                input.append("0,");
             }
             input.append("\n");
         }
@@ -188,7 +205,10 @@ public class GenerationAleatoire {
         for(int i = 3 ; i < hauteur ; i++) {
             input.append(TAB).append(TAB);
             for(int j = 0 ; j < largeur ; j++) {
-                input.append("0,");
+                if(liquides.get(j, i) == 1f)
+                    input.append(idLave).append(',');
+                else
+                    input.append("0,");
             }
             input.append("\n");
         }
@@ -208,6 +228,18 @@ public class GenerationAleatoire {
         int nb = rand.nextInt(99);
         if(nb < 20) return String.valueOf(idFleurs.get(rand.nextInt(idFleurs.size()-1))); // 20% de fleurs
         else return "0";
+    }
+
+    private Grid genererGrid(int hauteur, int largeur, float f, int i, int i0, int i1, int i2) {
+        final Grid grid = new Grid(largeur, hauteur);
+        final CellularAutomataGenerator cellularGenerator = new CellularAutomataGenerator();
+        cellularGenerator.setAliveChance(f);
+        cellularGenerator.setRadius(i);
+        cellularGenerator.setBirthLimit(i0);
+        cellularGenerator.setDeathLimit(i1);
+        cellularGenerator.setIterationsAmount(i2);
+        cellularGenerator.generate(grid);
+        return grid;
     }
     
 }
