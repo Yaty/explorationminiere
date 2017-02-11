@@ -2,8 +2,11 @@ package com.mygdx.gameworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.mygdx.gameobjects.Mineur;
+import com.mygdx.mehelpers.CellsHandler;
+import com.mygdx.mehelpers.FogHandler;
 import com.mygdx.minexploration.ChargementHandler;
 
 /**
@@ -15,6 +18,7 @@ public class GameWorld {
     private TiledMap map;
     private final Mineur mineur;
     private final String cheminMap;
+    private final FogHandler fogHandler;
 
     /**
      *
@@ -24,6 +28,7 @@ public class GameWorld {
     public GameWorld(String cheminMap, boolean chargement) {
         this.cheminMap = cheminMap;
         map = new TmxMapLoader().load(cheminMap);
+        fogHandler = new FogHandler((TiledMapTileLayer) map.getLayers().get("fog"), map.getTileSets().getTile(CellsHandler.idFog));
         if(!chargement)
             mineur = new Mineur(map);
         else {
@@ -43,6 +48,7 @@ public class GameWorld {
      */
     public void update(float delta) {
         mineur.update(delta);
+        fogHandler.handle(mineur.getPosition());
     }
     
     /**
@@ -62,6 +68,11 @@ public class GameWorld {
     public void reload() {
         map = new TmxMapLoader().load(cheminMap);
         mineur.reload(map);
+    }
+
+    public void dispose() {
+        map.dispose();
+        mineur.dispose();
     }
     
     

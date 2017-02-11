@@ -19,6 +19,13 @@ public class Mineur {
     private final float GRAVITE = -0.4f, LARGEUR, HAUTEUR, MAX_VELOCITE = 4f, SAUT_VELOCITE = 8f, ECHELLE_VELOCITE = 6f;
     private int argent;
     private final Inventaire inventaire, equipement;
+
+    public void dispose() {
+        cellsHandler.dispose();
+        if(deplacement != null) deplacement.dispose();
+        equipement.dispose();
+        inventaire.dispose();
+    }
         
     /**
      * Représente la direction du mineur
@@ -70,6 +77,7 @@ public class Mineur {
         isOnEchelle = false;
         wasMoving = false;
         cellsHandler = new CellsHandler(this);
+        //cellsHandler.faireTomberBlocEnSuspension();
         argent = 1000000;
         inventaire = new Inventaire();
         equipement = new Inventaire("pioche_bois");
@@ -86,6 +94,7 @@ public class Mineur {
         isOnEchelle = false;
         wasMoving = false;
         cellsHandler = new CellsHandler(this);
+        //cellsHandler.faireTomberBlocEnSuspension();
         this.argent = argent;
         this.position = position;
         this.inventaire = inventaire;

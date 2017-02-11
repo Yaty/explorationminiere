@@ -7,10 +7,6 @@ package com.mygdx.mehelpers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
-import com.badlogic.gdx.graphics.Texture;
 import com.github.czyzby.noise4j.map.Grid;
 import com.github.czyzby.noise4j.map.generator.cellular.CellularAutomataGenerator;
 import java.util.LinkedList;
@@ -27,7 +23,7 @@ public class GenerationAleatoire {
     private final int niveau;
     private final char TAB = (char) 9; // TABulation
     private final Random random;
-    private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis, idLave;
+    private int idDiamant, idGlowstone, idPierre, idHerbe, idTerre, idCharbon, idEmeraude, idOr, idFer, idLapis, idLave, idFog;
     private final LinkedList<Integer> idFleurs;
     
     public GenerationAleatoire(String blocsSurface[], String blocsObjet[], String chemin, int niveau) {
@@ -54,6 +50,7 @@ public class GenerationAleatoire {
         for(int j = 0 ; j < blocsObjet.length ; j++) {
             i++;
             if(blocsObjet[j].equals("lave.gif")) idLave = i;
+            else if (blocsObjet[j].equals("fog.gif")) idFog = i;
             else if (blocsObjet[j].startsWith("flower")) idFleurs.add(i);
         }
 
@@ -212,10 +209,32 @@ public class GenerationAleatoire {
             }
             input.append("\n");
         }
-        input.delete(input.length()-2, input.length()); // On enlève la virgule en trop
+        input.delete(input.length()-2, input.length()); // On enlève la virgule en trop        
 
-        input.append("\n").append(TAB).append(TAB).append("</data>\n").append(TAB).append("</layer>\n</map>");
+        input.append("\n").append(TAB).append(TAB).append("</data>\n").append(TAB).append("</layer>\n");
+        
+        // AJOUT DE LA MATRICE FOG
+        input.append("\n").append(TAB).append("<layer name=\"fog\" width=\"").append(largeur).append("\" height=\"").append(hauteur).append("\">\n").append(TAB).append(TAB).append("<data encoding=\"csv\">\n");
+        for(int i = 0 ; i < 3 ; i++ ) {
+            input.append(TAB).append(TAB);
+            for(int j = 0 ; j < largeur ; j++) {
+               input.append("0,");
+            }
+            input.append("\n");
+        }
+        
+        for(int i = 3 ; i < hauteur ; i++) {
+            input.append(TAB).append(TAB);
+            for(int j = 0 ; j < largeur ; j++) {
+                input.append(idFog).append(',');
+            }
+            input.append("\n");
+        }
+        input.delete(input.length()-2, input.length()); // On enlève la virgule en trop        
+        input.append("\n").append(TAB).append(TAB).append("</data>\n").append(TAB).append("</layer>\n");
 
+        
+        input.append("</map>");
         fichier.writeString(input.toString(), false, "UTF-8");
     }   
     
@@ -226,7 +245,7 @@ public class GenerationAleatoire {
     private String getIdFleur() {
         Random rand = new Random();
         int nb = rand.nextInt(99);
-        if(nb < 20) return String.valueOf(idFleurs.get(rand.nextInt(idFleurs.size()-1))); // 20% de fleurs
+        if(nb < 10) return String.valueOf(idFleurs.get(rand.nextInt(idFleurs.size()-1))); // 10% de fleurs
         else return "0";
     }
 

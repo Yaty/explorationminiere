@@ -29,8 +29,8 @@ public class CellsHandler {
     private final boolean[] cellsSAM; // CellsSurfaceAroundMineur
     public static int idPierre, idDiamant, idCharbon, idTerre, idEmeraude,
         idGlowstone, idOr, idHerbe, idFer, idLapis, idEchelle, idPilier,
-        idTNT, idMagasin, idSolBase;
-    private final TiledMapTileSets tileSet;
+        idTNT, idMagasin, idSolBase, idLave, idFog;
+    private final TiledMapTileSets tileSets;
     private final int rayonTNT = 1; 
     private LinkedList<BaseIntermediaire> bases;
     private final int HAUTEUR_SURFACE = 3;
@@ -46,22 +46,24 @@ public class CellsHandler {
         this.layerObjets =  (TiledMapTileLayer) mineur.getMap().getLayers().get("objets");
         this.cellsSAM = new boolean[4]; 
         bases = new LinkedList<BaseIntermediaire>();
-        tileSet = mineur.getMap().getTileSets();
-        idPierre = (Integer) mineur.getMap().getTileSets().getTileSet("stone.png").getProperties().get("firstgid");
-        idDiamant = (Integer) mineur.getMap().getTileSets().getTileSet("diamond_block.png").getProperties().get("firstgid");
-        idCharbon = (Integer) mineur.getMap().getTileSets().getTileSet("coal_ore.png").getProperties().get("firstgid");
-        idTerre = (Integer) mineur.getMap().getTileSets().getTileSet("dirt.png").getProperties().get("firstgid");
-        idEmeraude = (Integer) mineur.getMap().getTileSets().getTileSet("emerald_ore.png").getProperties().get("firstgid");
-        idGlowstone = (Integer) mineur.getMap().getTileSets().getTileSet("glowstone.png").getProperties().get("firstgid");
-        idOr = (Integer) mineur.getMap().getTileSets().getTileSet("gold_ore.png").getProperties().get("firstgid");
-        idHerbe = (Integer) mineur.getMap().getTileSets().getTileSet("grass_side.png").getProperties().get("firstgid");
-        idFer = (Integer) mineur.getMap().getTileSets().getTileSet("iron_ore.png").getProperties().get("firstgid");
-        idLapis = (Integer) mineur.getMap().getTileSets().getTileSet("lapis_ore.png").getProperties().get("firstgid");
-        idEchelle = (Integer) mineur.getMap().getTileSets().getTileSet("ladder.gif").getProperties().get("firstgid");
-        idPilier = (Integer) mineur.getMap().getTileSets().getTileSet("pilier.gif").getProperties().get("firstgid");
-        idTNT = (Integer) mineur.getMap().getTileSets().getTileSet("tnt.png").getProperties().get("firstgid");
-        idMagasin = (Integer) mineur.getMap().getTileSets().getTileSet("magasin.gif").getProperties().get("firstgid");
-        idSolBase = (Integer) mineur.getMap().getTileSets().getTileSet("solBase.png").getProperties().get("firstgid");
+        tileSets = mineur.getMap().getTileSets();
+        idPierre = (Integer) tileSets.getTileSet("stone.png").getProperties().get("firstgid");
+        idDiamant = (Integer) tileSets.getTileSet("diamond_block.png").getProperties().get("firstgid");
+        idCharbon = (Integer) tileSets.getTileSet("coal_ore.png").getProperties().get("firstgid");
+        idTerre = (Integer) tileSets.getTileSet("dirt.png").getProperties().get("firstgid");
+        idEmeraude = (Integer) tileSets.getTileSet("emerald_ore.png").getProperties().get("firstgid");
+        idGlowstone = (Integer) tileSets.getTileSet("glowstone.png").getProperties().get("firstgid");
+        idOr = (Integer) tileSets.getTileSet("gold_ore.png").getProperties().get("firstgid");
+        idHerbe = (Integer) tileSets.getTileSet("grass_side.png").getProperties().get("firstgid");
+        idFer = (Integer) tileSets.getTileSet("iron_ore.png").getProperties().get("firstgid");
+        idLapis = (Integer) tileSets.getTileSet("lapis_ore.png").getProperties().get("firstgid");
+        idEchelle = (Integer) tileSets.getTileSet("ladder.gif").getProperties().get("firstgid");
+        idPilier = (Integer) tileSets.getTileSet("pilier.gif").getProperties().get("firstgid");
+        idTNT = (Integer) tileSets.getTileSet("tnt.png").getProperties().get("firstgid");
+        idMagasin = (Integer) tileSets.getTileSet("magasin.gif").getProperties().get("firstgid");
+        idSolBase = (Integer) tileSets.getTileSet("solBase.png").getProperties().get("firstgid");
+        idLave = (Integer) tileSets.getTileSet("lave.gif").getProperties().get("firstgid");
+        idFog = (Integer) tileSets.getTileSet("fog.gif").getProperties().get("firstgid");
     }
     
     public void reload() {
@@ -138,7 +140,7 @@ public class CellsHandler {
     public void setLadder(int x,int y){
         if(!isLadderHere(x,y) && mineur.getInventaire().checkInventory(Item.ECHELLE) > 0){
             Cell cell = new Cell();
-            cell.setTile(tileSet.getTile(idEchelle));
+            cell.setTile(tileSets.getTile(idEchelle));
             layerObjets.setCell(x, y, cell);
             mineur.getInventaire().remove(Item.ECHELLE, 1);
         }else if(isLadderHere(x,y)){
@@ -150,7 +152,7 @@ public class CellsHandler {
     public void setPilier(int x, int y){
         if(mineur.getInventaire().checkInventory(Item.PILIER) > 0) {
             Cell cell = new Cell();
-            cell.setTile(tileSet.getTile(idPilier));
+            cell.setTile(tileSets.getTile(idPilier));
             layerObjets.setCell(x, y, cell);
             mineur.getInventaire().remove(Item.PILIER, 1);
         }
@@ -163,7 +165,7 @@ public class CellsHandler {
     public void setTNT(int x, int y){
         if(mineur.getInventaire().checkInventory(Item.TNT) > 0) {
             Cell cell = new Cell();
-            cell.setTile(tileSet.getTile(idTNT));
+            cell.setTile(tileSets.getTile(idTNT));
             if(!isCellSurfaceHere(x+1, y)) {
                 layerObjets.setCell(x+1, y, cell);
                 mineur.getInventaire().remove(Item.TNT, 1);
@@ -234,7 +236,7 @@ public class CellsHandler {
      */
     private void faireTomberUnBlocSurfaceDeCoord(int xBloc, int yBloc, int idBloc){ 
         Cell cell = new Cell();
-        cell.setTile(tileSet.getTile(idBloc));
+        cell.setTile(tileSets.getTile(idBloc));
         // Tant qu'il y a un bloc a faire tomber
         while(getBloc(xBloc, yBloc) == idBloc){
             int yBlocCible = yBloc-1;
@@ -261,7 +263,7 @@ public class CellsHandler {
     // Check si il y a une pierre au dessus, si oui on appele pierre tombe
     private void faireTomberUnBlocObjetDeCoord(int xBloc, int yBloc, int idBloc){
         Cell cell = new Cell();
-        cell.setTile(tileSet.getTile(idBloc));
+        cell.setTile(tileSets.getTile(idBloc));
         // Tant qu'il y a un bloc a faire tomber
         while(getObject(xBloc, yBloc) == idBloc){
             int yBlocCible = yBloc-1;
@@ -296,7 +298,7 @@ public class CellsHandler {
         mineur.setEtatMineur(Etat.Miner);
         int dureeMinage = calculDureeMinage();
         //System.out.println("Durée minage : " + dureeMinage);
-        new Timer().schedule(new Timer.Task() {
+        Timer.schedule(new Timer.Task() {
             @Override
             public void run() { // Fin du minage
                 Vector2 positionLorsDuCassage = mineur.getPosition().cpy();
@@ -381,7 +383,6 @@ public class CellsHandler {
     // X et y = position du mineur ou il a appuyé
     public void genererBase(int x, int y) {
         if(mineur.getInventaire().checkInventory(Item.BASE) > 0 && isBaseGenerable(x, y)) {
-            System.out.println("Création d'une base.");
             BaseIntermediaire base = new BaseIntermediaire(x, y);
             int x2 = x;
             y--; // pour faire genere la base une case plus bas (pour que le mineur soit à l'entrée.
@@ -394,7 +395,7 @@ public class CellsHandler {
                         }
                     }
                     Cell cell = new Cell();
-                    TiledMapTile tile = tileSet.getTile(BaseIntermediaire.CELLS[i][j]);
+                    TiledMapTile tile = tileSets.getTile(BaseIntermediaire.CELLS[i][j]);
                     cell.setTile(tile);
                     if(tile != null && tile.getId() == idMagasin) { // Si magasin
                         layerSurface.setCell(x2, y, null);
@@ -465,5 +466,32 @@ public class CellsHandler {
     public BaseIntermediaire getBaseById(int idSelect) {
         return bases.get(idSelect);
     }
+
+    /**
+     *
+     * @deprecated performance issue
+     */
+    @Deprecated
+    public void faireTomberBlocEnSuspension() {
+        final int hauteur = mineur.getMap().getProperties().get("width", Integer.class);
+        final int largeur = mineur.getMap().getProperties().get("height", Integer.class);
+        
+        for(int i = 0 ; i < largeur ; i++) {
+            for(int j = 0 ; j < hauteur ; j++) {
+                final Cell blocSurface = layerSurface.getCell(i, j);
+                final Cell blocObjet = layerObjets.getCell(i, j);
+                System.out.println(i + " " + j);
+                if(blocSurface != null) {
+                    final int idBlocSurface = blocSurface.getTile().getId();
+                    if(idBlocSurface == idPierre) faireTomberUnBlocSurfaceDeCoord(i, j, idBlocSurface);
+                } else if(blocObjet != null) {
+                    final int idBlocObjet = blocObjet.getTile().getId();
+                    if(idBlocObjet == idPilier || idBlocObjet == idTNT || idBlocObjet == idLave) faireTomberUnBlocObjetDeCoord(i, j, idBlocObjet);
+                }
+            }
+        }
+    }
+
+    public void dispose() {}
     
 }

@@ -1,9 +1,6 @@
 package com.mygdx.gameworld;
 
-import box2dLight.PointLight;
-import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -11,14 +8,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -38,11 +30,10 @@ public class GameRenderer {
     private final OrthographicCamera orthoCamera; // Caméra Orthographique
     private final OrthogonalTiledMapRenderer tiledMapRenderer; // Va dessiner la map
     private final float UNITE = 1/64f;
-    private final ShapeRenderer debugRenderer;
     private float runTime = 0;
     private final SpriteBatch spriteBatch;
     private static SelectBox<String> tpList;
-    private final BitmapFont etat, direction, deplacement, velocite, position, target, argent, tp;
+    private final BitmapFont etat, direction, deplacement, velocite, position, target, argent, tp, fps;
     private final NinePatch health, healthContainer;
     private final Skin skin;
     private final Stage stage;
@@ -60,8 +51,9 @@ public class GameRenderer {
         orthoCamera = new OrthographicCamera();
         orthoCamera.setToOrtho(false, 15, 15); // False pour y pointé vers le haut, les dimensions que la camera prend
         orthoCamera.update();
+        tiledMapRenderer.setView(orthoCamera);
         
-        debugRenderer = new ShapeRenderer();
+        //debugRenderer = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
         
         etat = new BitmapFont();
@@ -71,6 +63,7 @@ public class GameRenderer {
         position = new BitmapFont();
         target = new BitmapFont();
         argent = new BitmapFont();
+        fps = new BitmapFont();
 
         health = new NinePatch(AssetLoader.healthBarTexture);
         healthContainer = new NinePatch(AssetLoader.healthbarContainerTexture);
@@ -94,8 +87,7 @@ public class GameRenderer {
                 }
             }
         });
-        
-        
+                
         stage.addActor(okTp);
         stage.addActor(tpList);
     }
@@ -115,8 +107,20 @@ public class GameRenderer {
         tiledMapRenderer.setMap(map);
     }
     
-    private void dispose() {
-        stage.dispose();
+    public void dispose() {
+        argent.dispose();
+        //debugRenderer.dispose();
+        deplacement.dispose();
+        direction.dispose();
+        etat.dispose();
+        position.dispose();
+        fps.dispose();
+        skin.dispose();
+        spriteBatch.dispose();
+        target.dispose();
+        tiledMapRenderer.dispose();
+        tp.dispose();
+        velocite.dispose();
     }
     
     /**
@@ -125,28 +129,21 @@ public class GameRenderer {
      */
     public void render(float runTime) { // Une frame = un lancement de la méthode render()
         this.runTime = runTime;
-        // Gdx.app.log("GameRender", "FPS : " + 1/deltaTime);
         Gdx.gl.glClearColor(0, 0, 0, 1); // On vide l'écran, couleur noir
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        //float deltaTime = Gdx.graphics.getDeltaTime();
-        //gameWorld.getMineur().update(deltaTime);
-        
-        orthoCamera.position.x = gameWorld.getMineur().getPosition().x;
-        orthoCamera.position.y = gameWorld.getMineur().getPosition().y;
+        orthoCamera.position.x = gameWorld.getMineur().getPosition().x + gameWorld.getMineur().getLARGEUR()/2;
+        orthoCamera.position.y = gameWorld.getMineur().getPosition().y + gameWorld.getMineur().getHAUTEUR()/2;
         orthoCamera.update();
         
         renderBackground();
         tiledMapRenderer.setView(orthoCamera);
         tiledMapRenderer.render();
-
         renderMineur();
         renderGUI();
         
         stage.act();
         stage.draw();
-        //if(InputHandler.keys[30]) 
-        //renderDebug(); // Si on appui sur B, on affiche le debug
     }
     
     private void renderBackground() {
@@ -167,8 +164,6 @@ public class GameRenderer {
         else
             frame = (TextureRegion) AssetLoader.debout.getKeyFrame(runTime);
         
-        //Gdx.app.log("renderMineur", "x : " + gameWorld.getMineur().getPosition().x + " y : " + gameWorld.getMineur().getPosition().y);
-        
         Batch batcher = tiledMapRenderer.getBatch();
         batcher.begin();
         if(gameWorld.getMineur().isTeteVersLaDroite())
@@ -184,45 +179,8 @@ public class GameRenderer {
         health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth(), AssetLoader.healthBarTexture.getHeight());
         argent.draw(spriteBatch, "Argent : " + gameWorld.getMineur().getArgent(), 800, 25);
         tp.draw(spriteBatch, "Téléportation : ", Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 20);
+        fps.draw(spriteBatch, "FPS : " + Math.floor(1/Gdx.graphics.getDeltaTime()), 5, Gdx.graphics.getHeight()-10);
         spriteBatch.end();
-    }
-    
-    /**
-     * Va rendre le mode debug
-     * Ajout des lignes jaunes pour définir les blocs
-     * Ajout du rectangle rouge pour définir le mineur
-     * @deprecated A ne utiliser que pour des cartes de taille petite
-     */       
-    @Deprecated
-    private void renderDebug () {      
-        spriteBatch.begin();
-        etat.draw(spriteBatch, "Etat : " + gameWorld.getMineur().getEtatMineur().name(), 5, 950);
-        direction.draw(spriteBatch, "Direction : " + gameWorld.getMineur().getDirectionMineur().name(), 5, 935);
-        if(gameWorld.getMineur().getTypeDeplacement() != null) {
-            deplacement.draw(spriteBatch, "Déplacement : " + gameWorld.getMineur().getTypeDeplacement().getClass().getSimpleName(), 5, 920);
-            if("Ammortissement".equals(gameWorld.getMineur().getTypeDeplacement().toString()))
-                target.draw(spriteBatch, "Target : " + gameWorld.getMineur().getDeplacement().getTargetPosition().toString(), 5, 905);
-            velocite.draw(spriteBatch, "Vélocité : " + gameWorld.getMineur().getDeplacement().getVelocite().toString(), 150, 950);
-        }
-        position.draw(spriteBatch, "Position : " + gameWorld.getMineur().getPosition().toString(), 150, 935);
-        spriteBatch.end();
-        
-        debugRenderer.setProjectionMatrix(orthoCamera.combined);
-        debugRenderer.begin(ShapeType.Line);
-        debugRenderer.setColor(Color.RED);
-        debugRenderer.rect(gameWorld.getMineur().getPosition().x, gameWorld.getMineur().getPosition().y, gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getHAUTEUR());
-        debugRenderer.setColor(Color.YELLOW);
-        TiledMapTileLayer layer = (TiledMapTileLayer) gameWorld.getMap().getLayers().get("surface");
-        for (int y = 0; y <= layer.getHeight(); y++) {
-                for (int x = 0; x <= layer.getWidth(); x++) {
-                        Cell cell = layer.getCell(x, y);
-                        if (cell != null) {
-                                if (orthoCamera.frustum.boundsInFrustum(x + 0.5f, y + 0.5f, 0, 1, 1, 0))
-                                        debugRenderer.rect(x, y, 1, 1);
-                        }
-                }
-        }
-        debugRenderer.end();
     }
     
     public GameWorld getGameWorld() {

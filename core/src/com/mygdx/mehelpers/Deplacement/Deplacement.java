@@ -72,4 +72,8 @@ public abstract class Deplacement {
 
     public abstract Vector2 getTargetPosition();
 
+    public void dispose() {
+        collision.dispose();
+    }
+
 }

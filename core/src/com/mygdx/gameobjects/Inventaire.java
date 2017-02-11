@@ -86,4 +86,6 @@ public class Inventaire {
 
         return null;
     }
+
+    public void dispose() {}
 }

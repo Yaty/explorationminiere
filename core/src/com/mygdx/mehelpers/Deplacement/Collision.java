@@ -157,4 +157,6 @@ public class Collision {
                 }
         }
     } 
+
+    public void dispose() {}
 }

@@ -7,6 +7,7 @@ package com.mygdx.minexploration;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
@@ -52,6 +53,7 @@ public class SauvegardeHandler {
         TiledMap map = gameScreen.getWorld().getMap();
         TiledMapTileLayer surface = (TiledMapTileLayer) map.getLayers().get("surface");
         TiledMapTileLayer objets = (TiledMapTileLayer) map.getLayers().get("objets");
+        TiledMapTileLayer fog = (TiledMapTileLayer) map.getLayers().get("fog");
         int largeur = map.getProperties().get("width", Integer.class);
         int hauteur = map.getProperties().get("height", Integer.class);
         
@@ -70,7 +72,7 @@ public class SauvegardeHandler {
                 .pop();
             }
             
-            final String matriceSurfaces = tileLayerToString(surface), matriceObjets = tileLayerToString(objets);
+            final String matriceSurfaces = tileLayerToString(surface), matriceObjets = tileLayerToString(objets), matriceFog = tileLayerToString(fog);
             
             racine
             .element("layer").attribute("name", "surface").attribute("width", largeur).attribute("height", hauteur)
@@ -81,6 +83,11 @@ public class SauvegardeHandler {
             .element("layer").attribute("name", "objets").attribute("width", largeur).attribute("height", hauteur)
                 .element("data").attribute("encoding", "csv")
                     .text(matriceObjets)
+                .pop()
+            .pop()
+            .element("layer").attribute("name", "fog").attribute("width", largeur).attribute("height", hauteur)
+                .element("data").attribute("encoding", "csv")
+                    .text(matriceFog)
                 .pop()
             .pop();
             
@@ -97,14 +104,16 @@ public class SauvegardeHandler {
         StringBuilder str = new StringBuilder();
         final int hauteurLayer = layer.getHeight();
         final int largeurLayer = layer.getWidth();
-        final char TAB = (char) 9;
         
         for(int i = hauteurLayer - 1 ; i > -1 ; i--) {
             for(int j = 0 ; j < largeurLayer  ; j++) {
                 if(layer.getCell(j, i) == null)
                     str.append("0,");
-                else
-                   str.append(layer.getCell(j, i).getTile().getId()).append(",");
+                else {
+                    TiledMapTile tile = layer.getCell(j, i).getTile();
+                    if(tile != null)
+                        str.append(tile.getId()).append(",");
+                }
             }
         }
         str.delete(str.length()-1, str.length()); // Suppression \n et ,
