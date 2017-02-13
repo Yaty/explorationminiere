@@ -7,7 +7,7 @@ package com.mygdx.gameobjects;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.mehelpers.CellsHandler;
+import com.mygdx.mehelpers.handlers.handlers.MapHandler;
 
 public class BaseIntermediaire extends Rectangle {    
     // XXXXX
@@ -17,13 +17,13 @@ public class BaseIntermediaire extends Rectangle {
     public static final int[][] CELLS =
     {
         //SOL
-        {CellsHandler.idSolBase, CellsHandler.idSolBase, CellsHandler.idSolBase, CellsHandler.idSolBase, CellsHandler.idSolBase},
+        {MapHandler.idSolBase, MapHandler.idSolBase, MapHandler.idSolBase, MapHandler.idSolBase, MapHandler.idSolBase},
         // Air
-        {0, 0, 0, CellsHandler.idMagasin, CellsHandler.idSolBase},
+        {0, 0, 0, MapHandler.idMagasin, MapHandler.idSolBase},
         // Air
-        {CellsHandler.idSolBase, 0, 0, 0, CellsHandler.idSolBase},
+        {MapHandler.idSolBase, 0, 0, 0, MapHandler.idSolBase},
         // Plafond
-        {CellsHandler.idSolBase, CellsHandler.idSolBase, CellsHandler.idSolBase, CellsHandler.idSolBase, CellsHandler.idSolBase}
+        {MapHandler.idSolBase, MapHandler.idSolBase, MapHandler.idSolBase, MapHandler.idSolBase, MapHandler.idSolBase}
     };
     
     public BaseIntermediaire(int x0, int y0) {

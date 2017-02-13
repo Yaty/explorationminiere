@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mygdx.minexploration;
+package com.mygdx.minexploration.handlers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.mygdx.gameobjects.Mineur;
 import com.mygdx.mehelpers.inventaire.Slot;
+import com.mygdx.minexploration.MEGame;
 import com.mygdx.screens.GameScreen;
 import java.io.IOException;
 import java.io.StringWriter;

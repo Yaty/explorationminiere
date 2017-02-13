@@ -71,7 +71,7 @@ public class ChargementPartie implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
-                    game.loadingGame(Integer.parseInt(nomDossiers[sb.getSelectedIndex()].name()), nomParties[sb.getSelectedIndex()]);
+                    game.chargerUnePartie(Integer.parseInt(nomDossiers[sb.getSelectedIndex()].name()), nomParties[sb.getSelectedIndex()]);
                 };
         });
         stage.addActor(valider);

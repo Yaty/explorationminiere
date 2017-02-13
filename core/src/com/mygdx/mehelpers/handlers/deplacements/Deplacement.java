@@ -1,52 +1,47 @@
 
-package com.mygdx.mehelpers.Deplacement;
+package com.mygdx.mehelpers.handlers.deplacements;
 
+import com.mygdx.mehelpers.handlers.handlers.CollisionHandler;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Mineur;
+import com.mygdx.mehelpers.handlers.handlers.MapHandler;
 
 /**
  * Classe abstraite pour gérer les déplacements
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public abstract class Deplacement {
-    protected Mineur mineur;
-    protected Collision collision;
-    protected Vector2 velocite;
+    public static float GRAVITE = -0.4f, MAX_VELOCITE = 4f, SAUT_VELOCITE = 8f, ECHELLE_VELOCITE = 6f;
+    protected CollisionHandler collision;
+    public MapHandler mapHandler;
+    protected Vector2 velocite, positionMineur;
     
     /**
-     * @param mineur objet mineurr
+     * @param positionMineur
+     * @param mapHandler
      */
-    public Deplacement(Mineur mineur) {
-        this.mineur = mineur;
+    public Deplacement(MapHandler mapHandler, Vector2 positionMineur) {
         velocite = new Vector2(0,0);
-        collision = new Collision(this);
+        this.positionMineur = positionMineur;
+        this.mapHandler = mapHandler;
+        collision = new CollisionHandler(this);
     }
     
-    /**
-     * @return le mineur
-     */
-    public Mineur getMineur() {
-        return mineur;
-    }
-
-    /**
-     * @param mineur le mineur
-     */
-    public void setMineur(Mineur mineur) {
-        this.mineur = mineur;
+    public Vector2 getPositionMineur() {
+        return positionMineur;
     }
 
     /**
      * @return l'objet collision
      */
-    public Collision getCollision() {
+    public CollisionHandler getCollision() {
         return collision;
     }
 
     /**
      * @param collision un objet collision
      */
-    public void setCollision(Collision collision) {
+    public void setCollision(CollisionHandler collision) {
         this.collision = collision;
     }
 

@@ -119,7 +119,7 @@ public class ChoosePropertiesScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
                     if(!nomPartie.getText().isEmpty())
-                        game.newGame(getNumPartie(), nomPartie.getText());
+                        game.nouvellePartie(getNumPartie(), nomPartie.getText());
                 };
         });
         stage.addActor(valider);

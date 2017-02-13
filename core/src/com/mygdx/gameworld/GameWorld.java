@@ -5,21 +5,21 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.mygdx.gameobjects.Mineur;
-import com.mygdx.mehelpers.CellsHandler;
-import com.mygdx.mehelpers.FogHandler;
-import com.mygdx.minexploration.ChargementHandler;
+import com.mygdx.mehelpers.handlers.handlers.MapHandler;
+import com.mygdx.mehelpers.handlers.Handlers;
+import com.mygdx.minexploration.handlers.ChargementHandler;
 
 /**
  *
  * @author Hugo
  */
 public class GameWorld {
-    
+    public static int MAP_WIDTH, MAP_HEIGHT;
     private TiledMap map;
     private final Mineur mineur;
     private final String cheminMap;
-    private final FogHandler fogHandler;
-
+    private final Handlers handlers;
+    
     /**
      *
      * @param cheminMap
@@ -28,18 +28,20 @@ public class GameWorld {
     public GameWorld(String cheminMap, boolean chargement) {
         this.cheminMap = cheminMap;
         map = new TmxMapLoader().load(cheminMap);
-        fogHandler = new FogHandler((TiledMapTileLayer) map.getLayers().get("fog"), map.getTileSets().getTile(CellsHandler.idFog));
+        MAP_WIDTH = map.getProperties().get("width", Integer.class);
+        MAP_HEIGHT = map.getProperties().get("height", Integer.class);
         if(!chargement)
-            mineur = new Mineur(map);
+            mineur = new Mineur(MapHandler.getSpawnPosition()); // manque la position de départ
         else {
             int id = Integer.parseInt(cheminMap.replaceAll("[\\D]", ""));
             if(Gdx.files.internal("./map/" + id + "/save.xml").exists()) {
                 ChargementHandler chargeur = new ChargementHandler(id);
-                mineur = new Mineur(map, chargeur.getArgent(), chargeur.getPosition(), chargeur.getInventaire(), chargeur.getEquipement(), chargeur.getHealth());
+                mineur = new Mineur(chargeur.getArgent(), chargeur.getPosition(), chargeur.getInventaire(), chargeur.getEquipement(), chargeur.getHealth());
             } else {
-                mineur = new Mineur(map);
+                mineur = new Mineur(MapHandler.getSpawnPosition());
             }
         }
+        handlers = new Handlers(mineur, map);
     }
 
     /**
@@ -48,7 +50,7 @@ public class GameWorld {
      */
     public void update(float delta) {
         mineur.update(delta);
-        fogHandler.handle(mineur.getPosition());
+        handlers.handle();
     }
     
     /**
@@ -67,13 +69,20 @@ public class GameWorld {
 
     public void reload() {
         map = new TmxMapLoader().load(cheminMap);
-        mineur.reload(map);
+        MAP_WIDTH = map.getProperties().get("width", Integer.class);
+        MAP_HEIGHT = map.getProperties().get("height", Integer.class);        
+        mineur.reload();
+        handlers.reload();
     }
 
     public void dispose() {
         map.dispose();
         mineur.dispose();
+        // handlers.dispose(); ??
     }
-    
+
+    public Handlers getHandlers() {
+        return handlers;
+    }
     
 }

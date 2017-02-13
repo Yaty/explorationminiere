@@ -5,7 +5,7 @@
  */
 package com.mygdx.mehelpers.inventaire;
 
-import com.mygdx.gameobjects.Item;
+import com.mygdx.gameobjects.mineurobjects.Item;
 import java.util.ArrayList;
 
 /**

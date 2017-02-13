@@ -2,6 +2,7 @@ package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
 import com.mygdx.mehelpers.GenerationAleatoire;
+import com.mygdx.mehelpers.handlers.handlers.InputHandler;
 import com.mygdx.mehelpers.inventaire.InventoryActor;
 import com.mygdx.minexploration.MEGame;
 import java.io.File;
@@ -30,7 +32,7 @@ public class GameScreen implements Screen {
     private MenuPause menuPause;
 
     public static Stage stage;
-    private int idPartie;
+    private final int idPartie;
     
     /**
      * Lance le jeu au niveau 1
@@ -68,15 +70,19 @@ public class GameScreen implements Screen {
         Gdx.app.log("GameScreen", "show appelé");
 
         // On utilise un "hub" qui va switcher entre nos classes qui gères les entrées -> pouvoir recuperer les clics du stage et les entrées du jeu
-        Gdx.input.setInputProcessor(stage);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(new InputHandler());
+        
+        Gdx.input.setInputProcessor(multiplexer);
         
         stage.addListener(new InputListener() {
             @Override
             public boolean scrolled(InputEvent event, float x, float y, int amount) {
                 if(gameRenderer.getCamera().zoom + amount * 0.05f > 1 && gameRenderer.getCamera().zoom + amount * 0.05f < 10) {
                     gameRenderer.getCamera().zoom += amount * 0.05f;
-                    return true;
-                } return false;
+                }
+                return true;
             }
         });
 
@@ -105,9 +111,9 @@ public class GameScreen implements Screen {
         if(!pause) {
             gameWorld.update(delta);
             gameRenderer.render(gameWorld.getMineur().getRunTime());
-            if(gameWorld.getMineur().getCellsHandler().isVictory()) {
-                newLevel();
-                gameWorld.getMineur().getCellsHandler().setVictory(false);
+            if(MEGame.VICTOIRE) {
+                MEGame.VICTOIRE = false;
+                passerAuProchainNiveau();
             }
         }
         // P ou ESC
@@ -126,7 +132,7 @@ public class GameScreen implements Screen {
         stage.draw();
     }
     
-    public void newLevel() {
+    public void passerAuProchainNiveau() {
         // Remplissage du dossier
         // Création du dossier du niveau level
         File dir = new File("./map/");

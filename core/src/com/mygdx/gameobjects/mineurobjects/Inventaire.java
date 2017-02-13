@@ -1,4 +1,4 @@
-package com.mygdx.gameobjects;
+package com.mygdx.gameobjects.mineurobjects;
 
 import java.util.ArrayList;
 import com.mygdx.mehelpers.inventaire.Slot;

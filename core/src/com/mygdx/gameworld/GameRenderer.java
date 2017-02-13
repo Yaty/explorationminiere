@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.gameobjects.BaseIntermediaire;
+import com.mygdx.gameobjects.Mineur;
 import com.mygdx.mehelpers.AssetLoader;
 import java.util.LinkedList;
 
@@ -81,9 +82,10 @@ public class GameRenderer {
             public void clicked(InputEvent event, float x, float y) {
                 int idSelect = tpList.getSelectedIndex();
                 if(idSelect != -1) {
-                    Vector2 posTp = gameWorld.getMineur().getCellsHandler().getBaseById(idSelect).getPos();
+                    Vector2 posTp = gameWorld.getHandlers().getMapHandler().getBaseById(idSelect).getPos();
                     posTp.x += 3;
-                    gameWorld.getMineur().teleportation(posTp);
+                    if(!gameWorld.getHandlers().getMapHandler().isCellSurfaceHere((int) posTp.x, (int) posTp.y) && gameWorld.getHandlers().getMapHandler().coordIsInMap((int) posTp.x, (int) posTp.y))
+                        gameWorld.getMineur().teleportation(posTp);
                 }
             }
         });
@@ -132,8 +134,8 @@ public class GameRenderer {
         Gdx.gl.glClearColor(0, 0, 0, 1); // On vide l'écran, couleur noir
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        orthoCamera.position.x = gameWorld.getMineur().getPosition().x + gameWorld.getMineur().getLARGEUR()/2;
-        orthoCamera.position.y = gameWorld.getMineur().getPosition().y + gameWorld.getMineur().getHAUTEUR()/2;
+        orthoCamera.position.x = gameWorld.getMineur().getPosition().x + Mineur.LARGEUR/2;
+        orthoCamera.position.y = gameWorld.getMineur().getPosition().y + Mineur.HAUTEUR/2;
         orthoCamera.update();
         
         renderBackground();
@@ -157,26 +159,26 @@ public class GameRenderer {
      */       
     private void renderMineur() {
         TextureRegion frame;
-        if("Deplacement".equals(gameWorld.getMineur().getEtatMineur().name()))
+        if("Deplacement".equals(Mineur.etat.name()))
             frame = (TextureRegion) AssetLoader.marcher.getKeyFrame(runTime);
-        else if ("Haut".equals(gameWorld.getMineur().getDirectionMineur().name()))
+        else if ("Haut".equals(Mineur.dirMineur.name()))
             frame = (TextureRegion) AssetLoader.sauter.getKeyFrame(runTime);
         else
             frame = (TextureRegion) AssetLoader.debout.getKeyFrame(runTime);
         
         Batch batcher = tiledMapRenderer.getBatch();
         batcher.begin();
-        if(gameWorld.getMineur().isTeteVersLaDroite())
-            batcher.draw(frame, gameWorld.getMineur().getPosition().x, gameWorld.getMineur().getPosition().y, gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getHAUTEUR());
+        if(Mineur.teteVersLaDroite)
+            batcher.draw(frame, gameWorld.getMineur().getPosition().x, gameWorld.getMineur().getPosition().y, Mineur.LARGEUR, Mineur.HAUTEUR);
         else
-            batcher.draw(frame, gameWorld.getMineur().getPosition().x + gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getPosition().y, -gameWorld.getMineur().getLARGEUR(), gameWorld.getMineur().getHAUTEUR());
+            batcher.draw(frame, gameWorld.getMineur().getPosition().x + Mineur.LARGEUR, gameWorld.getMineur().getPosition().y, -Mineur.LARGEUR, Mineur.HAUTEUR);
         batcher.end();
     }
     
     private void renderGUI(){
         spriteBatch.begin();
         healthContainer.draw(spriteBatch, 5, 5, AssetLoader.healthbarContainerTexture.getWidth(), AssetLoader.healthbarContainerTexture.getHeight());
-        health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth(), AssetLoader.healthBarTexture.getHeight());
+        health.draw(spriteBatch, 10, 10, (Integer)AssetLoader.healthBarTexture.getWidth()*gameWorld.getMineur().getHealth().getHealth(), AssetLoader.healthBarTexture.getHeight());
         argent.draw(spriteBatch, "Argent : " + gameWorld.getMineur().getArgent(), 800, 25);
         tp.draw(spriteBatch, "Téléportation : ", Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 20);
         fps.draw(spriteBatch, "FPS : " + Math.floor(1/Gdx.graphics.getDeltaTime()), 5, Gdx.graphics.getHeight()-10);

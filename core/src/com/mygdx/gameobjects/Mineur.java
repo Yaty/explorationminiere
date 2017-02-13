@@ -1,31 +1,29 @@
 package com.mygdx.gameobjects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.mygdx.gameobjects.mineurobjects.Inventaire;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.gameobjects.mineurobjects.Money;
 import com.mygdx.mehelpers.AssetLoader;
-import com.mygdx.mehelpers.CellsHandler;
-import com.mygdx.mehelpers.Deplacement.Amortissement;
-import com.mygdx.mehelpers.Deplacement.Deplacement;
-import com.mygdx.mehelpers.Deplacement.Fluide;
+import com.mygdx.gameobjects.mineurobjects.Health;
+import com.mygdx.mehelpers.handlers.handlers.InputHandler;
 
 /**
  * Classe représentant le personnage du Mineur
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Mineur {
-    private final float GRAVITE = -0.4f, LARGEUR, HAUTEUR, MAX_VELOCITE = 4f, SAUT_VELOCITE = 8f, ECHELLE_VELOCITE = 6f;
-    private int argent;
+    public static boolean DPL_FLUIDE = false, DPL_AMORTISSEMENT = false;
+    public static float LARGEUR, HAUTEUR;
+    private final Money argent;
     private final Inventaire inventaire, equipement;
-
-    public void dispose() {
-        cellsHandler.dispose();
-        if(deplacement != null) deplacement.dispose();
-        equipement.dispose();
-        inventaire.dispose();
-    }
+    public static Etat etat;
+    public static Direction dirMineur;
+    private final Vector2 position;
+    private float runTime;
+    public static boolean teteVersLaDroite, mineurAuSol, wasMoving, isOnEchelle, MINEUR_BOUGE;
+    public static int HAUTEUR_CHUTE; // a faire
+    private final float UNITE = 1/64f;
+    private final Health health;
         
     /**
      * Représente la direction du mineur
@@ -48,114 +46,70 @@ public class Mineur {
         Sauter,
         Echelle
     };
-    private Etat etat;
-    private Direction dirMineur;
-    private final Vector2 position;
-    private float runTime;
-    private boolean teteVersLaDroite, mineurAuSol, moving, wasMoving, isOnEchelle;
-    private final float UNITE = 1/64f;
-    private TiledMap map;
-    private final CellsHandler cellsHandler;
-    private Deplacement deplacement;
-    private boolean poserEchelle = true;
-    private float health = 1f;
     
     /**
      * Constructeur du Mineur
      * Initialise toutes les variables et instancie CellsHandler
-     * @param map la carte
+     * @param positionSpawn
      */
-    public Mineur(TiledMap map) {
-        LARGEUR = UNITE * AssetLoader.regions[0].getRegionWidth();
-        HAUTEUR = UNITE * AssetLoader.regions[0].getRegionHeight();
-        etat = Etat.Arret;
-        dirMineur = Direction.Arret;
-        this.map = map;
-        position = new Vector2(getXDepart(), getYDepart());
+    public Mineur(Vector2 positionSpawn) {
+        resetMineur();
+        this.position = positionSpawn;
         runTime = 0f;
-        mineurAuSol = teteVersLaDroite = true;
-        isOnEchelle = false;
-        wasMoving = false;
-        cellsHandler = new CellsHandler(this);
-        //cellsHandler.faireTomberBlocEnSuspension();
-        argent = 1000000;
-        inventaire = new Inventaire();
-        equipement = new Inventaire("pioche_bois");
+        this.argent = new Money(0);
+        this.inventaire = new Inventaire();
+        this.equipement = new Inventaire("pioche_bois");
+        this.health = new Health();
     }
     
-    public Mineur(TiledMap map, int argent, Vector2 position, Inventaire inventaire, Inventaire equipement, float health) {
-        LARGEUR = UNITE * AssetLoader.regions[0].getRegionWidth();
-        HAUTEUR = UNITE * AssetLoader.regions[0].getRegionHeight();
-        etat = Etat.Arret;
-        dirMineur = Direction.Arret;
-        this.map = map;   
+    public Mineur(int argent, Vector2 position, Inventaire inventaire, Inventaire equipement, float health) {
+        resetMineur();
         runTime = 0f;
-        mineurAuSol = teteVersLaDroite = true;
-        isOnEchelle = false;
-        wasMoving = false;
-        cellsHandler = new CellsHandler(this);
-        //cellsHandler.faireTomberBlocEnSuspension();
-        this.argent = argent;
+        this.argent = new Money(argent);
         this.position = position;
         this.inventaire = inventaire;
         this.equipement = equipement;
-        this.health = health;
+        this.health = new Health(health);
     }
     
-    /**
-     * @return La coordonnée en X du mineur au départ du jeu
-     */
-    private float getXDepart() {
-        TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get("surface");
-        return layer.getWidth()/2 + LARGEUR/2;
-    }
-    
-    public void setEtatMineur(Etat etat) {
-        this.etat = etat;
-    }
-
-    public void gestionArgent(int id) {
-        if (id == CellsHandler.idDiamant) argent += 500;
-        else if (id == CellsHandler.idCharbon) argent += 10;
-        else if (id == CellsHandler.idTerre) argent++;
-        else if (id == CellsHandler.idEmeraude) argent += 100;
-        else if (id == CellsHandler.idGlowstone) argent += 10;
-        else if (id == CellsHandler.idOr) argent += 50;
-        else if (id == CellsHandler.idHerbe) argent++;
-        else if (id == CellsHandler.idFer) argent += 30;
-        else if (id == CellsHandler.idLapis) argent += 80;
+    public void dispose() {
+        equipement.dispose();
+        inventaire.dispose();
     }
 
     public int getArgent() {
-        return argent;
-    }
-
-    public void reload(TiledMap map) {
-        this.map = map;
-        position.set(getXDepart(), getYDepart()); 
-        resetMineur();
-        cellsHandler.reload();
+        return argent.getArgent();
     }
     
-    public void resetMineur() {
+    public void recolterArgent(int idBlock) {
+        argent.recolterArgent(idBlock);
+    }
+    
+    public void retirerArgent(int somme) {
+        argent.retirer(somme);
+    }
+
+    public void reload() {
+        resetMineur();
+    }
+    
+    private void resetMineur() {
+        LARGEUR = UNITE * AssetLoader.regions[0].getRegionWidth();
+        HAUTEUR = UNITE * AssetLoader.regions[0].getRegionHeight();
         etat = Etat.Arret;
         dirMineur = Direction.Arret;
         mineurAuSol = teteVersLaDroite = true;
-        isOnEchelle = false;
-        wasMoving = false;
-        deplacement = new Fluide(this);
+        DPL_AMORTISSEMENT = DPL_FLUIDE = wasMoving = isOnEchelle = false;
     }
 
     public void teleportation(Vector2 posTp) {
         int distance = (int) Math.sqrt(Math.pow(posTp.x - position.x, 2) + Math.pow(posTp.y - position.y, 2));
         int coef = 50;
-        if(!cellsHandler.isCellSurfaceHere((int) posTp.x, (int) posTp.y) && cellsHandler.coordIsInMap((int) posTp.x, (int) posTp.y)) {
-            if (argent >= coef*distance) {
-                position.set(posTp);
-                position.x += LARGEUR/2;
-                resetMineur();
-                argent -= coef * distance;
-            }
+        if (argent.getArgent() >= coef*distance) {
+            position.set(posTp);
+            position.x += LARGEUR/2;
+            resetMineur();
+            argent.retirer(coef * distance);
         }
     }
     
@@ -163,82 +117,36 @@ public class Mineur {
         return inventaire;
     }
     
-    
-     /**
-     * @return La coordonnée en Y du mineur au départ du jeu
-     */   
-    private float getYDepart() {
-        TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get("surface");
-        return layer.getHeight()-3; 
+    public Health getHealth(){
+        return health;
     }
     
-    /**
-     * @return la valeur gravité.
-     */
-    public float getGRAVITE() {
-        return GRAVITE;
+    public void respawn(Vector2 spawnPos){
+        position.x = spawnPos.x;
+        position.y = spawnPos.y;
     }
     
-    public float getHealth(){
-        return this.health;
-    }
-    
-    public void setHealth(float health){
-        this.health=health;
-    }
-    
-    /**
-     * @return la variable moving
-     */
-    public boolean isMoving() {
-        return moving;
-    }
-    
-    public float getVelociteMaxEchelle() {
-        return ECHELLE_VELOCITE;
-    }
-    
-    public boolean getPoserEchelle(){
-        return poserEchelle;
-    }
-
-    /**
-     * @param moving valeur qui va être affecté
-     */
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-    }
-
-    private void gestionVie() {
-        // Note : Toutes la gestion ne se passe pas ici (pour la saut c'est dans Deplacement et pour le descente c'est dans CellsHandler)
-        //Si la vie du mineur tombe en dessous de 0
-        if(cellsHandler.isMineurInBase() || cellsHandler.isMineurInSurface())
-            health += 0.0005f;
-        else if(dirMineur == Direction.Gauche || dirMineur == Direction.Droite)
-            health -= 0.0005f;
-        
-        if(health <= 0f){
-            health = 1f;
-            respawn(getXDepart(),getYDepart());
-        } else if(health > 1f)
-            health = 1f;
-    }
-    
-    public void tombe(){
-        health = 0.005f;
-    }
-    
-    private void respawn(float xspawn,float yspawn){
-        position.x = xspawn;
-        float y = yspawn;
-        float x = xspawn;
-        //position.y=getYDepart();
-        while(cellsHandler.getBloc((int)getXDepart(),(int)y-1) == 0){
-            y--;
-            // Je sais pas encore vraiment ce qu'on va faire ici ... En fait c'est simple mais c'est chiant
-            if(y<0) break;
+    private void preparerDeplacement() {
+        if(InputHandler.ALLER_GAUCHE) {
+            MINEUR_BOUGE = true;
+            dirMineur = Direction.Gauche;
+            teteVersLaDroite = false;
         }
-        position.y = y;
+        if(InputHandler.ALLER_DROITE) {
+            MINEUR_BOUGE = true;
+            dirMineur = Direction.Droite;
+            teteVersLaDroite = true;
+        }
+        if(InputHandler.ALLER_BAS) {
+            MINEUR_BOUGE = true;
+            dirMineur = Direction.Bas;
+        }
+        if(InputHandler.ALLER_HAUT) {
+            if(mineurAuSol) {
+                MINEUR_BOUGE = true;
+                dirMineur = Direction.Haut;
+            }
+        }
     }
     
     /**
@@ -248,192 +156,24 @@ public class Mineur {
         if (deltaTime == 0) return; // Si rien ne s'est passé on sort
         if(deltaTime > 0.1f) deltaTime = 0.1f; // Pour garder le jeu fluide
         runTime += deltaTime;
-      
         
-        if(Gdx.input.isKeyPressed(Keys.G) || Gdx.input.isKeyPressed(Keys.LEFT)) {
-            moving = true;
-            dirMineur = Direction.Gauche;
-            setTeteVersLaDroite(false);
-        }
-        if (Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT)) {
-            moving = true;
-            dirMineur = Direction.Droite;
-            setTeteVersLaDroite(true);
-        }
-        if ((Gdx.input.isKeyPressed(Keys.Z) || Gdx.input.isKeyPressed(Keys.UP)) && mineurAuSol) {
-            moving = true;
-            dirMineur = Direction.Haut;
-        }
-        if(Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN)) {
-            moving = true;
-            dirMineur = Direction.Bas;
-        }
-        
-        // faut un timer dans le cas ou on monte une echelle 
-        if(Gdx.input.isKeyJustPressed(Keys.E)){ // Echelle (E)
-            cellsHandler.setLadder((int) position.x,(int) position.y);
-        }
-        
-        if(Gdx.input.isKeyJustPressed(Keys.R)){
-            if(cellsHandler.getObject((int) position.x, (int) position.y) == 0){
-                cellsHandler.setPilier((int) position.x, (int) position.y);
-            }else{
-                cellsHandler.ramassePilier((int) position.x, (int) position.y);
-            }
-        }
-        
-        if(Gdx.input.isKeyJustPressed(Keys.T)){
-            cellsHandler.setTNT((int) position.x, (int) position.y);
-        }
-        
-        if(Gdx.input.isKeyJustPressed(Keys.Y)){
-            cellsHandler.makeTNTexplode((int) position.x, (int) position.y);
-        }
-        
-        if(Gdx.input.isKeyJustPressed(Keys.B)) {
-            cellsHandler.genererBase((int) position.x, (int) position.y);
-        }
+        preparerDeplacement();
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit
-        if(moving && !(deplacement instanceof Fluide)) {// Si on est dans déplacement dit de type fluide et que le mineur n'est pas en train de sauter
+        if(MINEUR_BOUGE && !DPL_FLUIDE) {// Si on est dans déplacement dit de type fluide et que le mineur n'est pas en train de sauter
             wasMoving = true;
-            deplacement = new Fluide(this);
-        } else if(!moving && wasMoving && !(deplacement instanceof Amortissement) && etat.equals(Etat.Deplacement)){ // Sinon c'est un amortissement
-            deplacement = new Amortissement(this);
+            DPL_FLUIDE = true;
+            DPL_AMORTISSEMENT = false;
+        } else if(!MINEUR_BOUGE && wasMoving && !DPL_AMORTISSEMENT && etat.equals(Etat.Deplacement)){ // Sinon c'est un amortissement
+            DPL_AMORTISSEMENT = true;
+            DPL_FLUIDE = false;
         }
         
-        // Ca bug car il faut empecher tout deplacement tant que le joueur est en vol
-        
-        if(deplacement != null) {
-            poserEchelle = true;
-            //System.out.println("1Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
-            deplacement.move();
-            if(isOnEchelle && !cellsHandler.isLadderHere((int) position.x, (int) position.y))
-                isOnEchelle = false;
-            //System.out.println("2Dpl : " + deplacement.getClass() + " Etat : " + etat + " Direction : " + dirMineur + " wasMoving : " + wasMoving);
-            if(deplacement.getVelocite().isZero() && !etat.equals(Etat.Miner)) {
-                deplacement = null;
-                wasMoving = false;
-                dirMineur = Direction.Arret;
-                etat = Etat.Arret;
-                if(cellsHandler.isLadderHere((int) position.x, (int) position.y)) 
-                    isOnEchelle = true;
-            }          
-        }
-        
-        gestionVie();
         resetForNextLoop();
     }
     
     private void resetForNextLoop() {
-        moving = false;
-    }
-
-    public Deplacement getDeplacement() {
-        return this.deplacement;
-    }
-    
-    /**
-     * @return vrai si le mineur est mode amortissement
-     */
-    public boolean isIsInAmortissement() {
-        return deplacement instanceof Amortissement;
-    }
-    
-    /**
-     * @return vrai si le mineur est arreté sur une echelle
-     */
-    public boolean isOnEchelle() {
-        return isOnEchelle;
-    }
-    
-    /**
-     * @param bool valeur a affecter
-     */
-    public void setWasMoving(boolean bool) {
-        wasMoving = bool;
-    }
-    
-    public boolean getWasMoving(){
-        return wasMoving;
-    }
-
-    /**
-     * @return l'état du mineur
-     */
-    public Etat getEtatMineur() {
-        return etat;
-    }
-    
-    /**
-     * @return la map (la carte)
-     */
-    public TiledMap getMap(){
-        return this.map;
-    }
-    
-    /**
-     * Change le type de déplacement du mineur
-     * @param typeDepla objet a affecter
-     */
-    public void setTypeDeplacement(Deplacement typeDepla) {
-        deplacement = typeDepla;
-    }
-    
-     /**
-     * @return l'objet deplacement
-     */
-    public Deplacement getTypeDeplacement() {
-        return deplacement;
-    }   
-    
-    /**
-     * @return la direction du mineur
-     */
-    public Direction getDirectionMineur() {
-        return dirMineur;
-    }
-    
-    /**
-     * @param dir variable à affecter
-     */
-    public void setDirectionMineur(Direction dir) {
-        dirMineur = dir;
-    }
-     
-    /**
-     * @return l'objet qui gère les cellules, blocs
-     */
-    public CellsHandler getCellsHandler(){
-        return this.cellsHandler;
-    }
-    
-    /**
-     * @return la largeur du mineur
-     */
-    public float getLARGEUR() {
-        return LARGEUR;
-    }
-
-    /**
-     * @return la hauteur du mineur
-     */
-    public float getHAUTEUR() {
-        return HAUTEUR;
-    }
-
-    /**
-     * @return la velocite maximale en abscisse du mineur
-     */
-    public float getMAX_VELOCITE() {
-        return MAX_VELOCITE;
-    }
-
-    /**
-     * @return la velocite maximale en ordonnée du mineur
-     */
-    public float getSAUT_VELOCITE() {
-        return SAUT_VELOCITE;
+        MINEUR_BOUGE = false;
     }
 
     /**
@@ -450,38 +190,6 @@ public class Mineur {
         return runTime;
     }
 
-    /**
-     * @param teteVersLaDroite booléen à affecter
-     */
-    public void setTeteVersLaDroite(boolean teteVersLaDroite) {
-        this.teteVersLaDroite = teteVersLaDroite;
-    }
-    
-    /**
-     * @return vrai si le mineur va vers la droite, faux sinon
-     */
-    public boolean isTeteVersLaDroite() {
-        return teteVersLaDroite;
-    }
-
-    /**
-     * @param mineurAuSol booléen à affecter
-     */
-    public void setMineurAuSol(boolean mineurAuSol) {
-        this.mineurAuSol = mineurAuSol;
-    }
-    
-    /**
-     * @return vrai si le mineur  touche le sol, faux sinon
-     */
-    public boolean isMineurAuSol() {
-        return mineurAuSol;
-    }
-    
-    public void removeArgent(int argent) {
-        this.argent -= argent;
-    }
-    
     public Inventaire getEquipement() {
         return equipement;
     }

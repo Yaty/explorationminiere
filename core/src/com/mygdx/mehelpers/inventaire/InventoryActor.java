@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.mygdx.gameobjects.Inventaire;
+import com.mygdx.gameobjects.mineurobjects.Inventaire;
 import com.mygdx.screens.GameScreen;
 
 /**
