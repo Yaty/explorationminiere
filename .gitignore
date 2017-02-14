@@ -6,6 +6,7 @@
 \.gradle/
 \.nb-gradle/
 \.nb_gradle-properties
+\local.properties
 *.class
 
 # Log file
@@ -22,3 +23,6 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 \.nb-gradle-properties
+
+android/libs/
+android/assets/map/*/
