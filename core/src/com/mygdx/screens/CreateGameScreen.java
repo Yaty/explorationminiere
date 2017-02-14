@@ -1,7 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mygdx.screens;
 
@@ -25,67 +37,34 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- *
+ * Create a game screen
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
-public class ChoosePropertiesScreen implements Screen {
+public class CreateGameScreen implements Screen {
     private final MEGame game;
     private TextField nomPartie;
-    private final int niveau;
     private final Stage stage;
     private final SpriteBatch batch;
     private final BitmapFont font;
-    private Skin skin;
+    private final Skin skin;
     private FileHandle[] directories;
     
     /**
-     * Ce constructeur est appelé pour créer une partie au niveau 1
+     * Constructor
      * @param game
      */
-    public ChoosePropertiesScreen(MEGame game) {
+    public CreateGameScreen(MEGame game) {
         this.game = game;
-        this.niveau = 1;
         this.batch = new SpriteBatch();
         this.stage = new Stage();
         this.font = new BitmapFont();
         this.font.getData().setScale(1);
         this.font.setColor(Color.BROWN);
         Gdx.input.setInputProcessor(stage); // Le stage va s'occuper des E/S
-        //createSkin();
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         Gdx.app.log("Choose", Gdx.files.getLocalStoragePath());
-        createBtn("Valider");
+        createButtons("Valider");
         createTextField();
-    }
-    
-    private void createSkin() {
-        BitmapFont font = new BitmapFont();
-        skin = new Skin();
-        skin.add("default", font);
-
-        //Create a texture
-        Pixmap pixmap = new Pixmap((int)Gdx.graphics.getWidth()/4,(int)Gdx.graphics.getHeight()/10, Pixmap.Format.RGB888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        skin.add("background",new Texture(pixmap));
-
-        //Create a button style
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
-        textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("background", Color.DARK_GRAY);
-        textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);
-        
-        // Create de TextFieldStyle
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = skin.getFont("default");
-        textFieldStyle.fontColor = Color.BLACK;
-        textFieldStyle.background = skin.getDrawable("background");
-        textFieldStyle.selection = skin.newDrawable("background", 0.5f, 0.5f, 0.5f,
-                0.5f);
-        skin.add("default", textFieldStyle);
     }
     
     private void createTextField() {
@@ -95,7 +74,7 @@ public class ChoosePropertiesScreen implements Screen {
         stage.addActor(nomPartie);
     }
     
-    private int getNumPartie() {
+    private int getGameId() {
         FileHandle file = Gdx.files.local("map");
         directories = file.list(new FilenameFilter() {
             @Override
@@ -111,7 +90,7 @@ public class ChoosePropertiesScreen implements Screen {
         return maxi+1;
     }
     
-    public final void createBtn(String text) {
+    public final void createButtons(String text) {
         TextButton valider = new TextButton(text, skin); // On utilise le skin
         valider.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         valider.addListener(new ClickListener() {
@@ -119,7 +98,7 @@ public class ChoosePropertiesScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
                     if(!nomPartie.getText().isEmpty())
-                        game.nouvellePartie(getNumPartie(), nomPartie.getText());
+                        game.newFirstLevel(getGameId(), nomPartie.getText());
                 };
         });
         stage.addActor(valider);
@@ -157,6 +136,10 @@ public class ChoosePropertiesScreen implements Screen {
 
     @Override
     public void dispose() {
+        batch.dispose();
+        font.dispose();
+        skin.dispose();
+        stage.dispose();
     }
     
 }

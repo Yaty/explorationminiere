@@ -1,3 +1,20 @@
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
@@ -11,16 +28,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
-import com.mygdx.mehelpers.GenerationAleatoire;
+import com.mygdx.mehelpers.RandomMapGenerator;
 import com.mygdx.mehelpers.handlers.handlers.InputHandler;
-import com.mygdx.mehelpers.inventaire.InventoryActor;
+import com.mygdx.mehelpers.inventory.InventoryActor;
 import com.mygdx.minexploration.MEGame;
 import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- * Classe qui est l'écran du jeu, c'est elle qui contient les éléments du jeu
- * et se fait afficher par un TiledMapRenderer.
+ * Game screen
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class GameScreen implements Screen {
@@ -32,11 +48,11 @@ public class GameScreen implements Screen {
     private MenuPause menuPause;
 
     public static Stage stage;
-    private final int idPartie;
+    private final int gameId;
     
     /**
-     * Lance le jeu au niveau 1
-     * @param game le jeu
+     * Constructor
+     * @param game
      * @param cheminMap
      * @param chargement
      */ 
@@ -52,19 +68,20 @@ public class GameScreen implements Screen {
             i++;
         }
         
-        idPartie = Integer.parseInt(id);
+        gameId = Integer.parseInt(id);
         stage = new Stage();
         gameRenderer = new GameRenderer(gameWorld, stage);
         pause = false;
     }
     
-    public int getIdPartie() {
-        return idPartie;
+    /**
+     * Get game id
+     * @return game id
+     */
+    public int getGameId() {
+        return gameId;
     }
     
-    /**
-     * Méthode appelée à la création du jeu
-     */    
     @Override
     public void show() {
         Gdx.app.log("GameScreen", "show appelé");
@@ -90,11 +107,11 @@ public class GameScreen implements Screen {
         Skin skin2 = new Skin(Gdx.files.internal("skin/uiskin.json"));
     
         DragAndDrop dragAndDrop = new DragAndDrop();
-        InventoryActor inventoryActor = new InventoryActor("Inventaire", gameWorld.getMineur().getInventaire(), Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
+        InventoryActor inventoryActor = new InventoryActor("Inventaire", gameWorld.getMiner().getInventory(), Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
         inventoryActor.setMovable(false);
         stage.addActor(inventoryActor);
         
-        InventoryActor equipementActor = new InventoryActor("Equipement", gameWorld.getMineur().getEquipement(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
+        InventoryActor equipementActor = new InventoryActor("Equipement", gameWorld.getMiner().getEquipment(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
         equipementActor.setMovable(false);
         stage.addActor(equipementActor);
         
@@ -103,17 +120,14 @@ public class GameScreen implements Screen {
         stage.addActor(menuPause);
     }
     
-    /**
-     * Méthode appelée à chaque frame
-     */   
     @Override
     public void render(float delta) {
         if(!pause) {
             gameWorld.update(delta);
-            gameRenderer.render(gameWorld.getMineur().getRunTime());
-            if(MEGame.VICTOIRE) {
-                MEGame.VICTOIRE = false;
-                passerAuProchainNiveau();
+            gameRenderer.render(gameWorld.getMiner().getRunTime());
+            if(MEGame.VICTORY) {
+                MEGame.VICTORY = false;
+                goToTheNextLevel();
             }
         }
         // P ou ESC
@@ -132,7 +146,10 @@ public class GameScreen implements Screen {
         stage.draw();
     }
     
-    public void passerAuProchainNiveau() {
+    /**
+     * Go to the next level.
+     */
+    public void goToTheNextLevel() {
         // Remplissage du dossier
         // Création du dossier du niveau level
         File dir = new File("./map/");
@@ -159,50 +176,33 @@ public class GameScreen implements Screen {
             objet[i] = objetFiles[i].getName();
                 
         game.setLevel(game.getLevel()+1);
-        new GenerationAleatoire(surface, objet, "./map/" + idPartie + "/map.tmx", game.getLevel());
+        new RandomMapGenerator(surface, objet, "./map/" + gameId + "/map.tmx", game.getLevel());
         gameWorld.reload();
         gameRenderer.reload(gameWorld.getMap());
     }
-    
-    /**
-     * Redimensionne la fenetre
-     * @param width la largeur
-     * @param height la hauteur
-     */   
+     
     @Override
     public void resize(int width, int height) {
         Gdx.app.log("GameScreen", "resize appelé");
     }
     
-    /**
-     * Méthode appelée quand le jeu passe en pause
-     */   
     @Override
     public void pause() {
         Gdx.app.log("GameScreen", "pause appelé");
         pause = true;
     }
-    
-    /**
-     * Méthode appelée quand le jeu passe sort de la pause
-     */   
+     
     @Override
     public void resume() {
         Gdx.app.log("GameScreen", "resume appelé");
         pause = false;
     }
-    
-    /**
-     * Méthode appelée quand la fenetre est minimiser
-     */   
+      
     @Override
     public void hide() {
         Gdx.app.log("GameScreen", "hide appelé");
     }
     
-    /**
-     * Méthode appelée quand on demande de supprimer le contenu de l'écran
-     */   
     @Override
     public void dispose() {
         gameRenderer.dispose();
@@ -210,6 +210,10 @@ public class GameScreen implements Screen {
         stage.dispose();
     }
     
+    /**
+     * Get the world
+     * @return the world
+     */
     public GameWorld getWorld() {
         return gameWorld;
     }

@@ -1,3 +1,20 @@
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mygdx.screens;
 
 import com.badlogic.gdx.Gdx;
@@ -15,23 +32,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.minexploration.MEGame;
 
 /**
- * Cette classe sert a l'affichage du menu de depart quand l'utilisateur lance le programme
- * 
+ * Main menu screen
+ * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
-
-
-
 public class MainMenuScreen implements Screen {
-
     private final MEGame game;  
-    private Stage stage;
+    private final Stage stage;
     private Skin skin;
     
     /**
-     * Ce constructeur initialise les boutons avec leur images
-     * @param game represente le jeu pour agir dessus (le lancer)
+     * Constructor
+     * @param game
      */
-    
     public MainMenuScreen (MEGame game){
         this.game = game;        
         stage = new Stage();
@@ -47,7 +59,7 @@ public class MainMenuScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
-                    game.setScreen(new ChoosePropertiesScreen(game)); // ATTENTION : IL VA FALLOIR GENERE PARTIEGEN AUTO SINON CA ECRASE LANCIENNE PARTIE
+                    game.setScreen(new CreateGameScreen(game)); // ATTENTION : IL VA FALLOIR GENERE PARTIEGEN AUTO SINON CA ECRASE LANCIENNE PARTIE
                 };
         });
         
@@ -57,7 +69,7 @@ public class MainMenuScreen implements Screen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
-                    game.setScreen(new ChargementPartie(game));
+                    game.setScreen(new LoadGameScreen(game));
                 };
         });        
         
@@ -112,11 +124,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show() {
     }
-/**
- * Cette methode sert pour l'affichage dans l'ecrans du menu
- * 
- */
-    
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 1, 1, 1);

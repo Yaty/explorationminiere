@@ -1,7 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mygdx.screens;
 
@@ -26,20 +38,24 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- *
+ * Load game screen
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
-public class ChargementPartie implements Screen {
+public class LoadGameScreen implements Screen {
     private final MEGame game;
     private final Stage stage;
     private Skin skin;
     private final BitmapFont font;
     private final SpriteBatch batch;
     private final SelectBox<String> sb;
-    private String nomParties[];
-    private FileHandle nomDossiers[];
+    private String gamesNames[];
+    private FileHandle foldersNames[];
     
-    public ChargementPartie(MEGame game) {
+    /**
+     * Constructor
+     * @param game
+     */
+    public LoadGameScreen(MEGame game) {
         this.game = game;
         this.batch = new SpriteBatch();
         stage = new Stage();
@@ -64,14 +80,14 @@ public class ChargementPartie implements Screen {
         batch.end();
     }
 
-    public final void createBtn(String text) {
+    private void createBtn(String text) {
         TextButton valider = new TextButton(text, skin); // On utilise le skin
         valider.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2-150);
         valider.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
-                    game.chargerUnePartie(Integer.parseInt(nomDossiers[sb.getSelectedIndex()].name()), nomParties[sb.getSelectedIndex()]);
+                    game.loadGame(Integer.parseInt(foldersNames[sb.getSelectedIndex()].name()), gamesNames[sb.getSelectedIndex()]);
                 };
         });
         stage.addActor(valider);
@@ -102,16 +118,16 @@ public class ChargementPartie implements Screen {
         // https://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html
         // On va lister les parties (équivalente à des dossiers) dans le tableau directories
         FileHandle map = new FileHandle(text);
-        nomDossiers = map.list(new FilenameFilter() {
+        foldersNames = map.list(new FilenameFilter() {
             @Override
             public boolean accept(File current, String name) {
                 return new File(current, name).isDirectory();
             }
         });
         
-        nomParties = new String[nomDossiers.length];
-        for(int j = 0 ; j < nomDossiers.length ; j++) {
-            FileHandle folder = new FileHandle(text + '/' + nomDossiers[j].name());
+        gamesNames = new String[foldersNames.length];
+        for(int j = 0 ; j < foldersNames.length ; j++) {
+            FileHandle folder = new FileHandle(text + '/' + foldersNames[j].name());
             System.out.println("Folder : " + folder.path());
             FileHandle[] files = folder.list(new FilenameFilter() {
                 @Override
@@ -119,11 +135,11 @@ public class ChargementPartie implements Screen {
                     return name.toLowerCase().endsWith(".name");
                 }
             });
-            nomParties[j] = files[0].name().substring(0, files[0].name().length()-5);
+            gamesNames[j] = files[0].name().substring(0, files[0].name().length()-5);
         }
         
         // Set up the SelectionBox with content
-        sb.setItems(nomParties);
+        sb.setItems(gamesNames);
 
         //For easier handling of Widgets
         Table table = new Table();

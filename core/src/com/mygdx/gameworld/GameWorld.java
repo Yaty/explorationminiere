@@ -1,86 +1,113 @@
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.mygdx.gameworld;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.mygdx.gameobjects.Mineur;
+import com.mygdx.gameobjects.Miner;
 import com.mygdx.mehelpers.handlers.handlers.MapHandler;
 import com.mygdx.mehelpers.handlers.Handlers;
-import com.mygdx.minexploration.handlers.ChargementHandler;
+import com.mygdx.minexploration.handlers.Loader;
 
 /**
- *
- * @author Hugo
+ * The game world !
+ * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class GameWorld {
     public static int MAP_WIDTH, MAP_HEIGHT;
     private TiledMap map;
-    private final Mineur mineur;
-    private final String cheminMap;
+    private final Miner miner;
+    private final String pathToMap;
     private final Handlers handlers;
     
     /**
-     *
-     * @param cheminMap
-     * @param chargement
+     * Construct a new game world
+     * @param pathToMap the path to the TMX file
+     * @param loading true if we are loading a game, alse if it's a new one
      */
-    public GameWorld(String cheminMap, boolean chargement) {
-        this.cheminMap = cheminMap;
-        map = new TmxMapLoader().load(cheminMap);
+    public GameWorld(String pathToMap, boolean loading) {
+        this.pathToMap = pathToMap;
+        map = new TmxMapLoader().load(pathToMap);
         MAP_WIDTH = map.getProperties().get("width", Integer.class);
         MAP_HEIGHT = map.getProperties().get("height", Integer.class);
-        if(!chargement)
-            mineur = new Mineur(MapHandler.getSpawnPosition()); // manque la position de départ
+        
+        if(!loading)
+            miner = new Miner(MapHandler.getSpawnPosition()); // manque la position de départ
         else {
-            int id = Integer.parseInt(cheminMap.replaceAll("[\\D]", ""));
+            int id = Integer.parseInt(pathToMap.replaceAll("[\\D]", ""));
             if(Gdx.files.internal("./map/" + id + "/save.xml").exists()) {
-                ChargementHandler chargeur = new ChargementHandler(id);
-                mineur = new Mineur(chargeur.getArgent(), chargeur.getPosition(), chargeur.getInventaire(), chargeur.getEquipement(), chargeur.getHealth());
+                Loader chargeur = new Loader(id);
+                miner = new Miner(chargeur.getMoney(), chargeur.getPosition(), chargeur.getInventory(), chargeur.getEquipment(), chargeur.getHealth());
             } else {
-                mineur = new Mineur(MapHandler.getSpawnPosition());
+                miner = new Miner(MapHandler.getSpawnPosition());
             }
         }
-        handlers = new Handlers(mineur, map);
+        handlers = new Handlers(miner, map);
     }
 
     /**
-     * Va mettre à jour le mineur
-     * @param delta le temps passé depuis la dernière frame
+     * Update the world
+     * @param delta time passed during the last frame
      */
     public void update(float delta) {
-        mineur.update(delta);
+        miner.update(delta);
         handlers.handle();
     }
     
     /**
-     * @return la carte
+     * @return the map
      */
     public TiledMap getMap() {
         return map;
     }
     
     /**
-     * @return le mineur
+     * @return the miner
      */
-    public Mineur getMineur() {
-        return mineur;
+    public Miner getMiner() {
+        return miner;
     }
 
+    /**
+     * Reload the world
+     */
     public void reload() {
-        map = new TmxMapLoader().load(cheminMap);
+        map = new TmxMapLoader().load(pathToMap);
         MAP_WIDTH = map.getProperties().get("width", Integer.class);
         MAP_HEIGHT = map.getProperties().get("height", Integer.class);        
-        mineur.reload();
+        miner.reload();
         handlers.reload();
     }
 
+    /**
+     * Dispose the world
+     */
     public void dispose() {
         map.dispose();
-        mineur.dispose();
+        miner.dispose();
         // handlers.dispose(); ??
     }
 
+    /**
+     * Get the list of handlers
+     * @return the handlers
+     */
     public Handlers getHandlers() {
         return handlers;
     }

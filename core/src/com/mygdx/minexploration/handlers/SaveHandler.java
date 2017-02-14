@@ -1,7 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mygdx.minexploration.handlers;
 
@@ -12,8 +24,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.mygdx.gameobjects.Mineur;
-import com.mygdx.mehelpers.inventaire.Slot;
+import com.mygdx.gameobjects.Miner;
+import com.mygdx.mehelpers.inventory.Slot;
 import com.mygdx.minexploration.MEGame;
 import com.mygdx.screens.GameScreen;
 import java.io.IOException;
@@ -21,32 +33,35 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 
 /**
- *
+ * Class to save miner's data, tiled map ...
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
-public class SauvegardeHandler {
+public class SaveHandler {
     private final MEGame game;
     private GameScreen gameScreen;
     private int idPartie;
     private final int TILEWIDTH = 64, TILEHEIGHT = 64;
     
-    public SauvegardeHandler(MEGame game) {
+    /**
+     * Constructor
+     * @param game the game
+     */
+    public SaveHandler(MEGame game) {
         this.game = game;
     }
     
     private void updateRef() {
         gameScreen = (GameScreen) game.getScreen();
-        idPartie = gameScreen.getIdPartie();
+        idPartie = gameScreen.getGameId();
     }
     
     /**
-     * Sauvegarde du mineur dans un fichier XML
-     * Fichier stocké dans le dossier de la map actuellement chargée
-     * Sauvegarde la position, l'argent, la pioche et l'inventaire du mineur
+     * Save miner's data
+     * Save map
      */
     public void save() {
         updateRef();
-        saveMineur();
+        saveMiner();
         saveMap();
     }
     
@@ -122,12 +137,12 @@ public class SauvegardeHandler {
         return str.toString();        
     }
     
-    private void saveMineur() {
+    private void saveMiner() {
         // On récupère les informations dans des variables
-        Mineur mineur = gameScreen.getWorld().getMineur();
-        String montantArgent = Integer.toString(mineur.getArgent());
+        Miner mineur = gameScreen.getWorld().getMiner();
+        String montantArgent = Integer.toString(mineur.getMoney());
         Vector2 vecteurPosition = mineur.getPosition();
-        ArrayList<Slot> slots = mineur.getInventaire().getSlots();
+        ArrayList<Slot> slots = mineur.getInventory().getSlots();
         
         try {
             StringWriter writer = new StringWriter();
@@ -164,7 +179,7 @@ public class SauvegardeHandler {
             
             racine.element("pioche")
                 .element("nom")
-                    .text(mineur.getEquipement().getSlots().get(0).getItem().getTextureRegion())
+                    .text(mineur.getEquipment().getSlots().get(0).getItem().getTextureRegion())
                 .pop()
             .pop();
             

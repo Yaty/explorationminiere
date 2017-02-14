@@ -1,7 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.mygdx.mehelpers.handlers.handlers;
 
@@ -9,16 +21,16 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.mygdx.gameobjects.Mineur;
+import com.mygdx.gameobjects.Miner;
 import com.mygdx.gameworld.GameWorld;
-import com.mygdx.mehelpers.handlers.deplacements.Deplacement;
+import com.mygdx.mehelpers.handlers.moves.Move;
 
 /**
- *
- * @author Hugo
+ * Handle the collision
+ * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class CollisionHandler implements Handler {
-    private Deplacement deplacement;
+    private Move move;
     private final Array<Rectangle> tiles = new Array<Rectangle>();
     private final Pool<Rectangle> rectPool = new Pool<Rectangle> () {
         @Override
@@ -26,106 +38,102 @@ public class CollisionHandler implements Handler {
             return new Rectangle();
         }
     };
-    private Rectangle mineurRect;
-    private int debutX, debutY, finX, finY;
-    private final int largeurMap;
+    private Rectangle minerRect;
+    private int startX, startY, endX, endY;
     
     /**
-     * @param deplacement objet Deplacement
+     * @param move the move instance which handle the shifting
      */
-    public CollisionHandler(Deplacement deplacement) {
-        this.deplacement = deplacement;
-        largeurMap = GameWorld.MAP_WIDTH;
+    public CollisionHandler(Move move) {
+        this.move = move;
     }
    
     /**
-     * Gère les collisions en  abscisse
+     * Handle collisions in the x-axis
      */
     private void handleCollisionX() {
-        mineurRect.set(deplacement.getPositionMineur().x, deplacement.getPositionMineur().y, Mineur.LARGEUR, Mineur.HAUTEUR);
-        debutX = (int) deplacement.getPositionMineur().x;
-        finX = (int) (deplacement.getPositionMineur().x + Mineur.LARGEUR);
+        minerRect.set(move.getPositionMineur().x, move.getPositionMineur().y, Miner.WIDTH, Miner.HEIGHT);
+        startX = (int) move.getPositionMineur().x;
+        endX = (int) (move.getPositionMineur().x + Miner.WIDTH);
 
-        if(Mineur.dirMineur.equals(Mineur.Direction.Droite)) { // Si vers la droite
+        if(Miner.direction.equals(Miner.Direction.RIGHT)) { // Si vers la droite
             // hitbox à droite
-            debutX = finX = (int) (deplacement.getPositionMineur().x + Mineur.LARGEUR + deplacement.getVelocite().x);
-            if((deplacement.getPositionMineur().x + Mineur.LARGEUR + deplacement.getVelocite().x) >= largeurMap) {
-                deplacement.getVelocite().x = 0;
-                Mineur.dirMineur = Mineur.Direction.Arret;
-                Mineur.etat = Mineur.Etat.Arret;         
+            startX = endX = (int) (move.getPositionMineur().x + Miner.WIDTH + move.getVelocity().x);
+            if((move.getPositionMineur().x + Miner.WIDTH + move.getVelocity().x) >= GameWorld.MAP_WIDTH) {
+                move.getVelocity().x = 0;
+                Miner.direction = Miner.Direction.STOPPED;
+                Miner.state = Miner.State.STOPPED;         
                 return;
             }
             
-        } else if(Mineur.dirMineur.equals(Mineur.Direction.Gauche)) { // Vers la gauche
+        } else if(Miner.direction.equals(Miner.Direction.LEFT)) { // Vers la gauche
             // hitbox à gauche
-            debutX = finX = (int) (deplacement.getPositionMineur().x + deplacement.getVelocite().x);
-            if((deplacement.getPositionMineur().x + deplacement.getVelocite().x) <= 0) {
-                deplacement.getVelocite().x = 0;
-                Mineur.dirMineur = Mineur.Direction.Arret;
-                Mineur.etat = Mineur.Etat.Arret;
+            startX = endX = (int) (move.getPositionMineur().x + move.getVelocity().x);
+            if((move.getPositionMineur().x + move.getVelocity().x) <= 0) {
+                move.getVelocity().x = 0;
+                Miner.direction = Miner.Direction.STOPPED;
+                Miner.state = Miner.State.STOPPED;
                 return;
             }
         }
         
-        debutY = (int) deplacement.getPositionMineur().x;
-        finY = (int)(deplacement.getPositionMineur().y + Mineur.LARGEUR);
+        startY = (int) move.getPositionMineur().x;
+        endY = (int)(move.getPositionMineur().y + Miner.WIDTH);
 
-        getTiles(debutX, debutY, finX, finY, tiles); // Voir méthode
-        mineurRect.x += deplacement.getVelocite().x;
+        getTiles(startX, startY, endX, endY, tiles); // Voir méthode
+        minerRect.x += move.getVelocity().x;
         for(Rectangle tile : tiles) {
-            if(mineurRect.overlaps(tile)) { // Si notre rectangle contient le rectangle tile on arrête le bonhomme et on stop
-                deplacement.getVelocite().x = 0;
-                Mineur.dirMineur = Mineur.Direction.Arret;
-                Mineur.etat = Mineur.Etat.Arret;
+            if(minerRect.overlaps(tile)) { // Si notre rectangle contient le rectangle tile on arrête le bonhomme et on stop
+                move.getVelocity().x = 0;
+                Miner.direction = Miner.Direction.STOPPED;
+                Miner.state = Miner.State.STOPPED;
                 break;
             }
         }
-        mineurRect.x = deplacement.getPositionMineur().x; // On remet en t, plus en t+1
+        minerRect.x = move.getPositionMineur().x; // On remet en t, plus en t+1
     }
     
     /**
-     * Gère les collisions en ordonnée
+     * Handle collisions in the y-axis
      */    
     private void handleCollisionY() {           
-        if(deplacement.getVelocite().y > 0) {
-            debutY = finY = (int) (deplacement.getPositionMineur().y + Mineur.HAUTEUR + deplacement.getVelocite().y);
+        if(move.getVelocity().y > 0) {
+            startY = endY = (int) (move.getPositionMineur().y + Miner.HEIGHT + move.getVelocity().y);
         } else {
-            debutY = finY = (int) (deplacement.getPositionMineur().y + deplacement.getVelocite().y);
-            if((deplacement.getPositionMineur().y + deplacement.getVelocite().y) <= 0) {
-                deplacement.getVelocite().y = 0;                
+            startY = endY = (int) (move.getPositionMineur().y + move.getVelocity().y);
+            if((move.getPositionMineur().y + move.getVelocity().y) <= 0) {
+                move.getVelocity().y = 0;                
             }
         }
-        debutX = (int)(deplacement.getPositionMineur().x);
-        finX = (int) (deplacement.getPositionMineur().x + Mineur.LARGEUR);
-        getTiles(debutX, debutY, finX, finY, tiles);
-        mineurRect.y += deplacement.getVelocite().y;
+        startX = (int)(move.getPositionMineur().x);
+        endX = (int) (move.getPositionMineur().x + Miner.WIDTH);
+        getTiles(startX, startY, endX, endY, tiles);
+        minerRect.y += move.getVelocity().y;
         for(Rectangle tile : tiles) {
-            if(mineurRect.overlaps(tile)) {
+            if(minerRect.overlaps(tile)) {
                 // Notre hitbox est en colision
                 // On reset la position en y
-                if(deplacement.getVelocite().y > 0) {
+                if(move.getVelocity().y > 0) {
                     // Repositionnement (tile est le bloc qui va entrer en colision)
-                    deplacement.getPositionMineur().y = tile.y - Mineur.HAUTEUR;
+                    move.getPositionMineur().y = tile.y - Miner.HEIGHT;
                 } else {
                     // Position du mineur au dessus du tile.y (car tile.y pointe vers le bas, on ajoute la hauteur)
-                    deplacement.getPositionMineur().y = tile.y + tile.height;
+                    move.getPositionMineur().y = tile.y + tile.height;
                     // Changement d'état
-                    Mineur.mineurAuSol = true;
+                    Miner.minerOnTheGround = true;
                 }
-                deplacement.getVelocite().y = 0;
+                move.getVelocity().y = 0;
                 break;                    
             }
         }
     }
     
-    
     /**
-     * Méthode qui va récuperer les blocs autour du mineur et
-     * les ajouter dans la list tiles.
+     * Get tiles around startX, startY, endX and endY into tiles
      */
     private void getTiles (int startX, int startY, int endX, int endY, Array<Rectangle> tiles) {
         // On va recuperer tout les tiles dans le rectangle de coordonnes (startx, starty, finx, finy) existantes
-        TiledMapTileLayer layer = deplacement.mapHandler.getLayerSurface(); // Une couche qui va contenir tout les "walls"
+        TiledMapTileLayer layer = move.mapHandler.getLayerSurface(); // Une couche qui va contenir tout les "walls"
         rectPool.freeAll(tiles); // Libère nos objets dans la pool
         tiles.clear();
         for (int y = startY; y <= endY; y++) {
@@ -140,18 +148,28 @@ public class CollisionHandler implements Handler {
         }
     } 
 
+    /**
+     * Called when the game is shutting down
+     */
     public void dispose() {}
 
+    /**
+     * Handle the collision
+     */
     @Override
     public void handle() {
-        mineurRect = rectPool.obtain(); // On recupere un objet Rectangle dans notre pool
+        minerRect = rectPool.obtain(); // On recupere un objet Rectangle dans notre pool
         handleCollisionX();
         handleCollisionY();
-        rectPool.free(mineurRect); // Libération de mineurRect dans la pool
+        rectPool.free(minerRect); // Libération de mineurRect dans la pool
     }
 
+    /**
+     * Reload the move object
+     * @param objects move is in the first place
+     */
     @Override
     public void reload(Object... objects) {
-        deplacement = (Deplacement) objects[0];
+        move = (Move) objects[0];
     }
 }
