@@ -1,2 +1,6 @@
 /desktop/.nb-gradle/
+/core/build/
+/core/.nb_gradle
 /html/build/
+.gradle/
+.nb-gradle/
