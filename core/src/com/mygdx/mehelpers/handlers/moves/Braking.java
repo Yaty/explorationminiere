@@ -1,39 +1,50 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package com.mygdx.mehelpers.handlers.deplacements;
+package com.mygdx.mehelpers.handlers.moves;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.gameobjects.Mineur;
-import com.mygdx.gameobjects.Mineur.Etat;
+import com.mygdx.gameobjects.Miner;
+import com.mygdx.gameobjects.Miner.State;
 import com.mygdx.mehelpers.handlers.handlers.MapHandler;
 
 /**
- * Classe gérant le déplacement du mineur en mode amortissement
+ * Handle the movement of the Miner, used when we are braking
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
-public class Amortissement extends Deplacement {
+public class Braking extends Move {
     private final Vector2 targetPosition;
     private boolean hasTarget;
-    private final float VITESSE_AMORTISSEMENT = 150f;
+    private final float BRAKING_SPEED = 150f;
     
     /**
-     * @param mapHandler
-     * @param positionMineur
+     * @param mapHandler a map handler
+     * @param positionMineur the miner position
      */
-    public Amortissement(MapHandler mapHandler, Vector2 positionMineur) {
+    public Braking(MapHandler mapHandler, Vector2 positionMineur) {
         super(mapHandler, positionMineur);
         targetPosition = new Vector2(0, 0);
         hasTarget = false;
     }
+    
     /**
-     * Méthode appelé à chaque frame quand le mineur est en mode
-     * amortissement. Celle-ci créer un vecteur objectif que le mineur au fur
-     * et a mesure du temps va rejoindre pour finalemet s'arrêter.
+     * Called every frame to handle the miner braking
      */
     @Override
     public void move() {
@@ -41,49 +52,44 @@ public class Amortissement extends Deplacement {
         if(Math.abs(positionMineur.x - targetPosition.x) < 0.02f) {
             positionMineur.x += targetPosition.x - positionMineur.x; // On recale le mineur correctement
             // Il y a pas mal de doublon ci-dessous qu'on pourrait éviter, à corriger dans le lot 2
-            Mineur.dirMineur = Mineur.Direction.Arret;
-            Mineur.etat = Mineur.Etat.Arret;
-            Mineur.MINEUR_BOUGE = false;
-            Mineur.wasMoving = false;
+            Miner.direction = Miner.Direction.STOPPED;
+            Miner.state = Miner.State.STOPPED;
+            Miner.MINER_MOVING = false;
+            Miner.wasMoving = false;
             hasTarget = false; // Idem
             return;
         }
          
         if(mapHandler.isLadderHere((int) positionMineur.x, (int) positionMineur.y)) 
-            Mineur.isOnEchelle = true;
-        else if(Mineur.isOnEchelle)
-            Mineur.isOnEchelle = false;
+            Miner.isOnLadder = true;
+        else if(Miner.isOnLadder)
+            Miner.isOnLadder = false;
         
         int x, y;
-        switch(Mineur.dirMineur) {
-                case Gauche:
-                    x = (int) (positionMineur.x - (0.5 + Mineur.LARGEUR/2)); // Position de la case à gauche ou le mineur va devoir aller
+        switch(Miner.direction) {
+                case LEFT:
+                    x = (int) (positionMineur.x - (0.5 + Miner.WIDTH/2)); // Position de la case à gauche ou le mineur va devoir aller
                     y = (int) positionMineur.y;
-                    if(!hasTarget && !mapHandler.isCellSurfaceHere(x, y) && !Mineur.etat.equals(Etat.Arret)) { // Si pas d'objectif et pas de tiled (bloc) en x, y
-                        targetPosition.set((float) ((int) positionMineur.x - (0.5 + Mineur.LARGEUR/2)),  positionMineur.y);
+                    if(!hasTarget && !mapHandler.isCellSurfaceHere(x, y) && !Miner.state.equals(State.STOPPED)) { // Si pas d'objectif et pas de tiled (bloc) en x, y
+                        targetPosition.set((float) ((int) positionMineur.x - (0.5 + Miner.WIDTH/2)),  positionMineur.y);
                         hasTarget = true;
                     }
                     break;
-                case Droite:
-                    x = (int) ((positionMineur.x + 1) + (0.5 - Mineur.LARGEUR/2));
+                case RIGHT:
+                    x = (int) ((positionMineur.x + 1) + (0.5 - Miner.WIDTH/2));
                     y = (int) positionMineur.y;
-                    if(!hasTarget && !mapHandler.isCellSurfaceHere(x, y) && !Mineur.etat.equals(Etat.Arret)) {
-                        targetPosition.set((float) ((int) ( positionMineur.x + 1) + (0.5 - Mineur.LARGEUR/2)),  positionMineur.y);
+                    if(!hasTarget && !mapHandler.isCellSurfaceHere(x, y) && !Miner.state.equals(State.STOPPED)) {
+                        targetPosition.set((float) ((int) ( positionMineur.x + 1) + (0.5 - Miner.WIDTH/2)),  positionMineur.y);
                         hasTarget = true;
                     }
                     break;
         }
-        velocite.x = (targetPosition.x - positionMineur.x) * VITESSE_AMORTISSEMENT * Gdx.graphics.getDeltaTime();   
-        velocite.x = MathUtils.clamp(velocite.x, -MAX_VELOCITE, MAX_VELOCITE); // On borne la velocite
-        velocite.add(0, GRAVITE);   // Ajout gravité
-        velocite.scl(Gdx.graphics.getDeltaTime()); // On "scale" par le temps passé durant la dernière frame
+        velocity.x = (targetPosition.x - positionMineur.x) * BRAKING_SPEED * Gdx.graphics.getDeltaTime();   
+        velocity.x = MathUtils.clamp(velocity.x, -VELOCITY_MAX, VELOCITY_MAX); // On borne la velocity
+        velocity.add(0, GRAVITY);   // Ajout gravité
+        velocity.scl(Gdx.graphics.getDeltaTime()); // On "scale" par le temps passé durant la dernière frame
         collision.handle(); // Gestion des colisions
-        positionMineur.add(velocite); // Ajout de la velocite au vecteur position
-        velocite.scl(1/Gdx.graphics.getDeltaTime()); // On remet velocite comme avant
+        positionMineur.add(velocity); // Ajout de la velocity au vecteur position
+        velocity.scl(1/Gdx.graphics.getDeltaTime()); // On remet velocity comme avant
     } 
-    
-    @Override
-    public Vector2 getTargetPosition() {
-        return targetPosition;
-    }
 }

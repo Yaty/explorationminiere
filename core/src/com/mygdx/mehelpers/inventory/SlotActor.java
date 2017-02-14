@@ -1,9 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package com.mygdx.mehelpers.inventaire;
+package com.mygdx.mehelpers.inventory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,11 +27,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.mygdx.gameobjects.mineurobjects.Item;
+import com.mygdx.gameobjects.minerobjects.Item;
 import com.mygdx.screens.GameScreen;
 
 /**
- *
+ * http://pixelscientists.com/wordpress/?p=17
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class SlotActor extends ImageButton implements SlotListener {
@@ -28,6 +40,12 @@ public class SlotActor extends ImageButton implements SlotListener {
 
     private final Skin skin;
     
+    /**
+     * Constructor
+     * @param skin
+     * @param slot
+     * @param screen
+     */
     public SlotActor(Skin skin, final Slot slot, final GameScreen screen) {
         super(createStyle(skin, slot));
         this.slot = slot;
@@ -46,28 +64,28 @@ public class SlotActor extends ImageButton implements SlotListener {
                 if(slot != null && slot.getItem() != null && slot.getItem().getTextureRegion().toLowerCase().startsWith("pioche") && !slot.getItem().getTextureRegion().equals("pioche_diamant")) {
                     // Slot équipement
                     Item pioche = slot.getItem();
-                    int prixUpgrade = pioche.getPrixUpgrade();
-                    if(screen.getWorld().getMineur().getArgent() >= prixUpgrade) {
+                    int prixUpgrade = pioche.getPriceToUpgrade();
+                    if(screen.getWorld().getMiner().getMoney() >= prixUpgrade) {
                         switch (pioche) {
-                            case PIOCHE_BOIS:
+                            case WOODEN_PICKAXE:
                                 slot.clearSlot();
-                                slot.add(Item.PIOCHE_PIERRE, 1);
-                                screen.getWorld().getMineur().retirerArgent(pioche.getPrixUpgrade());
+                                slot.add(Item.STONE_PICKAXE, 1);
+                                screen.getWorld().getMiner().withdrawMoney(pioche.getPriceToUpgrade());
                                 break;
-                            case PIOCHE_PIERRE:
+                            case STONE_PICKAXE:
                                 slot.clearSlot();
-                                slot.add(Item.PIOCHE_FER, 1);
-                                screen.getWorld().getMineur().retirerArgent(pioche.getPrixUpgrade());
+                                slot.add(Item.IRON_PICKAXE, 1);
+                                screen.getWorld().getMiner().withdrawMoney(pioche.getPriceToUpgrade());
                                 break;
-                            case PIOCHE_FER:
+                            case IRON_PICKAXE:
                                 slot.clearSlot();
-                                slot.add(Item.PIOCHE_OR, 1);
-                                screen.getWorld().getMineur().retirerArgent(pioche.getPrixUpgrade());
+                                slot.add(Item.GOLD_PICKAXE, 1);
+                                screen.getWorld().getMiner().withdrawMoney(pioche.getPriceToUpgrade());
                                 break;
-                            case PIOCHE_OR:
+                            case GOLD_PICKAXE:
                                 slot.clearSlot();
-                                slot.add(Item.PIOCHE_DIAMANT, 1);
-                                screen.getWorld().getMineur().retirerArgent(pioche.getPrixUpgrade());
+                                slot.add(Item.DIAMOND_PICKAXE, 1);
+                                screen.getWorld().getMiner().withdrawMoney(pioche.getPriceToUpgrade());
                                 break;
                             default:
                                 break;
@@ -102,6 +120,10 @@ public class SlotActor extends ImageButton implements SlotListener {
         setStyle(createStyle(skin, slot));
     }
 
+    /**
+     * Get the slot
+     * @return the slot
+     */
     public Slot getSlot() {
         return slot;
     }

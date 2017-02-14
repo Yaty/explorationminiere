@@ -1,132 +1,138 @@
-package com.mygdx.mehelpers.handlers.deplacements;
+/* 
+ * Copyright 2017 
+ * - Hugo Da Roit - Benjamin Lévêque
+ * - Alexis Montagne - Alexis Clément
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.mygdx.mehelpers.handlers.moves;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.gameobjects.Mineur;
-import com.mygdx.gameobjects.Mineur.Etat;
+import com.mygdx.gameobjects.Miner;
+import com.mygdx.gameobjects.Miner.State;
 import com.mygdx.mehelpers.handlers.handlers.MapHandler;
 
 /**
- * Classe gérant le déplacement du mineur en mode fluide
+ * Handle the miner movement dynamically
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
-public class Fluide extends Deplacement {
+public class Dynamic extends Move {
     
     /**
-     * @param positionMineur
-     * @param mapHandler
+     * @param positionMiner position of the miner
+     * @param mapHandler the map handler
      */
-    public Fluide(MapHandler mapHandler, Vector2 positionMineur) {
-        super(mapHandler, positionMineur);
+    public Dynamic(MapHandler mapHandler, Vector2 positionMiner) {
+        super(mapHandler, positionMiner);
     }
     
     /**
-     * Méthode appelée à chaque frame lorsque le mineur est en mode fluide.
-     * Celle-ci va faire bouger le mineur dynamiquement en fonction de la
-     * direction choisit par le joueur.
+     * Called every frame.
+     * Make the miner move smoothly
      */
     @Override
     public void move() {
         if(mapHandler.isLadderHere((int) positionMineur.x, (int) positionMineur.y)) 
-            Mineur.isOnEchelle = true;
-        else if(Mineur.isOnEchelle)
-            Mineur.isOnEchelle = false;
+            Miner.isOnLadder = true;
+        else if(Miner.isOnLadder)
+            Miner.isOnLadder = false;
         
         
-        boolean lancerDestruction = false;
-        int x = (int) (positionMineur.x + Mineur.LARGEUR/2);
+        boolean launchDestruction = false;
+        int x = (int) (positionMineur.x + Miner.WIDTH/2);
         int y = (int) positionMineur.y;
-        switch(Mineur.dirMineur) {
-            case Haut:
+        switch(Miner.direction) {
+            case TOP:
                 if(!mapHandler.isCellSurfaceHere(x, y+1)) { // Si pas de bloc en x et y + 1
-                    if(Mineur.isOnEchelle) {
-                        velocite.y = ECHELLE_VELOCITE;
-                        Mineur.mineurAuSol = false;
-                        Mineur.etat = Etat.Echelle;
+                    if(Miner.isOnLadder) {
+                        velocity.y = LADDER_VELOCITY;
+                        Miner.minerOnTheGround = false;
+                        Miner.state = State.LADDER_CLIMBING;
                         if(Gdx.input.isKeyPressed(19) && mapHandler.getBloc(x, y-1) ==0){
-                                velocite.y = GRAVITE; //faut rester appuyé
+                                velocity.y = GRAVITY; //faut rester appuyé
                         }
-                        velocite.y = ECHELLE_VELOCITE;
+                        velocity.y = LADDER_VELOCITY;
                         if(Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.Z)){
-                            velocite.y = 0.2f - GRAVITE; //faut rester appuyé
+                            velocity.y = 0.2f - GRAVITY; //faut rester appuyé
                         } 
-                    } else if(!Mineur.etat.equals(Etat.Sauter)) {
-                        velocite.y = SAUT_VELOCITE;
-                        Mineur.mineurAuSol = false;
-                        Mineur.etat = Etat.Sauter;
+                    } else if(!Miner.state.equals(State.JUMPING)) {
+                        velocity.y = JUMPING_VELOCITY;
+                        Miner.minerOnTheGround = false;
+                        Miner.state = State.JUMPING;
                     }
                 } else {
                     // Lancer animation ici ?
-                    lancerDestruction = true;
+                    launchDestruction = true;
                     y++;
                 }
-                if(Mineur.isOnEchelle && velocite.y==0){
-                    lancerDestruction = true;
+                if(Miner.isOnLadder && velocity.y==0){
+                    launchDestruction = true;
                 }
                 break;
-            case Droite:
+            case RIGHT:
                 if(!mapHandler.isCellSurfaceHere(x+1, y)) {
-                    velocite.x = MAX_VELOCITE;
-                    Mineur.teteVersLaDroite = true;
-                    Mineur.etat = Etat.Deplacement;
+                    velocity.x = VELOCITY_MAX;
+                    Miner.headTowardsRight = true;
+                    Miner.state = State.MOVING;
                 } else {
-                    lancerDestruction = true;
+                    launchDestruction = true;
                     x++;
                 }
                 break;
-            case Bas:
-                if(Mineur.etat.equals(Etat.Echelle)) {
-                    Mineur.etat = Etat.Echelle;
-                    velocite.y = -ECHELLE_VELOCITE;
+            case BOTTOM:
+                if(Miner.state.equals(State.LADDER_CLIMBING)) {
+                    Miner.state = State.LADDER_CLIMBING;
+                    velocity.y = -LADDER_VELOCITY;
                     if(Gdx.input.isKeyPressed(20) || Gdx.input.isKeyJustPressed(47)){
-                        velocite.y = GRAVITE; //faut rester appuyé
+                        velocity.y = GRAVITY; //faut rester appuyé
                     }
 
                 } else if(mapHandler.isCellSurfaceHere(x, y-1)) {
-                    //mineur.setEtaMineur(Etat.Arret);
-                    lancerDestruction = true;
+                    //mineur.setEtaMineur(State.STOPPED);
+                    launchDestruction = true;
                     y--;
                 }
                 break;
-            case Gauche:
+            case LEFT:
                 if(!mapHandler.isCellSurfaceHere(x-1, y)) {
-                    velocite.x = -MAX_VELOCITE;
-                    Mineur.teteVersLaDroite = false;
-                    Mineur.etat = Etat.Deplacement;
+                    velocity.x = -VELOCITY_MAX;
+                    Miner.headTowardsRight = false;
+                    Miner.state = State.MOVING;
                 } else {
-                    lancerDestruction = true;
+                    launchDestruction = true;
                     x--;
                 }
                 break;
             default:
                 break;
         }
-        if (lancerDestruction)
+        if (launchDestruction)
             mapHandler.destructionBloc(x, y);
-        velocite.x = MathUtils.clamp(velocite.x, -MAX_VELOCITE, MAX_VELOCITE); // On borne
-        velocite.add(0, GRAVITE); // Ajout gravité si sur echelle
-        if(Math.abs(velocite.x) < 1) { // Si le velocite est trop faible on stop le mineur
-            velocite.x = 0; // Et on detecte dans la boucle pour changer de mode de depla
-            if(Mineur.mineurAuSol) Mineur.dirMineur = Mineur.Direction.Arret;
+        velocity.x = MathUtils.clamp(velocity.x, -VELOCITY_MAX, VELOCITY_MAX); // On borne
+        velocity.add(0, GRAVITY); // Ajout gravité si sur echelle
+        if(Math.abs(velocity.x) < 1) { // Si le velocity est trop faible on stop le mineur
+            velocity.x = 0; // Et on detecte dans la boucle pour changer de mode de depla
+            if(Miner.minerOnTheGround) Miner.direction = Miner.Direction.STOPPED;
         }
-        velocite.scl(Gdx.graphics.getDeltaTime()); // On "scale" par le temps passé pendant la frame
+        velocity.scl(Gdx.graphics.getDeltaTime()); // On "scale" par le temps passé pendant la frame
         collision.handle(); // Gestion des colisions
-        positionMineur.add(velocite);
-        velocite.scl(1/Gdx.graphics.getDeltaTime());
-        if(Mineur.isOnEchelle && (Gdx.input.isKeyJustPressed(19)) && mapHandler.getBloc(x, y-1) ==0 && Mineur.etat.equals(Etat.Echelle) )
-            velocite.y=0f;
+        positionMineur.add(velocity);
+        velocity.scl(1/Gdx.graphics.getDeltaTime());
+        if(Miner.isOnLadder && (Gdx.input.isKeyJustPressed(19)) && mapHandler.getBloc(x, y-1) ==0 && Miner.state.equals(State.LADDER_CLIMBING) )
+            velocity.y=0f;
 
-    }
-
-    @Override
-    public Vector2 getTargetPosition() {
-        return null;
-    }
-    
-    public float getVelociteY(){
-        return velocite.y;
     }
 }
