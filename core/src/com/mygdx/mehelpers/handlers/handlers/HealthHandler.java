@@ -51,11 +51,11 @@ public class HealthHandler implements Handler {
         if(mapHandler.isMineurInBase() || mapHandler.isMineurInSurface())
             mineurHealth.add(0.0005f);
         else if(Miner.MINER_MOVING)
-            mineurHealth.remove(0.0005f);       
+            mineurHealth.remove(0.0005f);
         
         if(mineurHealth.getHealth() <= 0f){
             mineurHealth.setHealth(1);
-            makeMineurRespawn();
+            positionMineur.set(MapHandler.getSpawnPosition());
         } else if(mineurHealth.getHealth() > 1f)
             mineurHealth.setHealth(1);
     }
@@ -74,12 +74,6 @@ public class HealthHandler implements Handler {
      */
     public void removeLife(float amount) {
         mineurHealth.remove(amount);
-    }
-
-    private void makeMineurRespawn() {
-        Vector2 respawnPos = MapHandler.getSpawnPosition();
-        positionMineur.x = respawnPos.x;
-        positionMineur.y = respawnPos.y;
     }
 
     /**

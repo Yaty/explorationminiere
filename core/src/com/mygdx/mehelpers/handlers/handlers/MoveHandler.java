@@ -48,14 +48,16 @@ public class MoveHandler implements Handler {
      */
     @Override
     public void handle() {
-        if(Miner.DPL_AMORTISSEMENT && !(move instanceof Braking)) {
+        System.out.println(Miner.MV_BRAKING + " " + Miner.MV_DYNAMIC);
+        if(Miner.MV_BRAKING && !(move instanceof Braking)) {
             move = new Braking(mapHandler, positionMineur);
-        } else if (Miner.DPL_FLUIDE && !(move instanceof Dynamic)) {
-            move = new Dynamic(mapHandler, positionMineur);
+        } else if (Miner.MV_DYNAMIC && !(move instanceof Dynamic)) {
+            move = new Dynamic(mapHandler, positionMineur);                       
         }
         
         if(move != null) {
             move.move();
+            if(move.getVelocity().isZero()) move = null;
         }
     }
 
@@ -68,5 +70,18 @@ public class MoveHandler implements Handler {
         move = null;
         mapHandler = (MapHandler) objects[0];
         positionMineur = (Vector2) objects[1];
+    }
+
+    private boolean isMineurIsWellStopped() {
+        /*System.out.println("Moving : " + Miner.MINER_MOVING);
+        System.out.println("Dir : " + Miner.direction);
+        System.out.println("State : " + Miner.state);
+        System.out.println("Braking : " + Miner.MV_BRAKING);
+        System.out.println("Fluide : " + Miner.MV_DYNAMIC);*/
+
+        Vector2 whereTheMinerNeedsToBe = new Vector2();
+        whereTheMinerNeedsToBe.x = (float) ((int) (positionMineur.x) + 0.5 - Miner.WIDTH/2);
+        whereTheMinerNeedsToBe.y = (int) positionMineur.y;
+        return positionMineur.epsilonEquals(whereTheMinerNeedsToBe, 0.1f);
     }
 }

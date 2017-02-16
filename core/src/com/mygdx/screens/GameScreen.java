@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.mygdx.gameobjects.Miner;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
 import com.mygdx.mehelpers.RandomMapGenerator;
@@ -124,7 +125,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         if(!pause) {
             gameWorld.update(delta);
-            gameRenderer.render(gameWorld.getMiner().getRunTime());
+            gameRenderer.render(gameWorld.getMiner().getRunTime());            
             if(MEGame.VICTORY) {
                 MEGame.VICTORY = false;
                 goToTheNextLevel();

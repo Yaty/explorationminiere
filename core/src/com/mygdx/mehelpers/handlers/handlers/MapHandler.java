@@ -421,7 +421,7 @@ public class MapHandler implements Handler {
             }
             miner.getInventory().remove(Item.BASE, 1);
             bases.add(base);
-            GameRenderer.setTist(bases);
+            GameRenderer.setTpList(bases);
         }
     }
 

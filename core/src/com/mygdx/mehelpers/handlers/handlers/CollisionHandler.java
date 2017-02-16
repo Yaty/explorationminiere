@@ -48,6 +48,14 @@ public class CollisionHandler implements Handler {
         this.move = move;
     }
    
+    private void resetMiner() {
+        Miner.direction = Miner.Direction.STOPPED;
+        Miner.state = Miner.State.STOPPED; 
+        Miner.MINER_MOVING = false;
+        Miner.MV_BRAKING = false;
+        Miner.MV_DYNAMIC = false;       
+    }
+    
     /**
      * Handle collisions in the x-axis
      */
@@ -60,9 +68,8 @@ public class CollisionHandler implements Handler {
             // hitbox à droite
             startX = endX = (int) (move.getPositionMineur().x + Miner.WIDTH + move.getVelocity().x);
             if((move.getPositionMineur().x + Miner.WIDTH + move.getVelocity().x) >= GameWorld.MAP_WIDTH) {
-                move.getVelocity().x = 0;
-                Miner.direction = Miner.Direction.STOPPED;
-                Miner.state = Miner.State.STOPPED;         
+                move.getVelocity().setZero();
+                resetMiner();
                 return;
             }
             
@@ -70,9 +77,8 @@ public class CollisionHandler implements Handler {
             // hitbox à gauche
             startX = endX = (int) (move.getPositionMineur().x + move.getVelocity().x);
             if((move.getPositionMineur().x + move.getVelocity().x) <= 0) {
-                move.getVelocity().x = 0;
-                Miner.direction = Miner.Direction.STOPPED;
-                Miner.state = Miner.State.STOPPED;
+                move.getVelocity().setZero();
+                resetMiner();
                 return;
             }
         }
@@ -84,9 +90,8 @@ public class CollisionHandler implements Handler {
         minerRect.x += move.getVelocity().x;
         for(Rectangle tile : tiles) {
             if(minerRect.overlaps(tile)) { // Si notre rectangle contient le rectangle tile on arrête le bonhomme et on stop
-                move.getVelocity().x = 0;
-                Miner.direction = Miner.Direction.STOPPED;
-                Miner.state = Miner.State.STOPPED;
+                move.getVelocity().setZero();
+                resetMiner();
                 break;
             }
         }
@@ -102,7 +107,7 @@ public class CollisionHandler implements Handler {
         } else {
             startY = endY = (int) (move.getPositionMineur().y + move.getVelocity().y);
             if((move.getPositionMineur().y + move.getVelocity().y) <= 0) {
-                move.getVelocity().y = 0;                
+                move.getVelocity().y = 0;      
             }
         }
         startX = (int)(move.getPositionMineur().x);

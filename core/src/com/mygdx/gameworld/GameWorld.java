@@ -21,6 +21,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.mygdx.gameobjects.Miner;
+import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.handlers.handlers.MapHandler;
 import com.mygdx.mehelpers.handlers.Handlers;
 import com.mygdx.minexploration.handlers.Loader;
@@ -31,6 +32,7 @@ import com.mygdx.minexploration.handlers.Loader;
  */
 public class GameWorld {
     public static int MAP_WIDTH, MAP_HEIGHT;
+    private final float UNITY = 1/64f;
     private TiledMap map;
     private final Miner miner;
     private final String pathToMap;
@@ -46,7 +48,8 @@ public class GameWorld {
         map = new TmxMapLoader().load(pathToMap);
         MAP_WIDTH = map.getProperties().get("width", Integer.class);
         MAP_HEIGHT = map.getProperties().get("height", Integer.class);
-        
+        Miner.WIDTH = UNITY * AssetLoader.regions[0].getRegionWidth();
+        Miner.HEIGHT = UNITY * AssetLoader.regions[0].getRegionHeight();
         if(!loading)
             miner = new Miner(MapHandler.getSpawnPosition()); // manque la position de départ
         else {
@@ -92,7 +95,8 @@ public class GameWorld {
         MAP_WIDTH = map.getProperties().get("width", Integer.class);
         MAP_HEIGHT = map.getProperties().get("height", Integer.class);        
         miner.reload();
-        handlers.reload();
+        handlers.reload(miner, map);
+        miner.respawn(MapHandler.getSpawnPosition());
     }
 
     /**

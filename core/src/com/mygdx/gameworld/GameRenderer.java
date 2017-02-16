@@ -123,7 +123,7 @@ public class GameRenderer {
      * Set the list of base with a new list
      * @param bases the new list of base
      */
-    public static void setTist(LinkedList<Base> bases) {
+    public static void setTpList(LinkedList<Base> bases) {
        setTpList(bases.size());
     }
     

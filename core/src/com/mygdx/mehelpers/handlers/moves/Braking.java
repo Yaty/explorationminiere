@@ -39,7 +39,7 @@ public class Braking extends Move {
      */
     public Braking(MapHandler mapHandler, Vector2 positionMineur) {
         super(mapHandler, positionMineur);
-        targetPosition = new Vector2(0, 0);
+        targetPosition = new Vector2();
         hasTarget = false;
     }
     
@@ -55,6 +55,7 @@ public class Braking extends Move {
             Miner.direction = Miner.Direction.STOPPED;
             Miner.state = Miner.State.STOPPED;
             Miner.MINER_MOVING = false;
+            Miner.MV_BRAKING = false;
             Miner.wasMoving = false;
             hasTarget = false; // Idem
             return;
@@ -65,21 +66,36 @@ public class Braking extends Move {
         else if(Miner.isOnLadder)
             Miner.isOnLadder = false;
         
-        int x, y;
+        float x, y;
         switch(Miner.direction) {
                 case LEFT:
-                    x = (int) (positionMineur.x - (0.5 + Miner.WIDTH/2)); // Position de la case à gauche ou le mineur va devoir aller
+                    x = (int) (positionMineur.x) - 1 + (0.5f - Miner.WIDTH/2); // Position de la case à gauche ou le mineur va devoir aller
                     y = (int) positionMineur.y;
-                    if(!hasTarget && !mapHandler.isCellSurfaceHere(x, y) && !Miner.state.equals(State.STOPPED)) { // Si pas d'objectif et pas de tiled (bloc) en x, y
-                        targetPosition.set((float) ((int) positionMineur.x - (0.5 + Miner.WIDTH/2)),  positionMineur.y);
+                    if(!hasTarget && !mapHandler.isCellSurfaceHere((int) x, (int) y) && !Miner.state.equals(State.STOPPED)) { // Si pas d'objectif et pas de tiled (bloc) en x, y
+                        targetPosition.set(x, y);
                         hasTarget = true;
                     }
                     break;
                 case RIGHT:
-                    x = (int) ((positionMineur.x + 1) + (0.5 - Miner.WIDTH/2));
+                    x = (int) (positionMineur.x) + 1 + (0.5f - Miner.WIDTH/2);
                     y = (int) positionMineur.y;
-                    if(!hasTarget && !mapHandler.isCellSurfaceHere(x, y) && !Miner.state.equals(State.STOPPED)) {
-                        targetPosition.set((float) ((int) ( positionMineur.x + 1) + (0.5 - Miner.WIDTH/2)),  positionMineur.y);
+                    if(!hasTarget && !mapHandler.isCellSurfaceHere((int) x, (int) y) && !Miner.state.equals(State.STOPPED)) {
+                        targetPosition.set(x, y);
+                        hasTarget = true;
+                    }
+                    break;
+                case STOPPED:
+                    System.out.println("helol");
+                    if(Miner.headTowardsRight) {
+                    x = (int) (positionMineur.x) + 1 + (0.5f - Miner.WIDTH/2);
+                        y = (int) positionMineur.y;
+                    } else {
+                    x = (int) (positionMineur.x) - 1 + (0.5f - Miner.WIDTH/2);
+                        y = (int) positionMineur.y;
+                    }
+
+                    if(!hasTarget && !mapHandler.isCellSurfaceHere((int) x,(int) y)) {
+                        targetPosition.set(x,  y);
                         hasTarget = true;
                     }
                     break;

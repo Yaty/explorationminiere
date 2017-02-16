@@ -20,7 +20,6 @@ package com.mygdx.gameobjects;
 import com.mygdx.gameobjects.minerobjects.Inventory;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.minerobjects.Wallet;
-import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.gameobjects.minerobjects.Health;
 import com.mygdx.mehelpers.handlers.handlers.InputHandler;
 
@@ -29,7 +28,7 @@ import com.mygdx.mehelpers.handlers.handlers.InputHandler;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public class Miner {
-    public static boolean DPL_FLUIDE = false, DPL_AMORTISSEMENT = false;
+    public static boolean MV_DYNAMIC = false, MV_BRAKING = false;
     public static float WIDTH, HEIGHT;
     private final Wallet wallet;
     private final Inventory inventory, equipment;
@@ -39,7 +38,6 @@ public class Miner {
     private float runTime;
     public static boolean headTowardsRight, minerOnTheGround, wasMoving, isOnLadder, MINER_MOVING;
     public static int FALL_HEIGHT; // a faire
-    private final float UNITY = 1/64f;
     private final Health health;
         
     /**
@@ -136,12 +134,10 @@ public class Miner {
     }
     
     private void resetMiner() {
-        WIDTH = UNITY * AssetLoader.regions[0].getRegionWidth();
-        HEIGHT = UNITY * AssetLoader.regions[0].getRegionHeight();
         state = State.STOPPED;
         direction = Direction.STOPPED;
         minerOnTheGround = headTowardsRight = true;
-        DPL_AMORTISSEMENT = DPL_FLUIDE = wasMoving = isOnLadder = false;
+        MV_BRAKING = MV_DYNAMIC = wasMoving = isOnLadder = false;
     }
 
     /**
@@ -218,19 +214,18 @@ public class Miner {
         if(deltaTime > 0.1f) deltaTime = 0.1f; // Pour garder le jeu fluide
         runTime += deltaTime;
         
+        resetForNextLoop();
         prepareNextMove();
         
         // Instanceof pour éviter de créer pleins de fois des objets alors que deplacement est déjà définit
-        if(MINER_MOVING && !DPL_FLUIDE) {// Si on est dans déplacement dit de type fluide et que le mineur n'est pas en train de jumping
+        if(MINER_MOVING && !MV_DYNAMIC) {// Si on est dans déplacement dit de type fluide et que le mineur n'est pas en train de jumping
             wasMoving = true;
-            DPL_FLUIDE = true;
-            DPL_AMORTISSEMENT = false;
-        } else if(!MINER_MOVING && wasMoving && !DPL_AMORTISSEMENT && state.equals(State.MOVING)){ // Sinon c'est un amortissement
-            DPL_AMORTISSEMENT = true;
-            DPL_FLUIDE = false;
+            MV_DYNAMIC = true;
+            MV_BRAKING = false;
+        } else if(!MINER_MOVING && wasMoving && !MV_BRAKING && state.equals(State.MOVING)){ // Sinon c'est un amortissement
+            MV_BRAKING = true;
+            MV_DYNAMIC = false;
         }
-        
-        resetForNextLoop();
     }
     
     private void resetForNextLoop() {
