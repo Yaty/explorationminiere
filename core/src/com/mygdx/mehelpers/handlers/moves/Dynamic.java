@@ -45,12 +45,7 @@ public class Dynamic extends Move {
      */
     @Override
     public void move() {
-        if(mapHandler.isLadderHere((int) positionMineur.x, (int) positionMineur.y)) 
-            Miner.isOnLadder = true;
-        else if(Miner.isOnLadder)
-            Miner.isOnLadder = false;
-        
-        
+        System.out.print("Ici ");
         boolean launchDestruction = false;
         int x = (int) (positionMineur.x + Miner.WIDTH/2);
         int y = (int) positionMineur.y;
@@ -95,20 +90,19 @@ public class Dynamic extends Move {
             case BOTTOM:
                 if(Miner.state.equals(State.LADDER_CLIMBING)) {
                     Miner.state = State.LADDER_CLIMBING;
+                    velocity.x = 0;
                     velocity.y = -LADDER_VELOCITY;
                     if(Gdx.input.isKeyPressed(20) || Gdx.input.isKeyJustPressed(47)){
                         velocity.y = GRAVITY; //faut rester appuyé
                     }
-
-                } else if(mapHandler.isCellSurfaceHere(x, y-1)) {
-                    //mineur.setEtaMineur(State.STOPPED);
+                } else if(mapHandler.isCellSurfaceHere(x, y-1) && velocity.epsilonEquals(new Vector2(), 0.02f)) {
                     launchDestruction = true;
                     y--;
                 }
                 break;
             case LEFT:
                 if(!mapHandler.isCellSurfaceHere(x-1, y)) {
-                    velocity.x = -VELOCITY_MAX;
+                    velocity.x = -VELOCITY_MAX; // il y a un autre truc qui met à cette valeur ...
                     Miner.headTowardsRight = false;
                     Miner.state = State.MOVING;
                 } else {
@@ -125,10 +119,11 @@ public class Dynamic extends Move {
         velocity.add(0, GRAVITY); // Ajout gravité si sur echelle
         if(Math.abs(velocity.x) < 1) { // Si le velocity est trop faible on stop le mineur
             velocity.x = 0; // Et on detecte dans la boucle pour changer de mode de depla
-            if(Miner.minerOnTheGround) Miner.direction = Miner.Direction.STOPPED;
+            if(Miner.minerOnTheGround) Miner.stopMiner();
         }
         velocity.scl(Gdx.graphics.getDeltaTime()); // On "scale" par le temps passé pendant la frame
         collision.handle(); // Gestion des colisions
+        System.out.println("ON AJOUTE " + velocity);
         positionMineur.add(velocity);
         velocity.scl(1/Gdx.graphics.getDeltaTime());
         if(Miner.isOnLadder && (Gdx.input.isKeyJustPressed(19)) && mapHandler.getBloc(x, y-1) ==0 && Miner.state.equals(State.LADDER_CLIMBING) )

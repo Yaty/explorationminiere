@@ -32,6 +32,7 @@ public class Braking extends Move {
     private final Vector2 targetPosition;
     private boolean hasTarget;
     private final float BRAKING_SPEED = 150f;
+    public static boolean brakingEnded = false;
     
     /**
      * @param mapHandler a map handler
@@ -49,29 +50,21 @@ public class Braking extends Move {
     @Override
     public void move() {
         // On arrête correctement le mineur et on reset toutes les variables        
-        if(Math.abs(positionMineur.x - targetPosition.x) < 0.02f) {
+        if(positionMineur.epsilonEquals(targetPosition, 0.02f)) {
             positionMineur.x += targetPosition.x - positionMineur.x; // On recale le mineur correctement
             // Il y a pas mal de doublon ci-dessous qu'on pourrait éviter, à corriger dans le lot 2
-            Miner.direction = Miner.Direction.STOPPED;
-            Miner.state = Miner.State.STOPPED;
-            Miner.MINER_MOVING = false;
-            Miner.MV_BRAKING = false;
-            Miner.wasMoving = false;
+            brakingEnded = true;
+            Miner.stopMiner();
             hasTarget = false; // Idem
             return;
         }
-         
-        if(mapHandler.isLadderHere((int) positionMineur.x, (int) positionMineur.y)) 
-            Miner.isOnLadder = true;
-        else if(Miner.isOnLadder)
-            Miner.isOnLadder = false;
         
         float x, y;
         switch(Miner.direction) {
                 case LEFT:
                     x = (int) (positionMineur.x) - 1 + (0.5f - Miner.WIDTH/2); // Position de la case à gauche ou le mineur va devoir aller
                     y = (int) positionMineur.y;
-                    if(!hasTarget && !mapHandler.isCellSurfaceHere((int) x, (int) y) && !Miner.state.equals(State.STOPPED)) { // Si pas d'objectif et pas de tiled (bloc) en x, y
+                    if(!hasTarget && !mapHandler.isCellSurfaceHere((int) x, (int) y)) { // Si pas d'objectif et pas de tiled (bloc) en x, y
                         targetPosition.set(x, y);
                         hasTarget = true;
                     }
@@ -79,33 +72,20 @@ public class Braking extends Move {
                 case RIGHT:
                     x = (int) (positionMineur.x) + 1 + (0.5f - Miner.WIDTH/2);
                     y = (int) positionMineur.y;
-                    if(!hasTarget && !mapHandler.isCellSurfaceHere((int) x, (int) y) && !Miner.state.equals(State.STOPPED)) {
+                    if(!hasTarget && !mapHandler.isCellSurfaceHere((int) x, (int) y)) {
                         targetPosition.set(x, y);
                         hasTarget = true;
                     }
                     break;
-                case STOPPED:
-                    System.out.println("helol");
-                    if(Miner.headTowardsRight) {
-                    x = (int) (positionMineur.x) + 1 + (0.5f - Miner.WIDTH/2);
-                        y = (int) positionMineur.y;
-                    } else {
-                    x = (int) (positionMineur.x) - 1 + (0.5f - Miner.WIDTH/2);
-                        y = (int) positionMineur.y;
-                    }
-
-                    if(!hasTarget && !mapHandler.isCellSurfaceHere((int) x,(int) y)) {
-                        targetPosition.set(x,  y);
-                        hasTarget = true;
-                    }
-                    break;
         }
-        velocity.x = (targetPosition.x - positionMineur.x) * BRAKING_SPEED * Gdx.graphics.getDeltaTime();   
-        velocity.x = MathUtils.clamp(velocity.x, -VELOCITY_MAX, VELOCITY_MAX); // On borne la velocity
-        velocity.add(0, GRAVITY);   // Ajout gravité
-        velocity.scl(Gdx.graphics.getDeltaTime()); // On "scale" par le temps passé durant la dernière frame
-        collision.handle(); // Gestion des colisions
-        positionMineur.add(velocity); // Ajout de la velocity au vecteur position
-        velocity.scl(1/Gdx.graphics.getDeltaTime()); // On remet velocity comme avant
+        if(hasTarget) {
+            velocity.x = (targetPosition.x - positionMineur.x) * BRAKING_SPEED * Gdx.graphics.getDeltaTime();   
+            velocity.x = MathUtils.clamp(velocity.x, -VELOCITY_MAX, VELOCITY_MAX); // On borne la velocity
+            velocity.add(0, GRAVITY);   // Ajout gravité
+            velocity.scl(Gdx.graphics.getDeltaTime()); // On "scale" par le temps passé durant la dernière frame
+            collision.handle(); // Gestion des colisions
+            positionMineur.add(velocity); // Ajout de la velocity au vecteur position
+            velocity.scl(1/Gdx.graphics.getDeltaTime()); // On remet velocity comme avant
+        }
     } 
 }

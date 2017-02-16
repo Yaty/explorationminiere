@@ -136,8 +136,8 @@ public class RandomMapGenerator {
      */
     private void generer() {
         FileHandle fichier = Gdx.files.local(pathToMap);
-        final int mapHeight = getProfondeurGeneration();
-        final int mapWidth = (int) Math.round(0.7 * mapHeight);
+        final int mapHeight = 200;//getProfondeurGeneration();
+        final int mapWidth = 200;//(int) Math.round(0.7 * mapHeight);
         
         caves = genererGrid(mapHeight, mapWidth, 0.515f, 2, 13, 12, 15); // https://github.com/czyzby/noise4j
         liquids = genererGrid(mapHeight, mapWidth, 0.65f, 2, 13, 9, 6);

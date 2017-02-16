@@ -51,9 +51,8 @@ public class CollisionHandler implements Handler {
     private void resetMiner() {
         Miner.direction = Miner.Direction.STOPPED;
         Miner.state = Miner.State.STOPPED; 
-        Miner.MINER_MOVING = false;
         Miner.MV_BRAKING = false;
-        Miner.MV_DYNAMIC = false;       
+        Miner.MV_DYNAMIC = false;
     }
     
     /**
@@ -68,8 +67,7 @@ public class CollisionHandler implements Handler {
             // hitbox à droite
             startX = endX = (int) (move.getPositionMineur().x + Miner.WIDTH + move.getVelocity().x);
             if((move.getPositionMineur().x + Miner.WIDTH + move.getVelocity().x) >= GameWorld.MAP_WIDTH) {
-                move.getVelocity().setZero();
-                resetMiner();
+                move.getVelocity().x = 0;
                 return;
             }
             
@@ -77,8 +75,7 @@ public class CollisionHandler implements Handler {
             // hitbox à gauche
             startX = endX = (int) (move.getPositionMineur().x + move.getVelocity().x);
             if((move.getPositionMineur().x + move.getVelocity().x) <= 0) {
-                move.getVelocity().setZero();
-                resetMiner();
+                move.getVelocity().x = 0;
                 return;
             }
         }

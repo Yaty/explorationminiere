@@ -193,8 +193,10 @@ public class Miner {
             headTowardsRight = true;
         }
         if(InputHandler.GO_DOWN) {
-            MINER_MOVING = true;
-            direction = Direction.BOTTOM;
+            if(minerOnTheGround) {
+                MINER_MOVING = true;
+                direction = Direction.BOTTOM;
+            }
         }
         if(InputHandler.GO_UPWARDS) {
             if(minerOnTheGround) {
@@ -252,6 +254,13 @@ public class Miner {
      */
     public float getRunTime() {
         return runTime;
+    }
+    
+    public static void stopMiner() {
+        MV_BRAKING = false;
+        MV_DYNAMIC = false;
+        direction = Direction.STOPPED;
+        state = State.STOPPED;
     }
 
     /**
