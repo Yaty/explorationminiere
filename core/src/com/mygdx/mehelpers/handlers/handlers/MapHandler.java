@@ -216,7 +216,6 @@ public class MapHandler implements Handler {
                     }
                     else layerSurface.setCell(x+i, y+j, null);
                 }
-                else explodeTNT(x+i, y+j);
             }  
         }
     }

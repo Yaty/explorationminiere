@@ -128,6 +128,5 @@ public class Dynamic extends Move {
         velocity.scl(1/Gdx.graphics.getDeltaTime());
         if(Miner.isOnLadder && (Gdx.input.isKeyJustPressed(19)) && mapHandler.getBloc(x, y-1) ==0 && Miner.state.equals(State.LADDER_CLIMBING) )
             velocity.y=0f;
-
     }
 }
