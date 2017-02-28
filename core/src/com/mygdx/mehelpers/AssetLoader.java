@@ -18,6 +18,8 @@
 package com.mygdx.mehelpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -30,6 +32,7 @@ public class AssetLoader {
     public static Texture minerTexture, backgroundTexture, healthBarTexture,healthbarContainerTexture;
     public static Animation standing, walking, jumping;
     public static TextureRegion[] regions;
+    public static Music tnt_sound, run_sound, dig_sound;
     
     /**
      * Load textures and animations
@@ -48,6 +51,12 @@ public class AssetLoader {
         jumping = new Animation(0, regions[1]);
         walking = new Animation(0.15f, regions[2], regions[3], regions[4]);
         walking.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+        
+        
+        //Sons
+        tnt_sound = Gdx.audio.newMusic(Gdx.files.internal("tnt_sound.mp3"));
+        run_sound = Gdx.audio.newMusic(Gdx.files.internal("run_sound.mp3"));
+        dig_sound = Gdx.audio.newMusic(Gdx.files.internal("dig_sound.mp3"));
     }
     
     

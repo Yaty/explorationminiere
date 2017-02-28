@@ -23,6 +23,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Miner;
 import com.mygdx.gameobjects.Miner.State;
+import static com.mygdx.mehelpers.AssetLoader.run_sound;
 import com.mygdx.mehelpers.handlers.handlers.MapHandler;
 
 /**
@@ -113,8 +114,10 @@ public class Dynamic extends Move {
             default:
                 break;
         }
+        
         if (launchDestruction)
             mapHandler.destructionBloc(x, y);
+        
         velocity.x = MathUtils.clamp(velocity.x, -VELOCITY_MAX, VELOCITY_MAX); // On borne
         velocity.add(0, GRAVITY); // Ajout gravité si sur echelle
         if(Math.abs(velocity.x) < 1) { // Si le velocity est trop faible on stop le mineur
@@ -128,5 +131,7 @@ public class Dynamic extends Move {
         velocity.scl(1/Gdx.graphics.getDeltaTime());
         if(Miner.isOnLadder && (Gdx.input.isKeyJustPressed(19)) && mapHandler.getBloc(x, y-1) ==0 && Miner.state.equals(State.LADDER_CLIMBING) )
             velocity.y=0f;
+        
+        
     }
 }

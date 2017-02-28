@@ -28,6 +28,8 @@ import com.mygdx.gameobjects.minerobjects.Item;
 import com.mygdx.gameobjects.Miner;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
+import static com.mygdx.mehelpers.AssetLoader.dig_sound;
+import static com.mygdx.mehelpers.AssetLoader.tnt_sound;
 import com.mygdx.minexploration.MEGame;
 import java.util.LinkedList;
 
@@ -193,6 +195,7 @@ public class MapHandler implements Handler {
                                 @Override
                                 public void run(){
                                     explodeTNT(x, y);
+                                    
                                 }
                             }, 2.5f);
         }        
@@ -204,6 +207,9 @@ public class MapHandler implements Handler {
     // méthode avec les coordonnées de cette TNT.
     
     private void explodeTNT(final int x, final int y){
+        tnt_sound.stop();
+        tnt_sound.play();
+        
         for(int i = -RADIUS_TNT ; i <= RADIUS_TNT; i++ ){
             for(int j = -RADIUS_TNT ; j <= RADIUS_TNT ; j++){
                 if(getObject(x+i, y+j)!=idTNT ||(i == 0 && j == 0)){
@@ -216,8 +222,20 @@ public class MapHandler implements Handler {
                     }
                     else layerSurface.setCell(x+i, y+j, null);
                 }
+                else{
+                    final int icpy = i;
+                    final int jcpy = j;
+                    new Timer().scheduleTask(new Timer.Task(){
+                                @Override
+                                public void run(){
+                                    explodeTNT(x+icpy, y+jcpy);
+                                }
+                            }, 0.2f);
+                    
+                }
             }  
         }
+        
     }
     
     /**
@@ -302,13 +320,18 @@ public class MapHandler implements Handler {
     public void destructionBloc(int x, int y) {  
         final int xBloc = x;
         final int yBloc = y;
-
+        
+        
         final Vector2 positionLancement = miner.getPosition().cpy();
         // Faudrait lamper vers le bloc ou il va
         // Commencement du minage
         Miner.state = Miner.State.MINING;
         int dureeMinage = calculDureeMinage();
         //System.out.println("Durée minage : " + dureeMinage);
+        if(!dig_sound.isPlaying()){
+            dig_sound.setVolume(0.2f);
+            dig_sound.play();
+        }
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() { // Fin du minage
@@ -343,6 +366,9 @@ public class MapHandler implements Handler {
                             }, 2.5f);
                         }
                     }
+                }
+                if(dig_sound.isPlaying()){
+                    dig_sound.stop();
                 }
             }
         }, dureeMinage);
