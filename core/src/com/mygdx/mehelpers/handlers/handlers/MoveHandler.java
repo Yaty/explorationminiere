@@ -48,9 +48,10 @@ public class MoveHandler implements Handler {
      */
     @Override
     public void handle() {
-        if(Miner.MV_BRAKING && !(move instanceof Braking))
+        if(Miner.MV_BRAKING && !(move instanceof Braking)) {
+            Braking.brakingEnded = false;
             move = new Braking(mapHandler, positionMineur);
-        else if (Miner.MV_DYNAMIC && !(move instanceof Dynamic))
+        } else if (Miner.MV_DYNAMIC && !(move instanceof Dynamic))
             move = new Dynamic(mapHandler, positionMineur);                       
         
         if(mapHandler.isLadderHere((int) positionMineur.x, (int) positionMineur.y)) 
@@ -59,10 +60,8 @@ public class MoveHandler implements Handler {
             Miner.isOnLadder = false; // reset
         
         if(move != null) {
-            System.out.println(move.getVelocity());
             move.move();
-            if(move.getVelocity().epsilonEquals(new Vector2(), 0.02f) || (move instanceof Braking && Braking.brakingEnded)) {
-                Braking.brakingEnded = false;
+            if(move instanceof Braking && Braking.brakingEnded || (move.getVelocity().epsilonEquals(0, 0, 0.2f) && !Miner.state.equals(Miner.State.JUMPING))) {
                 Miner.stopMiner();
                 move = null;
             }
