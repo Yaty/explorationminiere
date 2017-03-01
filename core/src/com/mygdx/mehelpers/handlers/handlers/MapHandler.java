@@ -28,7 +28,10 @@ import com.mygdx.gameobjects.minerobjects.Item;
 import com.mygdx.gameobjects.Miner;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
+import static com.mygdx.mehelpers.AssetLoader.break_sound;
 import static com.mygdx.mehelpers.AssetLoader.dig_sound;
+import static com.mygdx.mehelpers.AssetLoader.fall_stone_sound;
+import static com.mygdx.mehelpers.AssetLoader.prefall_stone_sound;
 import static com.mygdx.mehelpers.AssetLoader.tnt_sound;
 import com.mygdx.minexploration.MEGame;
 import java.util.LinkedList;
@@ -266,8 +269,12 @@ public class MapHandler implements Handler {
     private void faireTomberUnBlocSurfaceDeCoord(int xBloc, int yBloc, int idBloc){ 
         TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
         cell.setTile(tileSets.getTile(idBloc));
+        
+        
         // Tant qu'il y a un bloc a faire tomber
         while(getBloc(xBloc, yBloc) == idBloc){
+            
+            
             int yBlocCible = yBloc-1;
 
             // Tant qu'il y a du vide en dessous
@@ -286,7 +293,9 @@ public class MapHandler implements Handler {
                 yBlocCible--;
             }
             yBloc++; // On passe au bloc supérieur
+            
         }
+        
     }
     
     // Check si il y a une pierre au dessus, si oui on appele pierre tombe
@@ -329,7 +338,7 @@ public class MapHandler implements Handler {
         int dureeMinage = calculDureeMinage();
         //System.out.println("Durée minage : " + dureeMinage);
         if(!dig_sound.isPlaying()){
-            dig_sound.setVolume(0.2f);
+            
             dig_sound.play();
         }
         Timer.schedule(new Timer.Task() {
@@ -346,24 +355,33 @@ public class MapHandler implements Handler {
                         
                         miner.collectMoney(idBlock);
                         layerSurface.setCell(xBloc, yBloc, null);
+                        break_sound.play();
                         
                         if (idBlock == idGlowstone) healthHandler.addLife(0.2f);
                         else healthHandler.removeLife(0.2f);
                         
                         if(isBlocAuDessus(xBloc, yBloc, idPillar)){
+                            prefall_stone_sound.play();
                             new Timer().scheduleTask(new Timer.Task(){
                                 @Override
                                 public void run() {
                                     faireTomberUnBlocObjetDeCoord(xBloc, yBloc+1, idPillar);
+                                    prefall_stone_sound.stop();
+                                    fall_stone_sound.play();
                                 }
                             }, 1);
+                            
                         } else if (isBlocAuDessus(xBloc, yBloc, idStone)) {
+                            prefall_stone_sound.play();
                             new Timer().scheduleTask(new Timer.Task(){
                                 @Override
                                 public void run(){
                                     faireTomberUnBlocSurfaceDeCoord(xBloc, yBloc+1, idStone);
+                                    prefall_stone_sound.stop();
+                                    fall_stone_sound.play();
                                 }
                             }, 2.5f);
+                            
                         }
                     }
                 }

@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.minerobjects.Wallet;
 import com.mygdx.gameobjects.minerobjects.Health;
 import static com.mygdx.mehelpers.AssetLoader.dig_sound;
+import static com.mygdx.mehelpers.AssetLoader.prefall_stone_sound;
 import static com.mygdx.mehelpers.AssetLoader.run_sound;
 import com.mygdx.mehelpers.handlers.handlers.InputHandler;
 
@@ -226,6 +227,7 @@ public class Miner {
             wasMoving = true;
             MV_DYNAMIC = true;
             MV_BRAKING = false;
+            
 
         } else if(!MINER_MOVING && wasMoving && !MV_BRAKING && state.equals(State.MOVING)){ // Sinon c'est un amortissement
             MV_BRAKING = true;
@@ -237,9 +239,15 @@ public class Miner {
     }
     
     public static void playSound(){
+        
+        if( state != State.STOPPED){
+            if(dig_sound.isPlaying()){
+                dig_sound.stop();
+            }
+        }
+        
         if(state == State.MOVING && (direction == Direction.LEFT || direction == Direction.RIGHT) && minerOnTheGround){
             if(!run_sound.isPlaying()){
-                run_sound.setVolume(0.2f);
                 run_sound.play();
             }
         }

@@ -32,7 +32,7 @@ public class AssetLoader {
     public static Texture minerTexture, backgroundTexture, healthBarTexture,healthbarContainerTexture;
     public static Animation standing, walking, jumping;
     public static TextureRegion[] regions;
-    public static Music tnt_sound, run_sound, dig_sound;
+    public static Music tnt_sound, run_sound, dig_sound,break_sound, fall_stone_sound,prefall_stone_sound;
     
     /**
      * Load textures and animations
@@ -56,7 +56,14 @@ public class AssetLoader {
         //Sons
         tnt_sound = Gdx.audio.newMusic(Gdx.files.internal("tnt_sound.mp3"));
         run_sound = Gdx.audio.newMusic(Gdx.files.internal("run_sound.mp3"));
+        run_sound.setVolume(0.15f);
         dig_sound = Gdx.audio.newMusic(Gdx.files.internal("dig_sound.mp3"));
+        dig_sound.setVolume(0.05f);
+        break_sound = Gdx.audio.newMusic(Gdx.files.internal("break_sound.mp3"));
+        break_sound.setVolume(0.3f);
+        fall_stone_sound = Gdx.audio.newMusic(Gdx.files.internal("fall_stone_sound.mp3"));
+        prefall_stone_sound = Gdx.audio.newMusic(Gdx.files.internal("prefall_stone_sound.mp3"));
+        prefall_stone_sound.setLooping(true);
     }
     
     
