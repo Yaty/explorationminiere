@@ -171,6 +171,7 @@ public class MapHandler implements Handler {
             TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
             cell.setTile(tileSets.getTile(idPillar));
             layerObjets.setCell(x, y, cell);
+            faireTomberUnBlocObjetDeCoord(x, y, idPillar);
             miner.getInventory().remove(Item.PILLAR, 1);
         }
     }
@@ -185,6 +186,7 @@ public class MapHandler implements Handler {
             cell.setTile(tileSets.getTile(idTNT));
             if(!isCellSurfaceHere(x, y)) {
                 layerObjets.setCell(x, y, cell);
+                faireTomberUnBlocSurfaceDeCoord(x, y, idTNT);
                 miner.getInventory().remove(Item.TNT, 1);
             }
         }
@@ -216,14 +218,17 @@ public class MapHandler implements Handler {
         for(int i = -RADIUS_TNT ; i <= RADIUS_TNT; i++ ){
             for(int j = -RADIUS_TNT ; j <= RADIUS_TNT ; j++){
                 if(getObject(x+i, y+j)!=idTNT ||(i == 0 && j == 0)){
-                    if((int)miner.getPosition().x == (x+i) && (int)miner.getPosition().y == (y+j)) 
-                        healthHandler.die();
-                    layerObjets.setCell(x+i, y+j, null);
-                    if(getBloc(x+i, y+j)==idDiamond) {
-                        MEGame.VICTORY = true;
-                        return;
+                    System.out.println(Math.abs(Vector2.dst(0, 0, i, j)));
+                    if(Math.abs(Vector2.dst(0, 0, i, j)) <= RADIUS_TNT) {
+                        if((int)miner.getPosition().x == (x+i) && (int)miner.getPosition().y == (y+j)) 
+                            healthHandler.die();
+                        layerObjets.setCell(x+i, y+j, null);
+                        if(getBloc(x+i, y+j)==idDiamond) {
+                            MEGame.VICTORY = true;
+                            return;
+                        }
+                        else layerSurface.setCell(x+i, y+j, null);
                     }
-                    else layerSurface.setCell(x+i, y+j, null);
                 }
                 else{
                     final int icpy = i;
@@ -370,7 +375,16 @@ public class MapHandler implements Handler {
                                     fall_stone_sound.play();
                                 }
                             }, 1);
-                            
+                        } else if(isBlocAuDessus(xBloc, yBloc, idTNT)){
+                            prefall_stone_sound.play();
+                            new Timer().scheduleTask(new Timer.Task(){
+                                @Override
+                                public void run() {
+                                    faireTomberUnBlocObjetDeCoord(xBloc, yBloc+1, idTNT);
+                                    prefall_stone_sound.stop();
+                                    fall_stone_sound.play();
+                                }
+                            }, 1);
                         } else if (isBlocAuDessus(xBloc, yBloc, idStone)) {
                             prefall_stone_sound.play();
                             new Timer().scheduleTask(new Timer.Task(){
@@ -380,8 +394,7 @@ public class MapHandler implements Handler {
                                     prefall_stone_sound.stop();
                                     fall_stone_sound.play();
                                 }
-                            }, 2.5f);
-                            
+                            }, 2.5f);  
                         }
                     }
                 }

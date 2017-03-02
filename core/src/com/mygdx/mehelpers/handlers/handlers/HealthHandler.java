@@ -50,7 +50,7 @@ public class HealthHandler implements Handler {
     public void handle() {
         if(mapHandler.isMineurInBase() || mapHandler.isMineurInSurface())
             mineurHealth.add(0.0005f);
-        else if(Miner.MINER_MOVING)
+        else if(!Miner.state.equals(Miner.State.STOPPED))
             mineurHealth.remove(0.0005f);
         
         if(mineurHealth.getHealth() <= 0f){

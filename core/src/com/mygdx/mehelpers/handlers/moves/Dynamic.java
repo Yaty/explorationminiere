@@ -23,7 +23,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Miner;
 import com.mygdx.gameobjects.Miner.State;
-import static com.mygdx.mehelpers.AssetLoader.run_sound;
 import com.mygdx.mehelpers.handlers.handlers.MapHandler;
 
 /**
