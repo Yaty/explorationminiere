@@ -75,6 +75,12 @@ public class AssetLoader {
         backgroundTexture.dispose();
         healthBarTexture.dispose();
         healthbarContainerTexture.dispose();
+        tnt_sound.dispose();
+        run_sound.dispose();
+        dig_sound.dispose();
+        break_sound.dispose();
+        fall_stone_sound.dispose();
+        prefall_stone_sound.dispose();
     }       
 
 }

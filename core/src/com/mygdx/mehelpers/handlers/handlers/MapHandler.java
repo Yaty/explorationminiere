@@ -358,7 +358,7 @@ public class MapHandler implements Handler {
                         break_sound.play();
                         
                         if (idBlock == idGlowstone) healthHandler.addLife(0.2f);
-                        else healthHandler.removeLife(0.2f);
+                        else healthHandler.removeLife(0.05f);
                         
                         if(isBlocAuDessus(xBloc, yBloc, idPillar)){
                             prefall_stone_sound.play();

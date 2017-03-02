@@ -61,10 +61,8 @@ public class MoveHandler implements Handler {
         
         if(move != null) {
             move.move();
-            if(move instanceof Braking && Braking.brakingEnded || (move.getVelocity().epsilonEquals(0, 0, 0.2f) && !Miner.state.equals(Miner.State.JUMPING))) {
+            if(move.getVelocity().epsilonEquals(0, 0, 0.1f))
                 Miner.stopMiner();
-                move = null;
-            }
         }
     }
 
@@ -80,12 +78,6 @@ public class MoveHandler implements Handler {
     }
 
     private boolean isMineurIsWellStopped() {
-        /*System.out.println("Moving : " + Miner.MINER_MOVING);
-        System.out.println("Dir : " + Miner.direction);
-        System.out.println("State : " + Miner.state);
-        System.out.println("Braking : " + Miner.MV_BRAKING);
-        System.out.println("Fluide : " + Miner.MV_DYNAMIC);*/
-
         Vector2 whereTheMinerNeedsToBe = new Vector2();
         whereTheMinerNeedsToBe.x = (float) ((int) (positionMineur.x) + 0.5 - Miner.WIDTH/2);
         whereTheMinerNeedsToBe.y = (int) positionMineur.y;
