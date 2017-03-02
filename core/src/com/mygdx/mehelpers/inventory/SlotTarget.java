@@ -29,12 +29,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 public class SlotTarget extends Target {
    private final Slot targetSlot;
 
-    public SlotTarget(SlotActor actor) {
+    public SlotTarget(SlotActor actor, String name) {
         super(actor);
+        actor.setName(name);
         targetSlot = actor.getSlot();
         getActor().setColor(Color.LIGHT_GRAY);
     }
-
+    
     @Override
     public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
         Slot payloadSlot = (Slot) payload.getObject();

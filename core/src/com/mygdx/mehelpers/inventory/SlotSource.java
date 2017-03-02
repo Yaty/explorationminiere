@@ -39,11 +39,12 @@ public class SlotSource extends Source {
      * Constructor
      * @param actor
      */
-    public SlotSource(SlotActor actor) {
+    public SlotSource(SlotActor actor, String name) {
         super(actor);
+        actor.setName(name);
         this.sourceSlot = actor.getSlot();
     }
-
+    
     @Override
     public Payload dragStart(InputEvent event, float x, float y, int pointer) {
         if (sourceSlot.getAmount() == 0) {

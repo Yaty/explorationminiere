@@ -21,6 +21,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.mygdx.gameobjects.Miner;
+import com.mygdx.gameobjects.minerobjects.Inventory;
 import com.mygdx.mehelpers.AssetLoader;
 import com.mygdx.mehelpers.handlers.handlers.MapHandler;
 import com.mygdx.mehelpers.handlers.Handlers;
@@ -37,6 +38,7 @@ public class GameWorld {
     private final Miner miner;
     private final String pathToMap;
     private final Handlers handlers;
+    private final Inventory store;
     
     /**
      * Construct a new game world
@@ -45,6 +47,7 @@ public class GameWorld {
      */
     public GameWorld(String pathToMap, boolean loading) {
         this.pathToMap = pathToMap;
+        this.store = new Inventory(1, 1, 1, 1);
         map = new TmxMapLoader().load(pathToMap);
         MAP_WIDTH = map.getProperties().get("width", Integer.class);
         MAP_HEIGHT = map.getProperties().get("height", Integer.class);
@@ -62,6 +65,10 @@ public class GameWorld {
             }
         }
         handlers = new Handlers(miner, map);
+    }
+    
+    public Inventory getStore() {
+        return store;
     }
 
     /**

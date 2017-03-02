@@ -47,6 +47,7 @@ public class GameScreen implements Screen {
     private boolean pause;
     
     private MenuPause menuPause;
+    private InventoryActor storeActor;
 
     public static Stage stage;
     private final int gameId;
@@ -115,8 +116,11 @@ public class GameScreen implements Screen {
         equipementActor.setMovable(false);
         stage.addActor(equipementActor);
         
+        storeActor = new InventoryActor(I18n.GAME.getString("Store"), gameWorld.getStore(), 300, 300, dragAndDrop, skin, this);
+        storeActor.setVisible(false);
+        stage.addActor(storeActor);
+        
         menuPause = new MenuPause(skin2, game);
-
         stage.addActor(menuPause);
     }
     
@@ -140,6 +144,9 @@ public class GameScreen implements Screen {
                 this.pause();
             }
         }
+        if(Gdx.input.isKeyJustPressed(Keys.M) && gameWorld.getHandlers().getMapHandler().isMineurInBase())
+            storeActor.setVisible(!storeActor.isVisible());
+            
         
         // handle all inputs and draw the whole UI
         stage.act(delta);

@@ -32,12 +32,10 @@ public class Inventory {
      * Constructor called to instanciate this class
      * Set up a basic inventory
      */
-    public Inventory() {
+    public Inventory(int size) {
         slots = new ArrayList<Slot>();
-        slots.add(new Slot(Item.LADDER, 15));
-        slots.add(new Slot(Item.PILLAR, 10));
-        slots.add(new Slot(Item.BASE, 1));
-        slots.add(new Slot(Item.TNT, 5));
+        for(int i = 0 ; i < size ; i++)
+            slots.add(new Slot(null, 0));
     }
 
     /**

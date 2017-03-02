@@ -22,7 +22,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.minerobjects.Wallet;
 import com.mygdx.gameobjects.minerobjects.Health;
 import static com.mygdx.mehelpers.AssetLoader.dig_sound;
-import static com.mygdx.mehelpers.AssetLoader.prefall_stone_sound;
 import static com.mygdx.mehelpers.AssetLoader.run_sound;
 import com.mygdx.mehelpers.handlers.handlers.InputHandler;
 
@@ -74,7 +73,7 @@ public class Miner {
         this.position = positionSpawn;
         runTime = 0f;
         this.wallet = new Wallet(0);
-        this.inventory = new Inventory();
+        this.inventory = new Inventory(15, 10, 1, 5);
         this.equipment = new Inventory("pioche_bois");
         this.health = new Health();
     }

@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.gameobjects.minerobjects.Item;
+import com.mygdx.minexploration.handlers.I18n;
 import com.mygdx.screens.GameScreen;
 
 /**
@@ -91,6 +92,11 @@ public class SlotActor extends ImageButton implements SlotListener {
                                 break;
                         }
                     }
+                } else if (slot.getItem() != null && !slot.getItem().name().startsWith("pioche") && getName().equals(I18n.GAME.getString("Store"))) {
+                    if(screen.getWorld().getMiner().getMoney() >= slot.getItem().getPriceToUpgrade()) {
+                        screen.getWorld().getMiner().withdrawMoney(slot.getItem().getPriceToUpgrade());
+                        screen.getWorld().getMiner().getInventory().store(slot.getItem(), 1);
+                    }                    
                 }
             }
         });

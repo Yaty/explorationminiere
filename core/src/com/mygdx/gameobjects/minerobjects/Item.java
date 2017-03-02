@@ -24,10 +24,10 @@ import com.mygdx.minexploration.handlers.I18n;
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public enum Item {
-    TNT("tnt", I18n.GAME.getString("tnt"), I18n.GAME.getString("tnt_desc"), 0, 0),
-    LADDER("echelle", I18n.GAME.getString("echelle"), I18n.GAME.getString("echelle_desc"), 0, 0),
-    PILLAR("pilier", I18n.GAME.getString("pilier"), I18n.GAME.getString("pilier_desc"), 0, 0),
-    BASE("base", I18n.GAME.getString("base"), I18n.GAME.getString("base_desc"), 0, 0),
+    TNT("tnt", I18n.GAME.getString("tnt"), I18n.GAME.getString("tnt_desc"), 0, 2000),
+    LADDER("echelle", I18n.GAME.getString("echelle"), I18n.GAME.getString("echelle_desc"), 0, 300),
+    PILLAR("pilier", I18n.GAME.getString("pilier"), I18n.GAME.getString("pilier_desc"), 0, 750),
+    BASE("base", I18n.GAME.getString("base"), I18n.GAME.getString("base_desc"), 0, 10000),
     WOODEN_PICKAXE("pioche_bois", I18n.GAME.getString("pioche_bois"), I18n.GAME.getString("pioche_bois_desc"), 1, 5000),
     STONE_PICKAXE("pioche_pierre", I18n.GAME.getString("pioche_pierre"), I18n.GAME.getString("pioche_pierre_desc"), 1.5f, 15000),
     IRON_PICKAXE("pioche_fer", I18n.GAME.getString("pioche_fer"), I18n.GAME.getString("pioche_fer_desc"), 2, 50000),
