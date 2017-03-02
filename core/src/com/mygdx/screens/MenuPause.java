@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.minexploration.MEGame;
+import com.mygdx.minexploration.handlers.I18n;
 
 /**
  * Pause menu
@@ -38,10 +39,10 @@ public class MenuPause extends Window {
      */
     public MenuPause(Skin skin, final MEGame game) {
         super("Pause", skin);
-        TextButton continuer = new TextButton("Continuer", skin);
-        TextButton sauvegarder = new TextButton("Sauvegarder", skin);
-        TextButton quitterSauvegarde = new TextButton("Quitter et sauvegarder", skin);
-        TextButton quitterSansSauvegarder = new TextButton("Quitter sans sauvegarder", skin);
+        TextButton continuer = new TextButton(I18n.GAME.getString("KeepPlaying"), skin);
+        TextButton sauvegarder = new TextButton(I18n.GAME.getString("Save"), skin);
+        TextButton quitterSauvegarde = new TextButton(I18n.GAME.getString("QuitSave"), skin);
+        TextButton quitterSansSauvegarder = new TextButton(I18n.GAME.getString("QuitWithoutSaving"), skin);
         continuer.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

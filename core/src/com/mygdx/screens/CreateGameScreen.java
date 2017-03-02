@@ -22,8 +22,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -33,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.minexploration.MEGame;
+import com.mygdx.minexploration.handlers.I18n;
 import java.io.File;
 import java.io.FilenameFilter;
 
@@ -62,8 +61,7 @@ public class CreateGameScreen implements Screen {
         this.font.setColor(Color.BROWN);
         Gdx.input.setInputProcessor(stage); // Le stage va s'occuper des E/S
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-        Gdx.app.log("Choose", Gdx.files.getLocalStoragePath());
-        createButtons("Valider");
+        createButtons(I18n.MENU.getString("Submit"));
         createTextField();
     }
     
@@ -114,7 +112,7 @@ public class CreateGameScreen implements Screen {
         stage.act();
         stage.draw();
         batch.begin();
-        font.draw(batch, "Veuillez nommer votre partie :", (Gdx.graphics.getHeight()/2)-65,  (Gdx.graphics.getWidth()/2)+100);
+        font.draw(batch, I18n.MENU.getString("NameGame") + " :", (Gdx.graphics.getHeight()/2)-65,  (Gdx.graphics.getWidth()/2)+100);
         batch.end();
     }
 

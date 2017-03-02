@@ -17,20 +17,22 @@
  */
 package com.mygdx.gameobjects.minerobjects;
 
+import com.mygdx.minexploration.handlers.I18n;
+
 /**
  * Enum which represent Items, used by the Inventory
  * @author Alexis Clément, Hugo Da Roit, Benjamin Lévèque, Alexis Montagne
  */
 public enum Item {
-    TNT("tnt", "TNT", "Permet de faire exploser des blocs aux alentours !", 0, 0),
-    LADDER("echelle", "Echelle", "Afin de pouvoir remonter à la surface.", 0, 0),
-    PILLAR("pilier", "Pilier", "Pour éviter que les blocs de pierre vous tombent sur la tete ;)", 0, 0),
-    BASE("base", "Base", "Permet de générer une base lorsque vous appuyez sur B.", 0, 0),
-    WOODEN_PICKAXE("pioche_bois", "Pioche en bois", "Cette pioche va vous permettre de casser des blocs.", 1, 5000),
-    STONE_PICKAXE("pioche_pierre", "Pioche en pierre", "Cette pioche va vous permettre de casser des blocs.", 1.5f, 15000),
-    IRON_PICKAXE("pioche_fer", "Pioche en fer", "Cette pioche va vous permettre de casser des blocs.", 2, 50000),
-    GOLD_PICKAXE("pioche_or", "Pioche en or", "Cette pioche va vous permettre de casser des blocs.", 3, 100000),
-    DIAMOND_PICKAXE("pioche_diamant", "Pioche en diamant", "Cette pioche va vous permettre de casser des blocs.", 5,  0);
+    TNT("tnt", I18n.GAME.getString("tnt"), I18n.GAME.getString("tnt_desc"), 0, 0),
+    LADDER("echelle", I18n.GAME.getString("echelle"), I18n.GAME.getString("echelle_desc"), 0, 0),
+    PILLAR("pilier", I18n.GAME.getString("pilier"), I18n.GAME.getString("pilier_desc"), 0, 0),
+    BASE("base", I18n.GAME.getString("base"), I18n.GAME.getString("base_desc"), 0, 0),
+    WOODEN_PICKAXE("pioche_bois", I18n.GAME.getString("pioche_bois"), I18n.GAME.getString("pioche_bois_desc"), 1, 5000),
+    STONE_PICKAXE("pioche_pierre", I18n.GAME.getString("pioche_pierre"), I18n.GAME.getString("pioche_pierre_desc"), 1.5f, 15000),
+    IRON_PICKAXE("pioche_fer", I18n.GAME.getString("pioche_fer"), I18n.GAME.getString("pioche_fer_desc"), 2, 50000),
+    GOLD_PICKAXE("pioche_or", I18n.GAME.getString("pioche_or"), I18n.GAME.getString("pioche_or_desc"), 3, 100000),
+    DIAMOND_PICKAXE("pioche_diamant", I18n.GAME.getString("pioche_diamant"), I18n.GAME.getString("pioche_diamant_desc"), 5,  0);
 
     private final String textureRegion, name, description;
     private final float param;

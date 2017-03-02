@@ -34,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.minexploration.MEGame;
+import com.mygdx.minexploration.handlers.I18n;
 import java.io.File;
 import java.io.FilenameFilter;
 
@@ -76,7 +77,7 @@ public class LoadGameScreen implements Screen {
         stage.act();
         stage.draw();
         batch.begin();
-        font.draw(batch, "Sélectionnez la partie :", (Gdx.graphics.getHeight()/2)-65,  (Gdx.graphics.getWidth()/2)+50);
+        font.draw(batch, I18n.MENU.getString("SelectName") + " :", (Gdx.graphics.getHeight()/2)-65,  (Gdx.graphics.getWidth()/2)+50);
         batch.end();
     }
 
@@ -128,7 +129,6 @@ public class LoadGameScreen implements Screen {
         gamesNames = new String[foldersNames.length];
         for(int j = 0 ; j < foldersNames.length ; j++) {
             FileHandle folder = new FileHandle(text + '/' + foldersNames[j].name());
-            System.out.println("Folder : " + folder.path());
             FileHandle[] files = folder.list(new FilenameFilter() {
                 @Override
                 public boolean accept(File folder, String name) {

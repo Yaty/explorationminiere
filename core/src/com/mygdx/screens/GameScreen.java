@@ -26,13 +26,13 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.mygdx.gameobjects.Miner;
 import com.mygdx.gameworld.GameRenderer;
 import com.mygdx.gameworld.GameWorld;
 import com.mygdx.mehelpers.RandomMapGenerator;
 import com.mygdx.mehelpers.handlers.handlers.InputHandler;
 import com.mygdx.mehelpers.inventory.InventoryActor;
 import com.mygdx.minexploration.MEGame;
+import com.mygdx.minexploration.handlers.I18n;
 import java.io.File;
 import java.io.FilenameFilter;
 
@@ -58,7 +58,6 @@ public class GameScreen implements Screen {
      * @param chargement
      */ 
     public GameScreen(MEGame game, String cheminMap, boolean chargement) {
-        Gdx.app.log("GameScreen", "GameScreen créé");
         this.game = game;
         gameWorld = new GameWorld(cheminMap, chargement);
         
@@ -108,11 +107,11 @@ public class GameScreen implements Screen {
         Skin skin2 = new Skin(Gdx.files.internal("skin/uiskin.json"));
     
         DragAndDrop dragAndDrop = new DragAndDrop();
-        InventoryActor inventoryActor = new InventoryActor("Inventaire", gameWorld.getMiner().getInventory(), Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
+        InventoryActor inventoryActor = new InventoryActor(I18n.GAME.getString("Inventory"), gameWorld.getMiner().getInventory(), Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
         inventoryActor.setMovable(false);
         stage.addActor(inventoryActor);
         
-        InventoryActor equipementActor = new InventoryActor("Equipement", gameWorld.getMiner().getEquipment(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
+        InventoryActor equipementActor = new InventoryActor(I18n.GAME.getString("Equipment"), gameWorld.getMiner().getEquipment(), Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight(), dragAndDrop, skin, this);
         equipementActor.setMovable(false);
         stage.addActor(equipementActor);
         
@@ -184,24 +183,20 @@ public class GameScreen implements Screen {
      
     @Override
     public void resize(int width, int height) {
-        Gdx.app.log("GameScreen", "resize appelé");
     }
     
     @Override
     public void pause() {
-        Gdx.app.log("GameScreen", "pause appelé");
         pause = true;
     }
      
     @Override
     public void resume() {
-        Gdx.app.log("GameScreen", "resume appelé");
         pause = false;
     }
       
     @Override
     public void hide() {
-        Gdx.app.log("GameScreen", "hide appelé");
     }
     
     @Override

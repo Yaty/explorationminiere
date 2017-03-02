@@ -30,6 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.minexploration.MEGame;
+import com.mygdx.minexploration.handlers.I18n;
 
 /**
  * Main menu screen
@@ -53,17 +54,17 @@ public class MainMenuScreen implements Screen {
     }
     
     private void createButtons() {
-        TextButton btnNvlPartie = new TextButton("Nouvelle partie", skin); // On utilise le skin
+        TextButton btnNvlPartie = new TextButton(I18n.MENU.getString("NewGame"), skin); // On utilise le skin
         btnNvlPartie.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2+150);
         btnNvlPartie.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dispose();
-                    game.setScreen(new CreateGameScreen(game)); // ATTENTION : IL VA FALLOIR GENERE PARTIEGEN AUTO SINON CA ECRASE LANCIENNE PARTIE
+                    game.setScreen(new CreateGameScreen(game));
                 };
         });
         
-        TextButton btnChargerPartie = new TextButton("Charger une partie", skin);
+        TextButton btnChargerPartie = new TextButton(I18n.MENU.getString("LoadGame"), skin);
         btnChargerPartie.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2+50);
         btnChargerPartie.addListener(new ClickListener() {
                 @Override
@@ -73,7 +74,7 @@ public class MainMenuScreen implements Screen {
                 };
         });        
         
-        TextButton btnInfos = new TextButton("Informations", skin);
+        TextButton btnInfos = new TextButton(I18n.MENU.getString("Infos"), skin);
         btnInfos.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2-50);
         btnInfos.addListener(new ClickListener() {
                 @Override
@@ -83,7 +84,7 @@ public class MainMenuScreen implements Screen {
                 };
         });    
         
-        TextButton btnQuitter = new TextButton("Quitter", skin);
+        TextButton btnQuitter = new TextButton(I18n.MENU.getString("Quit"), skin);
         btnQuitter.setPosition(Gdx.graphics.getWidth()/2 - Gdx.graphics.getWidth()/8 , Gdx.graphics.getHeight()/2-150);
         btnQuitter.addListener(new ClickListener() {
                 @Override

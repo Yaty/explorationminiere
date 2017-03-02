@@ -46,7 +46,6 @@ public class Dynamic extends Move {
      */
     @Override
     public void move() {
-        System.out.print("Ici ");
         boolean launchDestruction = false;
         int x = (int) (positionMineur.x + Miner.WIDTH/2);
         int y = (int) positionMineur.y;
@@ -126,12 +125,9 @@ public class Dynamic extends Move {
         }
         velocity.scl(Gdx.graphics.getDeltaTime()); // On "scale" par le temps passé pendant la frame
         collision.handle(); // Gestion des colisions
-        System.out.println("ON AJOUTE " + velocity);
         positionMineur.add(velocity);
         velocity.scl(1/Gdx.graphics.getDeltaTime());
         if(Miner.isOnLadder && (Gdx.input.isKeyJustPressed(19)) && mapHandler.getBloc(x, y-1) ==0 && Miner.state.equals(State.LADDER_CLIMBING) )
             velocity.y=0f;
-        
-        
     }
 }
