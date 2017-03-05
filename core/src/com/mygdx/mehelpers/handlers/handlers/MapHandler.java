@@ -334,23 +334,17 @@ public class MapHandler implements Handler {
     public void destructionBloc(int x, int y) {  
         final int xBloc = x;
         final int yBloc = y;
-        
-        
         final Vector2 positionLancement = miner.getPosition().cpy();
-        // Faudrait lamper vers le bloc ou il va
-        // Commencement du minage
         Miner.state = Miner.State.MINING;
         int dureeMinage = calculDureeMinage();
-        //System.out.println("Durée minage : " + dureeMinage);
         if(!dig_sound.isPlaying()){
-            
             dig_sound.play();
         }
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() { // Fin du minage
                 Vector2 positionLorsDuCassage = miner.getPosition().cpy();
-                if(isCellSurfaceHere(xBloc, yBloc) && Miner.minerOnTheGround && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
+                if(isCellSurfaceHere(xBloc, yBloc) && (Miner.minerOnTheGround || Miner.isOnLadder) && positionLorsDuCassage.epsilonEquals(positionLancement, 0.2f)) {
                     int idBlock = (Integer) getBloc(xBloc, yBloc);
                     if(idBlock != idStone && idBlock != idBaseGround && idBlock != idStore) {                
                         if(idBlock == idDiamond) {

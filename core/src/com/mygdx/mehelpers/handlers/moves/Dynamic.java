@@ -50,66 +50,56 @@ public class Dynamic extends Move {
         int y = (int) positionMineur.y;
         switch(Miner.direction) {
             case TOP:
-                if(!mapHandler.isCellSurfaceHere(x, y+1)) { // Si pas de bloc en x et y + 1
-                    if(Miner.isOnLadder) {
-                        velocity.y = LADDER_VELOCITY;
-                        Miner.minerOnTheGround = false;
-                        Miner.state = State.LADDER_CLIMBING;
-                        if(Gdx.input.isKeyPressed(19) && mapHandler.getBloc(x, y-1) ==0){
-                                velocity.y = GRAVITY; //faut rester appuyé
-                        }
-                        velocity.y = LADDER_VELOCITY;
-                        if(Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.Z)){
-                            velocity.y = 0.2f - GRAVITY; //faut rester appuyé
-                        } 
-                    } else if(!Miner.state.equals(State.JUMPING)) {
-                        velocity.y = JUMPING_VELOCITY;
-                        Miner.minerOnTheGround = false;
-                        Miner.state = State.JUMPING;
-                    }
-                } else {
-                    // Lancer animation ici ?
+                if(mapHandler.isCellSurfaceHere(x, y+1)) { // Si pas de bloc en x et y + 1
                     launchDestruction = true;
-                    y++;
-                }
-                if(Miner.isOnLadder && velocity.y==0){
-                    launchDestruction = true;
+                    y++;                    
+                } else if(Miner.isOnLadder) {
+                    velocity.y = LADDER_VELOCITY;
+                    Miner.minerOnTheGround = false;
+                    Miner.state = State.LADDER_CLIMBING;
+                } else if(!Miner.state.equals(State.JUMPING) && Miner.minerOnTheGround) {
+                    velocity.y = JUMPING_VELOCITY;
+                    Miner.minerOnTheGround = false;
+                    Miner.state = State.JUMPING;
                 }
                 break;
             case RIGHT:
-                if(!mapHandler.isCellSurfaceHere(x+1, y)) {
+                if(mapHandler.isCellSurfaceHere(x+1, y)) {
+                    if(Miner.isOnLadder) {
+                        Miner.stopMiner();
+                        velocity.y = -GRAVITY;
+                    }
+                    launchDestruction = true;
+                    x++;
+                } else {
                     velocity.x = VELOCITY_MAX;
                     Miner.headTowardsRight = true;
                     Miner.state = State.MOVING;
-                } else {
-                    launchDestruction = true;
-                    x++;
                 }
                 break;
             case BOTTOM:
-                if(Miner.state.equals(State.LADDER_CLIMBING)) {
+                if(mapHandler.isCellSurfaceHere(x, y-1) && velocity.epsilonEquals(0, 0, 0.02f)) {
+                    launchDestruction = true;
+                    y--;                    
+                } else if(Miner.isOnLadder) {
                     Miner.state = State.LADDER_CLIMBING;
                     velocity.x = 0;
                     velocity.y = -LADDER_VELOCITY;
-                    if(Gdx.input.isKeyPressed(20) || Gdx.input.isKeyJustPressed(47)){
-                        velocity.y = GRAVITY; //faut rester appuyé
-                    }
-                } else if(mapHandler.isCellSurfaceHere(x, y-1) && velocity.epsilonEquals(new Vector2(), 0.02f)) {
-                    launchDestruction = true;
-                    y--;
                 }
                 break;
             case LEFT:
-                if(!mapHandler.isCellSurfaceHere(x-1, y)) {
-                    velocity.x = -VELOCITY_MAX; // il y a un autre truc qui met à cette valeur ...
-                    Miner.headTowardsRight = false;
-                    Miner.state = State.MOVING;
-                } else {
+                if(mapHandler.isCellSurfaceHere(x-1, y)) {
+                    if(Miner.isOnLadder) {
+                        Miner.stopMiner();
+                        velocity.y = -GRAVITY;
+                    }
                     launchDestruction = true;
                     x--;
+                } else {
+                    velocity.x = -VELOCITY_MAX;
+                    Miner.headTowardsRight = false;
+                    Miner.state = State.MOVING;
                 }
-                break;
-            default:
                 break;
         }
         
@@ -126,7 +116,5 @@ public class Dynamic extends Move {
         collision.handle(); // Gestion des colisions
         positionMineur.add(velocity);
         velocity.scl(1/Gdx.graphics.getDeltaTime());
-        if(Miner.isOnLadder && (Gdx.input.isKeyJustPressed(19)) && mapHandler.getBloc(x, y-1) ==0 && Miner.state.equals(State.LADDER_CLIMBING) )
-            velocity.y=0f;
     }
 }

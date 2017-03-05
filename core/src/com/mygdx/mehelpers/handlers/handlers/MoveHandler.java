@@ -54,12 +54,8 @@ public class MoveHandler implements Handler {
         } else if (Miner.MV_DYNAMIC && !(move instanceof Dynamic))
             move = new Dynamic(mapHandler, positionMineur);                       
         
-        if(mapHandler.isLadderHere((int) positionMineur.x, (int) positionMineur.y)) 
-            Miner.isOnLadder = true;
-        else if(Miner.isOnLadder)
-            Miner.isOnLadder = false; // reset
-        
         if(move != null) {
+            Miner.isOnLadder = mapHandler.isLadderHere((int) positionMineur.x, (int) positionMineur.y);
             move.move();
             if(move.getVelocity().epsilonEquals(0, 0, 0.1f))
                 Miner.stopMiner();

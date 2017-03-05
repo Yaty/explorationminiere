@@ -136,6 +136,7 @@ public class Miner {
     }
     
     private void resetMiner() {
+        System.out.println("RESET MINER");
         state = State.STOPPED;
         direction = Direction.STOPPED;
         minerOnTheGround = headTowardsRight = true;
@@ -195,16 +196,12 @@ public class Miner {
             headTowardsRight = true;
         }
         if(InputHandler.GO_DOWN) {
-            if(minerOnTheGround) {
-                MINER_MOVING = true;
-                direction = Direction.BOTTOM;
-            }
+            MINER_MOVING = true;
+            direction = Direction.BOTTOM;
         }
         if(InputHandler.GO_UPWARDS) {
-            if(minerOnTheGround) {
-                MINER_MOVING = true;
-                direction = Direction.TOP;
-            }
+            MINER_MOVING = true;
+            direction = Direction.TOP;
         }
     }
     
