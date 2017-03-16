@@ -97,5 +97,6 @@ public class HealthHandler implements Handler {
      */
     public void die() {
         mineurHealth.setHealth(-1);
+        Miner.hasDied = true;
     }
 }

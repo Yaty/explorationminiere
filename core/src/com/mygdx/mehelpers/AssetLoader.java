@@ -30,6 +30,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class AssetLoader {
     public static Texture minerTexture, backgroundTexture, healthBarTexture,healthbarContainerTexture;
+    public static Texture minerTexture, backgroundTexture, healthBarTexture,healthbarContainerTexture,death;
     public static Animation standing, walking, jumping;
     public static TextureRegion[] regions;
     public static Music tnt_sound, run_sound, dig_sound,break_sound, fall_stone_sound,prefall_stone_sound;
@@ -43,6 +44,7 @@ public class AssetLoader {
         backgroundTexture = new Texture(Gdx.files.internal("background.png"));
         healthBarTexture = new Texture(Gdx.files.internal("gui_healthbar.png"));
         healthbarContainerTexture = new Texture(Gdx.files.internal("gui_healthbar_container.png"));
+        death = new Texture(Gdx.files.internal("death.png"));
         
         // A modif selon l'image du mineur
         //healthBar = TextureRegion.split(healthBarTexture, 30, 30)[0];

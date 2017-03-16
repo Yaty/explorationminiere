@@ -149,6 +149,10 @@ public class Miner {
             return true;
         return false;
     }
+    
+    public void setHasDied(boolean b){
+        hasDied = b;
+    }
 
     /**
      * Teleport the miner at a given position, also remove money according

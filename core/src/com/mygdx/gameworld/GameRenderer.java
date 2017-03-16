@@ -54,6 +54,7 @@ public class GameRenderer {
     private static SelectBox<String> tpList;
     private final BitmapFont state, direction, shifting, velocity, position, target, money, tp, fps;
     private final NinePatch health, healthContainer;
+    private final NinePatch health, healthContainer, death;
     private final Skin skin;
     private final Stage stage;
     private final TextButton okTpButton;
@@ -87,6 +88,7 @@ public class GameRenderer {
 
         health = new NinePatch(AssetLoader.healthBarTexture);
         healthContainer = new NinePatch(AssetLoader.healthbarContainerTexture);
+        death = new NinePatch(AssetLoader.death);
         
         skin = new Skin(Gdx.files.internal("./skin/uiskin.json"));
         tpList = new SelectBox(skin);
@@ -213,6 +215,16 @@ public class GameRenderer {
         money.draw(spriteBatch, "Argent : " + gameWorld.getMiner().getMoney(), 800, 25);
         tp.draw(spriteBatch, "Téléportation : ", Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 20);
         fps.draw(spriteBatch, "FPS : " + Math.floor(1/Gdx.graphics.getDeltaTime()), 5, Gdx.graphics.getHeight()-10);
+        if(Miner.hasDied){
+            death.draw(spriteBatch, 200, 200, AssetLoader.death.getWidth(), AssetLoader.death.getHeight());
+            new Timer().scheduleTask(new Timer.Task(){
+                                @Override
+                                public void run(){
+                                    Miner.hasDied = false;
+                                    
+                                }
+                            }, 3f);
+        }
         spriteBatch.end();
     }
 
