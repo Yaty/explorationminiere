@@ -39,6 +39,7 @@ public class Miner {
     private final Vector2 position;
     private float runTime;
     public static boolean headTowardsRight, minerOnTheGround, wasMoving, isOnLadder, MINER_MOVING;
+    public static boolean headTowardsRight, minerOnTheGround, wasMoving, isOnLadder, MINER_MOVING,hasDied;
     public static int FALL_HEIGHT; // a faire
     private final Health health;
         
@@ -141,6 +142,12 @@ public class Miner {
         direction = Direction.STOPPED;
         minerOnTheGround = headTowardsRight = true;
         MV_BRAKING = MV_DYNAMIC = wasMoving = isOnLadder = false;
+    }
+    
+    public boolean isDead(){
+        if(hasDied)
+            return true;
+        return false;
     }
 
     /**
@@ -258,6 +265,7 @@ public class Miner {
         MINER_MOVING = false;
     }
 
+    
     /**
      * @return the position of the miner
      */

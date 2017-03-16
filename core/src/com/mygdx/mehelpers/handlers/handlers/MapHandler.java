@@ -125,6 +125,13 @@ public class MapHandler implements Handler {
         }
     }
     
+    public boolean isOnSmaug(int x,int y){
+        if(layerObjets.getCell(x, y) != null){
+            return layerObjets.getCell(x,y).getTile().getId() == idLava;
+        }
+        return false;
+    }
+    
     public boolean isMineurInBase() {
         for(Base base : bases) {
             if(base.contains(miner.getPosition().x, miner.getPosition().y))

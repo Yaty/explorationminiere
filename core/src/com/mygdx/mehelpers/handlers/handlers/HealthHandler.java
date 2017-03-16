@@ -58,6 +58,10 @@ public class HealthHandler implements Handler {
             positionMineur.set(MapHandler.getSpawnPosition());
         } else if(mineurHealth.getHealth() > 1f)
             mineurHealth.setHealth(1);
+        
+        if(mapHandler.isOnSmaug((int)positionMineur.x, (int)positionMineur.y)){
+            mineurHealth.remove(0.0015f);
+        }
     }
     
     /**

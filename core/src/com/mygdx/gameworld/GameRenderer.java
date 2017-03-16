@@ -34,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.gameobjects.Base;
 import com.mygdx.gameobjects.Miner;
 import com.mygdx.mehelpers.AssetLoader;
@@ -111,6 +112,7 @@ public class GameRenderer {
         stage.addActor(okTpButton);
         stage.addActor(tpList);
     }
+    
     
     private static void setTpList(int nbBases) {
         String[] bases = new String[nbBases];
