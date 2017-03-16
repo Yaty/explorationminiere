@@ -74,6 +74,7 @@ public class AssetLoader {
      */
     public static void dispose() {
         minerTexture.dispose();
+        death.dispose();
         backgroundTexture.dispose();
         healthBarTexture.dispose();
         healthbarContainerTexture.dispose();
