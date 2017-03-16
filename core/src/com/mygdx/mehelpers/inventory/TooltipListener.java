@@ -38,8 +38,8 @@ public class TooltipListener extends InputListener {
 
     /**
      * Constructor
-     * @param tooltip
-     * @param followCursor
+     * @param tooltip the tooltip actor
+     * @param followCursor follow or not the cursor
      */
     public TooltipListener(Actor tooltip, boolean followCursor) {
         this.tooltip = tooltip;
@@ -74,6 +74,8 @@ public class TooltipListener extends InputListener {
     /**
      * The offset of the tooltip from the touch position. It should not be
      * positive as the tooltip will flicker otherwise.
+     * @param offsetX offset x
+     * @param offsetY offset y
      */
     public void setOffset(float offsetX, float offsetY) {
         offset.set(offsetX, offsetY);

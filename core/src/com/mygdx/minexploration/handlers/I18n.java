@@ -26,19 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Resource Bundle helper.
- *
- * <p>
- * Each module has its own resource bundle file for i18n strings. Always read
- * default locale from <code>Locale.getDefault()</code>.
- *
- * <p>
- * <pre>
- *      I18n.MODULE_NAME.getString("stringKey");
- * </pre>
- *
  * @see ResourceBundle
- *
  * @author Cem Ikta
  */
 public enum I18n {

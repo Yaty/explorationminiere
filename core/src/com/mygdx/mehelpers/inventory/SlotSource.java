@@ -37,7 +37,8 @@ public class SlotSource extends Source {
 
     /**
      * Constructor
-     * @param actor
+     * @param actor the actor
+     * @param name the actor's name
      */
     public SlotSource(SlotActor actor, String name) {
         super(actor);

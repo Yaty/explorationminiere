@@ -36,7 +36,7 @@ public class InventoryActor extends Window {
      * @param inventory An inventory to display
      * @param width The window's width
      * @param height The window's height
-     * @param dragAndDrop drag&drop object
+     * @param dragAndDrop dragdrop object
      * @param skin a skin
      * @param screen the game screen
      */

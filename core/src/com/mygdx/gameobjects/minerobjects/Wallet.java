@@ -28,7 +28,7 @@ public class Wallet {
 
     /**
      * Constructor to create a wallet with an amount of money
-     * @param money
+     * @param money the amount of money to start
      */
     public Wallet(int money) {
         this.money = money;

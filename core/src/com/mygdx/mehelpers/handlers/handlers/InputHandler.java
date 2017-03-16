@@ -31,7 +31,7 @@ public class InputHandler implements InputProcessor {
     public static boolean
             PUT_LADDER = false, PUT_TNT = false,
             EXPLODE_TNT = false, PUT_PILLAR = false,
-            PUT_BASE  = false;
+            PUT_BASE  = false, REMOVE_OBJECT = false;
     
     /**
      * Called once when a touch is pressed
@@ -71,6 +71,9 @@ public class InputHandler implements InputProcessor {
                 break;
             case Keys.B:
                 PUT_BASE = true;
+                break;
+            case Keys.F:
+                REMOVE_OBJECT = true;
                 break;
         }
         return true;

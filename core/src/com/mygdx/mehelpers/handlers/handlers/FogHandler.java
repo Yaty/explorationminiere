@@ -60,7 +60,7 @@ public class FogHandler implements Handler {
 
     /**
      * Reload objects
-     * @param objects
+     * @param objects [0] is fogLayer, [2] is the miner position (bad)
      */
     @Override
     public void reload(Object... objects) {

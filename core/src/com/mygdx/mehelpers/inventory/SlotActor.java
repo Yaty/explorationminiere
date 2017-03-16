@@ -43,9 +43,9 @@ public class SlotActor extends ImageButton implements SlotListener {
     
     /**
      * Constructor
-     * @param skin
-     * @param slot
-     * @param screen
+     * @param skin the skin
+     * @param slot the slot
+     * @param screen the game screen
      */
     public SlotActor(Skin skin, final Slot slot, final GameScreen screen) {
         super(createStyle(skin, slot));

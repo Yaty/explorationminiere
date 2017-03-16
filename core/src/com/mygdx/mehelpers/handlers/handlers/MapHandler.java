@@ -87,7 +87,7 @@ public class MapHandler implements Handler {
     
     /**
      * Set the health handler
-     * @param healthHandler
+     * @param healthHandler the health handler
      */
     public void setHealthHandler(HealthHandler healthHandler) {
         this.healthHandler = healthHandler;
@@ -123,6 +123,18 @@ public class MapHandler implements Handler {
             setTNT((int) miner.getPosition().x, (int) miner.getPosition().y);
             InputHandler.PUT_TNT = false;
         }
+        if(InputHandler.REMOVE_OBJECT) {
+            removeObject((int) miner.getPosition().x, (int) miner.getPosition().y);
+            InputHandler.REMOVE_OBJECT = false;
+        }
+    }
+    
+    private void removeObject(int x, int y) {
+        int id = getObject(x, y);
+        layerObjets.setCell(x, y, null);
+        if(id == idLadder) miner.getInventory().store(Item.LADDER, 1);
+        else if(id == idPillar) miner.getInventory().store(Item.PILLAR, 1);
+        else if(id == idTNT) miner.getInventory().store(Item.TNT, 1);
     }
     
     public boolean isOnSmaug(int x,int y){
@@ -162,14 +174,11 @@ public class MapHandler implements Handler {
      * @param y l'entier en ordonnée
      */
     public void setLadder(int x,int y){
-        if(!isLadderHere(x,y) && miner.getInventory().checkInventory(Item.LADDER) > 0){
+        if(miner.getInventory().checkInventory(Item.LADDER) > 0) {
             TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
             cell.setTile(tileSets.getTile(idLadder));
             layerObjets.setCell(x, y, cell);
             miner.getInventory().remove(Item.LADDER, 1);
-        }else if(isLadderHere(x,y)){
-            layerObjets.setCell(x, y, null);
-            miner.getInventory().store(Item.LADDER, 1);
         }
     }
     
@@ -183,19 +192,13 @@ public class MapHandler implements Handler {
         }
     }
     
-    public void ramassePilier(int x, int y){
-        layerObjets.setCell(x,y,null);
-    }
-    
     public void setTNT(int x, int y){
         if(miner.getInventory().checkInventory(Item.TNT) > 0) {
             TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
             cell.setTile(tileSets.getTile(idTNT));
-            if(!isCellSurfaceHere(x, y)) {
-                layerObjets.setCell(x, y, cell);
-                faireTomberUnBlocSurfaceDeCoord(x, y, idTNT);
-                miner.getInventory().remove(Item.TNT, 1);
-            }
+            layerObjets.setCell(x, y, cell);
+            faireTomberUnBlocSurfaceDeCoord(x, y, idTNT);
+            miner.getInventory().remove(Item.TNT, 1);
         }
     }
     

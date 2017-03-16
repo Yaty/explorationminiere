@@ -76,8 +76,8 @@ public class MEGame extends Game {
     
     /**
      * Create a new game at level 1
-     * @param idGame
-     * @param gameName
+     * @param idGame game id
+     * @param gameName game name
      */
     public void newFirstLevel(int idGame, String gameName) {
         this.idGame = idGame;
@@ -123,8 +123,8 @@ public class MEGame extends Game {
     
     /**
      * Load a game
-     * @param idPartie
-     * @param nomGame
+     * @param idPartie game id
+     * @param nomGame game name
      */
     public void loadGame(int idPartie, String nomGame) {
         this.idGame = idPartie;

@@ -94,7 +94,7 @@ public class Slot {
 
     /**
      *
-     * @param slotListener
+     * @param slotListener the listener to add
      */
     public void addListener(SlotListener slotListener) {
         slotListeners.add(slotListener);
@@ -102,7 +102,7 @@ public class Slot {
 
     /**
      * Remove a listener
-     * @param slotListener
+     * @param slotListener the listener to remove
      */
     public void removeListener(SlotListener slotListener) {
         slotListeners.remove(slotListener);

@@ -50,7 +50,7 @@ public class CreateGameScreen implements Screen {
     
     /**
      * Constructor
-     * @param game
+     * @param game the Game
      */
     public CreateGameScreen(MEGame game) {
         this.game = game;

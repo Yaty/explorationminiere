@@ -123,6 +123,7 @@ public class CollisionHandler implements Handler {
                     move.getPositionMineur().y = tile.y + tile.height;
                     // Changement d'état
                     Miner.minerOnTheGround = true;
+                    Miner.state = Miner.State.MOVING;
                 }
                 move.getVelocity().y = 0;
                 break;                    

@@ -82,7 +82,7 @@ public class HealthHandler implements Handler {
 
     /**
      * Reload objects
-     * @param objects
+     * @param objects [0] mapHandler, [1] minerHealth, [2] miner position
      */
     @Override
     public void reload(Object... objects) {

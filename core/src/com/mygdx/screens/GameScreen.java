@@ -21,6 +21,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -54,9 +55,9 @@ public class GameScreen implements Screen {
     
     /**
      * Constructor
-     * @param game
-     * @param cheminMap
-     * @param chargement
+     * @param game the game
+     * @param cheminMap path to map
+     * @param chargement loading or it's a new game 
      */ 
     public GameScreen(MEGame game, String cheminMap, boolean chargement) {
         this.game = game;
@@ -97,9 +98,7 @@ public class GameScreen implements Screen {
         stage.addListener(new InputListener() {
             @Override
             public boolean scrolled(InputEvent event, float x, float y, int amount) {
-                if(gameRenderer.getCamera().zoom + amount * 0.05f > 1 && gameRenderer.getCamera().zoom + amount * 0.05f < 10) {
-                    gameRenderer.getCamera().zoom += amount * 0.05f;
-                }
+                gameRenderer.getCamera().zoom = MathUtils.clamp(gameRenderer.getCamera().zoom + amount * 0.05f, 1, 10);
                 return true;
             }
         });

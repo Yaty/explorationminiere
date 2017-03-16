@@ -53,7 +53,6 @@ public class GameRenderer {
     private final SpriteBatch spriteBatch;
     private static SelectBox<String> tpList;
     private final BitmapFont state, direction, shifting, velocity, position, target, money, tp, fps;
-    private final NinePatch health, healthContainer;
     private final NinePatch health, healthContainer, death;
     private final Skin skin;
     private final Stage stage;
@@ -178,7 +177,6 @@ public class GameRenderer {
         renderGUI();
         
         stage.act();
-        stage.draw();
     }
     
     private void renderBackground() {
@@ -219,12 +217,11 @@ public class GameRenderer {
             death.draw(spriteBatch, 200, 200, AssetLoader.death.getWidth(), AssetLoader.death.getHeight());
             death.draw(spriteBatch, 320, 320, AssetLoader.death.getWidth(), AssetLoader.death.getHeight());
             new Timer().scheduleTask(new Timer.Task(){
-                                @Override
-                                public void run(){
-                                    Miner.hasDied = false;
-                                    
-                                }
-                            }, 3f);
+                @Override
+                public void run(){
+                    Miner.hasDied = false;
+                }
+            }, 3f);
         }
         spriteBatch.end();
     }

@@ -38,7 +38,6 @@ public class Miner {
     public static Direction direction;
     private final Vector2 position;
     private float runTime;
-    public static boolean headTowardsRight, minerOnTheGround, wasMoving, isOnLadder, MINER_MOVING;
     public static boolean headTowardsRight, minerOnTheGround, wasMoving, isOnLadder, MINER_MOVING,hasDied;
     public static int FALL_HEIGHT; // a faire
     private final Health health;
@@ -74,18 +73,18 @@ public class Miner {
         this.position = positionSpawn;
         runTime = 0f;
         this.wallet = new Wallet(0);
-        this.inventory = new Inventory(15, 10, 1, 5);
+        this.inventory = new Inventory(15, 10, 5, 1);
         this.equipment = new Inventory("pioche_bois");
         this.health = new Health();
     }
     
     /**
      * Constructor to use when loading a game
-     * @param money
-     * @param position
-     * @param inventory
-     * @param equipement
-     * @param health
+     * @param money amount of money
+     * @param position start position
+     * @param inventory the inventory
+     * @param equipement the equipment
+     * @param health curent health
      */
     public Miner(int money, Vector2 position, Inventory inventory, Inventory equipement, float health) {
         resetMiner();
@@ -127,6 +126,18 @@ public class Miner {
      */
     public void withdrawMoney(int amount) {
         wallet.withdraw(amount);
+    }
+    
+    public static void printInfos() {
+        System.out.println("###### MINER ######");
+        System.out.println("State     : " + Miner.state);
+        System.out.println("Direction : " + Miner.direction);
+        System.out.println("HeadRight : " + Miner.headTowardsRight);
+        System.out.println("On ladder : " + Miner.isOnLadder);
+        System.out.println("Grounded  : " + Miner.minerOnTheGround);
+        System.out.println("Moved     : " + Miner.wasMoving);
+        System.out.println("MV        : " + Miner.MV_BRAKING + " - " + Miner.MV_DYNAMIC);
+        System.out.println("###### MINER ######");
     }
 
     /**
@@ -234,8 +245,6 @@ public class Miner {
             wasMoving = true;
             MV_DYNAMIC = true;
             MV_BRAKING = false;
-            
-
         } else if(!MINER_MOVING && wasMoving && !MV_BRAKING && state.equals(State.MOVING)){ // Sinon c'est un amortissement
             MV_BRAKING = true;
             MV_DYNAMIC = false;
@@ -246,23 +255,13 @@ public class Miner {
     }
     
     public static void playSound(){
-        
-        if( state != State.STOPPED){
-            if(dig_sound.isPlaying()){
-                dig_sound.stop();
-            }
-        }
-        
-        if(state == State.MOVING && (direction == Direction.LEFT || direction == Direction.RIGHT) && minerOnTheGround){
-            if(!run_sound.isPlaying()){
-                run_sound.play();
-            }
-        }
-        else{
-            if(run_sound.isPlaying()){
-                run_sound.stop();
-            }
-        }
+        if(state != State.STOPPED && dig_sound.isPlaying())
+            dig_sound.stop();
+
+        if(state == State.MOVING && (direction == Direction.LEFT || direction == Direction.RIGHT) && minerOnTheGround & !run_sound.isPlaying())
+            run_sound.play();
+        else if(run_sound.isPlaying())
+            run_sound.stop();
     }
     
     private void resetForNextLoop() {

@@ -54,7 +54,7 @@ public class LoadGameScreen implements Screen {
     
     /**
      * Constructor
-     * @param game
+     * @param game the game
      */
     public LoadGameScreen(MEGame game) {
         this.game = game;

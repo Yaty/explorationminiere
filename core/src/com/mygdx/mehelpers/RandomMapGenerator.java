@@ -217,7 +217,7 @@ public class RandomMapGenerator {
         }
         input.append("\n");
 
-        for(int i = 3 ; i < mapHeight ; i++) {
+        for(int i = 5 ; i < mapHeight ; i++) {
             input.append(TAB).append(TAB);
             for(int j = 0 ; j < mapWidth ; j++) {
                 if(liquids.get(j, i) == 1f)
@@ -276,7 +276,7 @@ public class RandomMapGenerator {
      * @param i0
      * @param i1
      * @param i2
-     * @return a grid fiiled with 0 and 1
+     * @return a grid filled with 0 and 1
      */
     private Grid genererGrid(int height, int width, float f, int i, int i0, int i1, int i2) {
         final Grid grid = new Grid(width, height);

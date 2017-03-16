@@ -43,7 +43,7 @@ public class MainMenuScreen implements Screen {
     
     /**
      * Constructor
-     * @param game
+     * @param game the game
      */
     public MainMenuScreen (MEGame game){
         this.game = game;        

@@ -31,6 +31,7 @@ public class Inventory {
     /**
      * Constructor called to instanciate this class
      * Set up a basic inventory
+     * @param size size of the inventory
      */
     public Inventory(int size) {
         slots = new ArrayList<Slot>();

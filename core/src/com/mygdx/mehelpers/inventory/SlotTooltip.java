@@ -32,8 +32,8 @@ public class SlotTooltip extends Window implements SlotListener {
 
     /**
      * Constructor
-     * @param slot
-     * @param skin
+     * @param slot the slot
+     * @param skin the skin
      */
     public SlotTooltip(Slot slot, Skin skin) {
         super("Informations", skin);

@@ -34,8 +34,8 @@ public class MenuPause extends Window {
     
     /**
      * Create a pause menu
-     * @param skin
-     * @param game
+     * @param skin the skin
+     * @param game the game
      */
     public MenuPause(Skin skin, final MEGame game) {
         super("Pause", skin);
