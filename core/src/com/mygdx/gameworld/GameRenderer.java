@@ -206,6 +206,10 @@ public class GameRenderer {
         batcher.end();
     }
     
+    
+     /**
+     * Render the user interface : health, money, and globaly everything that is displayed above the game 
+     */ 
     private void renderGUI(){
         spriteBatch.begin();
         healthContainer.draw(spriteBatch, 5, 5, AssetLoader.healthbarContainerTexture.getWidth(), AssetLoader.healthbarContainerTexture.getHeight());
