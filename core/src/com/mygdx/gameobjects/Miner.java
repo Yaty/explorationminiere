@@ -258,9 +258,9 @@ public class Miner {
         if(state != State.STOPPED && dig_sound.isPlaying())
             dig_sound.stop();
 
-        if(state == State.MOVING && (direction == Direction.LEFT || direction == Direction.RIGHT) && minerOnTheGround & !run_sound.isPlaying())
+        if(state == State.MOVING && minerOnTheGround & !run_sound.isPlaying())
             run_sound.play();
-        else if(run_sound.isPlaying())
+        else if(state == State.STOPPED && run_sound.isPlaying())
             run_sound.stop();
     }
     
