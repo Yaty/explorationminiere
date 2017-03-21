@@ -218,7 +218,6 @@ public class GameRenderer {
         tp.draw(spriteBatch, "Téléportation : ", Gdx.graphics.getWidth() - 300, Gdx.graphics.getHeight() - 20);
         fps.draw(spriteBatch, "FPS : " + Math.floor(1/Gdx.graphics.getDeltaTime()), 5, Gdx.graphics.getHeight()-10);
         if(Miner.hasDied){
-            death.draw(spriteBatch, 200, 200, AssetLoader.death.getWidth(), AssetLoader.death.getHeight());
             death.draw(spriteBatch, 320, 320, AssetLoader.death.getWidth(), AssetLoader.death.getHeight());
             new Timer().scheduleTask(new Timer.Task(){
                 @Override

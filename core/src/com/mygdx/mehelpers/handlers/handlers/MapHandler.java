@@ -228,7 +228,6 @@ public class MapHandler implements Handler {
         for(int i = -RADIUS_TNT ; i <= RADIUS_TNT; i++ ){
             for(int j = -RADIUS_TNT ; j <= RADIUS_TNT ; j++){
                 if(getObject(x+i, y+j)!=idTNT ||(i == 0 && j == 0)){
-                    System.out.println(Math.abs(Vector2.dst(0, 0, i, j)));
                     if(Math.abs(Vector2.dst(0, 0, i, j)) <= RADIUS_TNT) {
                         if((int)miner.getPosition().x == (x+i) && (int)miner.getPosition().y == (y+j)) 
                             healthHandler.die();
