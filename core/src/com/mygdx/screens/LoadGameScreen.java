@@ -99,7 +99,7 @@ public class LoadGameScreen implements Screen {
         skin = new Skin();
         skin.add("default", font);
 
-        //Create a texture
+        //Create a textfonture
         Pixmap pixmap = new Pixmap((int)Gdx.graphics.getWidth()/4,(int)Gdx.graphics.getHeight()/10, Pixmap.Format.RGB888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();

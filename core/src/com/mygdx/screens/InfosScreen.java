@@ -17,8 +17,20 @@
  */
 package com.mygdx.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.mygdx.minexploration.MEGame;
+import com.mygdx.minexploration.handlers.I18n;
 
 /**
  * Infos screen, not implemented yet
@@ -26,44 +38,74 @@ import com.mygdx.minexploration.MEGame;
  */
 public class InfosScreen implements Screen {
     private final MEGame game;
+    private final BitmapFont title, content;
+    private final TextButton back;
+    private final Stage stage;
+    private final SpriteBatch batch;
+    private final String titleStr, contentStr;
     
-    public InfosScreen(MEGame game) {
+    public InfosScreen(final MEGame game) {
         this.game = game;
+        this.stage = new Stage();
+        this.batch = new SpriteBatch();
+        title = new BitmapFont();
+        title.setColor(Color.BLACK);
+        content = new BitmapFont();
+        content.setColor(Color.BLACK);
+        back = new TextButton(I18n.MENU.getString("Back"), new Skin(Gdx.files.internal("skin/uiskin.json")));
+        back.setSize(200, 100);
+        back.setPosition(Gdx.graphics.getWidth()/2 - back.getWidth()/2, 450);
+        back.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dispose();
+                game.backToMainMenuScreen();
+            }
+        });
+        titleStr = I18n.MENU.getString("TitleInfos");
+        contentStr = I18n.MENU.getString("ContentInfos");
+        stage.addActor(back);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void show() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void render(float delta) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                
+        stage.act();
+        stage.draw();
+        
+        batch.begin();
+        title.draw(batch, titleStr, Gdx.graphics.getWidth()/2 - 30, Gdx.graphics.getHeight() - 25);
+        content.draw(batch, contentStr, 100, Gdx.graphics.getHeight() - 100, Gdx.graphics.getWidth() - 200, 1, true);
+        batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void pause() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void resume() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void hide() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        content.dispose();
+        title.dispose();
     }
     
 }
