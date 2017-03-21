@@ -58,7 +58,7 @@ public class Braking extends Move {
             hasTarget = false; // Idem
             return;
         }
-        
+
         float x, y;
         switch(Miner.direction) {
                 case LEFT:

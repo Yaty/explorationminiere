@@ -102,10 +102,10 @@ public class Dynamic extends Move {
                 }
                 break;
         }
-        
+
         if (launchDestruction)
             mapHandler.destructionBloc(x, y);
-        
+
         velocity.x = MathUtils.clamp(velocity.x, -VELOCITY_MAX, VELOCITY_MAX); // On borne
         velocity.add(0, GRAVITY); // Ajout gravité si sur echelle
         if(Math.abs(velocity.x) < 1) { // Si le velocity est trop faible on stop le mineur
