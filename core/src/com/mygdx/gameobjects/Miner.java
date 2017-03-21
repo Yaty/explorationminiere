@@ -21,6 +21,7 @@ import com.mygdx.gameobjects.minerobjects.Inventory;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.minerobjects.Wallet;
 import com.mygdx.gameobjects.minerobjects.Health;
+import com.mygdx.gameobjects.minerobjects.Item;
 import static com.mygdx.mehelpers.AssetLoader.dig_sound;
 import static com.mygdx.mehelpers.AssetLoader.run_sound;
 import com.mygdx.mehelpers.handlers.handlers.InputHandler;
@@ -145,6 +146,14 @@ public class Miner {
      */
     public void reload() {
         resetMiner();
+        if(inventory.checkInventory(Item.LADDER) == 0)
+            inventory.store(Item.LADDER, 20);
+        if(inventory.checkInventory(Item.PILLAR) == 0)
+            inventory.store(Item.PILLAR, 10);
+        if(inventory.checkInventory(Item.TNT) == 0)
+            inventory.store(Item.TNT, 2);
+        if(inventory.checkInventory(Item.BASE) == 0)
+            inventory.store(Item.BASE, 1);
     }
     
     private void resetMiner() {
