@@ -186,9 +186,9 @@ public class RandomMapGenerator {
                 if(diamondPositionX == j && diamondPositionY == i)
                     input.append(idDiamond).append(',');
                 else {
-                    if(caves.get(j, i) == 1f) {
+                    if(caves.get(j, i) == 1.0f) {
                         input.append(0).append(',');
-                    } else if (liquids.get(j, i) == 1f) {
+                    } else if (liquids.get(j, i) == 1.0f) {
                         input.append(0).append(',');
                     } else // Si on est pas une cave ou pas dans une zone de liquide = c'est un bloc
                         input.append(generateBlockByDepth(i)).append(',');
@@ -216,8 +216,14 @@ public class RandomMapGenerator {
            input.append(getAFlower()).append(",");
         }
         input.append("\n");
-
-        for(int i = 5 ; i < mapHeight ; i++) {
+        
+        input.append(TAB).append(TAB);
+        for(int j = 0 ; j < mapWidth ; j++) {
+           input.append(0).append(",");
+        }
+        input.append("\n");        
+        
+        for(int i = 4 ; i < mapHeight ; i++) {
             input.append(TAB).append(TAB);
             for(int j = 0 ; j < mapWidth ; j++) {
                 if(liquids.get(j, i) == 1f)
