@@ -32,6 +32,14 @@ public enum Item {
     STONE_PICKAXE("pioche_pierre", I18n.GAME.getString("pioche_pierre"), I18n.GAME.getString("pioche_pierre_desc"), 1.5f, 15000),
     IRON_PICKAXE("pioche_fer", I18n.GAME.getString("pioche_fer"), I18n.GAME.getString("pioche_fer_desc"), 2, 50000),
     GOLD_PICKAXE("pioche_or", I18n.GAME.getString("pioche_or"), I18n.GAME.getString("pioche_or_desc"), 3, 100000),
+    TNT("tnt", I18n.GAME.getString("tnt"), I18n.GAME.getString("tnt_desc"), 0, 200),
+    LADDER("echelle", I18n.GAME.getString("echelle"), I18n.GAME.getString("echelle_desc"), 0, 50),
+    PILLAR("pilier", I18n.GAME.getString("pilier"), I18n.GAME.getString("pilier_desc"), 0, 100),
+    BASE("base", I18n.GAME.getString("base"), I18n.GAME.getString("base_desc"), 0, 2000),
+    WOODEN_PICKAXE("pioche_bois", I18n.GAME.getString("pioche_bois"), I18n.GAME.getString("pioche_bois_desc"), 1, 3000),
+    STONE_PICKAXE("pioche_pierre", I18n.GAME.getString("pioche_pierre"), I18n.GAME.getString("pioche_pierre_desc"), 1.5f, 10000),
+    IRON_PICKAXE("pioche_fer", I18n.GAME.getString("pioche_fer"), I18n.GAME.getString("pioche_fer_desc"), 2, 25000),
+    GOLD_PICKAXE("pioche_or", I18n.GAME.getString("pioche_or"), I18n.GAME.getString("pioche_or_desc"), 3, 50000),
     DIAMOND_PICKAXE("pioche_diamant", I18n.GAME.getString("pioche_diamant"), I18n.GAME.getString("pioche_diamant_desc"), 5,  0);
 
     private final String textureRegion, name, description;
