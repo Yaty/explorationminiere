@@ -18,7 +18,6 @@
 package com.mygdx.mehelpers.handlers.moves;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.gameobjects.Miner;
@@ -52,7 +51,7 @@ public class Dynamic extends Move {
             case TOP:
                 if(mapHandler.isCellSurfaceHere(x, y+1)) { // Si pas de bloc en x et y + 1
                     launchDestruction = true;
-                    y++;                    
+                    y++;
                 } else if(Miner.isOnLadder) {
                     velocity.y = LADDER_VELOCITY;
                     Miner.minerOnTheGround = false;

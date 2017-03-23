@@ -52,14 +52,7 @@ public class MoveHandler implements Handler {
             Braking.brakingEnded = false;
             move = new Braking(mapHandler, positionMineur);
         } else if (Miner.MV_DYNAMIC && !(move instanceof Dynamic))
-            move = new Dynamic(mapHandler, positionMineur);                       
-        
-        /*
-        System.out.println("\n#### MOVING ####");
-        Miner.printInfos();
-        System.out.println("Move : " + (move instanceof Braking ? "Braking" : move instanceof Dynamic ? "Dynamic" : "Null"));
-        System.out.println("#### MOVING ####");
-        */
+            move = new Dynamic(mapHandler, positionMineur); 
         
         if(move != null) {
             Miner.isOnLadder = mapHandler.isLadderHere((int) positionMineur.x, (int) positionMineur.y);

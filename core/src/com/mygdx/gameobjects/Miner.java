@@ -157,7 +157,6 @@ public class Miner {
     }
     
     private void resetMiner() {
-        System.out.println("RESET MINER");
         state = State.STOPPED;
         direction = Direction.STOPPED;
         minerOnTheGround = headTowardsRight = true;
@@ -260,7 +259,6 @@ public class Miner {
         } 
         
         playSound();
-        
     }
     
     public static void playSound(){
