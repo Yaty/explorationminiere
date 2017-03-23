@@ -89,11 +89,11 @@ public class Loader {
         for(Element slot : slots) {
             String nom = slot.getChildByName("nom").getText();
             int value = Integer.parseInt(slot.getChildByName("montant").getText());
-            if ("ECHELLE".equals(nom.toUpperCase()))
+            if ("LADDER".equals(nom.toUpperCase()))
                 nbEchelles = value;
-            else if ("PILIER".equals(nom.toUpperCase()))
+            else if ("PILLAR".equals(nom.toUpperCase()))
                 nbPiliers = value;
-            else if ("MAGASIN".equals(nom.toUpperCase()))
+            else if ("BASE".equals(nom.toUpperCase()))
                 nbMagasin = value;
             else if ("TNT".equals(nom.toUpperCase()))
                 nbTnt = value;
